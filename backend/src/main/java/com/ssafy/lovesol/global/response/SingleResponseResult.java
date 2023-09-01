@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class SingleResponseResult<T> extends com.ssafy.airlingo.global.response.ResponseResult {
+public class SingleResponseResult<T> extends ResponseResult {
 
 	private T data;
 
