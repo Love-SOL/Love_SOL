@@ -27,6 +27,9 @@ public class User {
     private String password;
 
     @Column(nullable = false)
+    private String simplePassword;
+
+    @Column(nullable = false)
     private String personalAccount;
 
     @Column(nullable = false)
@@ -36,7 +39,7 @@ public class User {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private LocalDateTime birthAt;
+    private String birthAt;
 
     @Column(nullable =true)
     private int amount;
@@ -51,4 +54,5 @@ public class User {
     // 어떤 User가 여러 개의 알람을 "보낼 수" 있는 경우
     @OneToMany(mappedBy = "sender" , cascade = CascadeType.ALL)
     private List<Notice> sendNoticeList;
+
 }

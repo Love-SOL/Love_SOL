@@ -1,14 +1,22 @@
 package com.ssafy.lovesol.domain.user.controller;
 
+import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.response.ResponseResult;
+import com.ssafy.lovesol.global.response.SingleResponseResult;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,4 +32,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+
+    @Operation(summary = "Sign Up", description = "사용자가 회원가입 합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공")
+    })
+    @PostMapping("/signup")
+    public ResponseResult createUserAccount(
+            @Valid @RequestBody CreateUserAccountRequestDto createUserAccountRequestDto) {
+        log.info("UserController_createUserAccount -> 사용자의 회원가입");
+        if (userService.createUserAccount(createUserAccountRequestDto) >= 0) {
+            return ResponseResult.successResponse;
+        }
+        return ResponseResult.failResponse;
+    }
+
+    @Operation(summary = "Login", description = "사용자가 로그인 합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공")
+    })
+    @PostMapping("/login")
+    public ResponseResult login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        log.info("UserController_login -> 로그인 시도");
+        userService.login(loginRequestDto, response);
+        return ResponseResult.successResponse;
+    }
 }
