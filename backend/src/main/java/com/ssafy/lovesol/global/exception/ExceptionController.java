@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackages = "com.ssafy.lovesol")
 public class ExceptionController {
 
-	@ExceptionHandler(Exception.class)
-	public ResponseResult incorrectLanguageCodeException(Exception err) {
+	@ExceptionHandler(InvalidAccessTokenException.class)
+	public ResponseResult InvalidAccessTokenException(InvalidAccessTokenException err) {
 		log.info("Error : {}", err.getClass());
 		log.info("Error Message : {}", err.getMessage());
-		return ResponseResult.exceptionResponse(ExceptionCode.SERVER_EXCEPTION);
+		return ResponseResult.exceptionResponse(ExceptionCode.INVALID_ACCESS_TOKEN_EXCEPTION);
 	}
+
 }
