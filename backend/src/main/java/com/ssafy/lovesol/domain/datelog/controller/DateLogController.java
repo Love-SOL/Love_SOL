@@ -88,6 +88,24 @@ public class DateLogController {
         // TODO: 데이트 일기에 이미지를 삽입한다.
 
         // TODO: 데이트 일기와 커플에게 마일리지(exp)를 적립한다.
+
+        // TODO: 일기 작성 알림을 보낸다.
+        return ResponseResult.failResponse;
+    }
+
+    /**
+     * 해당 이미지의 상세 정보를 조회한다.
+     * 날짜, 이미지, 내용, 작성된 모든 댓글을 조회한다.
+     * @param imageId
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/{imageId}")
+    public  ResponseResult getImageDetail(@PathVariable String imageId) throws Exception {
+        // TODO: 해당 이미지가 존재하는지 검사한다.
+
+        // TODO: 이미지 객체에 속하는 모든 댓글을 조회한다.
+
         return ResponseResult.failResponse;
     }
 
