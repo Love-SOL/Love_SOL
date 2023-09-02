@@ -18,4 +18,10 @@ public class ExceptionController {
 		return ResponseResult.exceptionResponse(ExceptionCode.INVALID_ACCESS_TOKEN_EXCEPTION);
 	}
 
+	@ExceptionHandler(NotExistAccountException.class)
+	public ResponseResult NotExistAccountException(NotExistAccountException err) {
+		log.info("Error : {}", err.getClass());
+		log.info("Error Message : {}", err.getMessage());
+		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_ACCOUNT_EXCEPTION);
+	}
 }
