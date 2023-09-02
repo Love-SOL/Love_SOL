@@ -64,7 +64,7 @@ public class DateLogController {
      * @return
      * @throws Exception
      */
-    @DeleteMapping("/{dateLogId")
+    @DeleteMapping("/{dateLogId}")
     public ResponseResult removeDateLog(@PathVariable String dateLog) throws  Exception {
         // TODO: 데이트 로그가 존재하는지 검사한다.
 
@@ -125,7 +125,7 @@ public class DateLogController {
         return ResponseResult.failResponse;
     }
 
-    @DeleteMapping("/{imageId")
+    @DeleteMapping("/{imageId}")
     public ResponseResult removeImage(@PathVariable String imageId) throws Exception {
         // TODO: 해당 이미지가 존재하는지 검사한다.
 
