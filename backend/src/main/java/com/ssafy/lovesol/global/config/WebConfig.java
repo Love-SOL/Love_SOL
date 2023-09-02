@@ -2,10 +2,12 @@ package com.ssafy.lovesol.global.config;
 
 import com.ssafy.lovesol.global.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -21,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor);
+        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")
+                .excludePathPatterns("/api/user/signup", "/api/user/login");;
     }
 }

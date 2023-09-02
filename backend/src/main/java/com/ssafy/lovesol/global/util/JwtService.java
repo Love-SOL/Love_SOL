@@ -80,7 +80,7 @@ public class JwtService {
         log.info("JwtTokenProvider_validateToken -> JWT토큰의 유효성 + 만료일자 확인");
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(this.generateKey()).build().parseClaimsJws(accessToken);
-            if(claims.getBody().getExpiration().getTime() - claims.getBody().getIssuedAt().getTime() != ACCESS_TOKEN_EXPIRE_MINUTES){
+            if(claims.getBody().getExpiration().getTime() - claims.getBody().getIssuedAt().getTime() != 1000 * 60 * 60 * ACCESS_TOKEN_EXPIRE_MINUTES){
                 log.info("토큰이 유효하지 않음");
                 return false;
             }
