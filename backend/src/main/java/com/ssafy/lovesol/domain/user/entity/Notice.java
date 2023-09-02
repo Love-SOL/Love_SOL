@@ -23,7 +23,7 @@ public class Notice {
     private String content;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id" , nullable = false)
