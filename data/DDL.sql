@@ -25,13 +25,13 @@ DROP TABLE IF EXISTS `comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comment` (
-  `CommentId` int NOT NULL AUTO_INCREMENT,
-  `ImageId` int NOT NULL,
-  `Content` varchar(255) NOT NULL,
-  `CreateAt` datetime NOT NULL,
-  PRIMARY KEY (`CommentId`),
-  KEY `FK_Comment_ImageId_idx` (`ImageId`),
-  CONSTRAINT `FK_Comment_ImageId` FOREIGN KEY (`ImageId`) REFERENCES `image` (`ImageId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `comment_id` int NOT NULL AUTO_INCREMENT,
+  `image_id` int NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `create_at` datetime NOT NULL,
+  PRIMARY KEY (`comment_id`),
+  KEY `FK_comment_Image_id__idx` (`image_id`),
+  CONSTRAINT `FK_comment_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`Image_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -43,18 +43,18 @@ DROP TABLE IF EXISTS `couple`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `couple` (
-  `CoupleId` int NOT NULL AUTO_INCREMENT,
-  `CommonAccount` varchar(25) NOT NULL,
-  `Anniversary` date NOT NULL,
-  `OnwerId` int NOT NULL,
-  `SubOnwerId` int DEFAULT NULL,
-  `OnwerTotal` int NOT NULL DEFAULT '0',
-  `SubOnwerTotal` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`CoupleId`),
-  KEY `FK_OnwerId_idx` (`OnwerId`),
-  KEY `FK_SubOnwerId_idx` (`SubOnwerId`),
-  CONSTRAINT `FK_OnwerId` FOREIGN KEY (`OnwerId`) REFERENCES `member` (`MemberId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_SubOnwerId` FOREIGN KEY (`SubOnwerId`) REFERENCES `member` (`MemberId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `couple_id` int NOT NULL AUTO_INCREMENT,
+  `common_account` varchar(25) NOT NULL,
+  `anniversary` date NOT NULL,
+  `onwer_id` int NOT NULL,
+  `sub_onwer_id` int DEFAULT NULL,
+  `onwer_total` int NOT NULL DEFAULT '0',
+  `sub_onwer_total` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`couple_id`),
+  KEY `FK_onwer_id__idx` (`onwer_id`),
+  KEY `FK_sub_onwer_id__idx` (`sub_onwer_id`),
+  CONSTRAINT `FK_onwer_id` FOREIGN KEY (`onwer_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_sub_onwer_id` FOREIGN KEY (`sub_onwer_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,13 +66,13 @@ DROP TABLE IF EXISTS `datelog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `datelog` (
-  `DateLogId` varchar(255) NOT NULL,
-  `CoupleId` int NOT NULL,
-  `DateAt` date NOT NULL,
-  `Mileage` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`DateLogId`),
-  KEY `FK_DateLog_CoupleId_idx` (`CoupleId`),
-  CONSTRAINT `FK_DateLog_CoupleId` FOREIGN KEY (`CoupleId`) REFERENCES `couple` (`CoupleId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `datelog_id` varchar(255) NOT NULL,
+  `couple_id` int NOT NULL,
+  `date_at` date NOT NULL,
+  `mileage` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`datelog_id`),
+  KEY `FK_DateLog_Couple_id__idx` (`couple_id`),
+  CONSTRAINT `FK_DateLog_Couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,14 +84,14 @@ DROP TABLE IF EXISTS `image`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `image` (
-  `ImageId` int NOT NULL AUTO_INCREMENT,
-  `DateLogId` varchar(255) NOT NULL,
-  `URL` varchar(255) NOT NULL,
-  `CreateAt` datetime DEFAULT NULL,
+  `image_id` int NOT NULL AUTO_INCREMENT,
+  `datelog_id` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `create_at` datetime DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ImageId`),
-  KEY `KF_Image_DateLogId_idx` (`DateLogId`),
-  CONSTRAINT `KF_Image_DateLogId` FOREIGN KEY (`DateLogId`) REFERENCES `datelog` (`DateLogId`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`image_id`),
+  KEY `KF_Image_DateLog_id__idx` (`datelog_id`),
+  CONSTRAINT `KF_Image_DateLog_id` FOREIGN KEY (`datelog_id`) REFERENCES `datelog` (`datelog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -103,16 +103,16 @@ DROP TABLE IF EXISTS `member`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `member` (
-  `MemberId` int NOT NULL AUTO_INCREMENT,
-  `ID` varchar(25) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `PersonalAcount` varchar(25) NOT NULL,
-  `Name` varchar(25) NOT NULL,
-  `BirthAt` date DEFAULT NULL,
-  `Phone` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`MemberId`),
-  UNIQUE KEY `new_tableMembercol_UNIQUE` (`ID`),
-  UNIQUE KEY `MemberId_UNIQUE` (`MemberId`)
+  `member_id` int NOT NULL AUTO_INCREMENT,
+  `id` varchar(25) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `personal_acount` varchar(25) NOT NULL,
+  `name` varchar(25) NOT NULL,
+  `birth_at` date DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`member_id`),
+  UNIQUE KEY `Member_UNIQUE` (`id`),
+  UNIQUE KEY `Member_id_UNIQUE` (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,16 +124,16 @@ DROP TABLE IF EXISTS `notice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notice` (
-  `NoticeId` int NOT NULL AUTO_INCREMENT,
-  `Content` varchar(255) NOT NULL,
-  `CreateAt` varchar(45) NOT NULL,
-  `SendId` int NOT NULL,
-  `ReceiveId` int NOT NULL,
-  PRIMARY KEY (`NoticeId`),
-  KEY `SendId_idx` (`SendId`),
-  KEY `FK_ReceivedId_idx` (`ReceiveId`),
-  CONSTRAINT `FK_ReceivedId` FOREIGN KEY (`ReceiveId`) REFERENCES `member` (`MemberId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_SendId` FOREIGN KEY (`SendId`) REFERENCES `member` (`MemberId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `notice_id` int NOT NULL AUTO_INCREMENT,
+  `content` varchar(255) NOT NULL,
+  `createAt` varchar(45) NOT NULL,
+  `send_id` int NOT NULL,
+  `receive_id` int NOT NULL,
+  PRIMARY KEY (`notice_id`),
+  KEY `send_id__idx` (`send_id`),
+  KEY `FK_received_id__idx` (`receive_id`),
+  CONSTRAINT `FK_received_id` FOREIGN KEY (`receive_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_send_id` FOREIGN KEY (`send_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,14 +145,14 @@ DROP TABLE IF EXISTS `paymentlog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `paymentlog` (
-  `PaymentId` varchar(45) NOT NULL,
-  `DateLogId` varchar(255) NOT NULL,
-  `Amount` int NOT NULL,
-  `PayAt` datetime NOT NULL,
-  `Detail` varchar(255) NOT NULL,
-  PRIMARY KEY (`PaymentId`),
-  KEY `FK_Payment_DateLogId_idx` (`DateLogId`),
-  CONSTRAINT `FK_Payment_DateLogId` FOREIGN KEY (`DateLogId`) REFERENCES `datelog` (`DateLogId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `payment_id` varchar(45) NOT NULL,
+  `datelog_id` varchar(255) NOT NULL,
+  `amount` int NOT NULL,
+  `pay_at` datetime NOT NULL,
+  `detail` varchar(255) NOT NULL,
+  PRIMARY KEY (`Payment_id`),
+  KEY `FK_Payment_DateLog_id__idx` (`dateLog_id`),
+  CONSTRAINT `FK_Payment_DateLog_id` FOREIGN KEY (`dateLog_id`) REFERENCES `datelog` (`datelog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -164,14 +164,14 @@ DROP TABLE IF EXISTS `pet`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pet` (
-  `CoupleId` int NOT NULL,
-  `Name` varchar(25) NOT NULL,
-  `Exp` int NOT NULL DEFAULT '0',
-  `Status` int NOT NULL DEFAULT '0',
-  `Kind` int DEFAULT '0',
-  `Level` int DEFAULT '1',
-  KEY `FK_CoupleId_idx` (`CoupleId`),
-  CONSTRAINT `FK_CoupleId` FOREIGN KEY (`CoupleId`) REFERENCES `couple` (`CoupleId`) ON DELETE CASCADE ON UPDATE CASCADE
+  `couple_id` int NOT NULL,
+  `name` varchar(25) NOT NULL,
+  `exp` int NOT NULL DEFAULT '0',
+  `status` int NOT NULL DEFAULT '0',
+  `kind` int DEFAULT '0',
+  `level` int DEFAULT '1',
+  KEY `FK_couple_id_idx` (`couple_id`),
+  CONSTRAINT `FK_couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -183,15 +183,15 @@ DROP TABLE IF EXISTS `schedule`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `schedule` (
-  `ScheduleId` int NOT NULL AUTO_INCREMENT,
-  `CoupleId` int NOT NULL,
-  `startAt` datetime NOT NULL,
-  `endAt` datetime NOT NULL,
+  `schedule_id` int NOT NULL AUTO_INCREMENT,
+  `couple_id` int NOT NULL,
+  `start_at` datetime NOT NULL,
+  `end_at` datetime NOT NULL,
   `content` varchar(255) DEFAULT NULL,
   `type` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ScheduleId`),
-  KEY `FK_CoupleId_idx` (`CoupleId`),
-  CONSTRAINT `FK_Schedule_CoupleId` FOREIGN KEY (`CoupleId`) REFERENCES `couple` (`CoupleId`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`schedule_id`),
+  KEY `FK_Couple_id_idx` (`couple_id`),
+  CONSTRAINT `FK_schedule_couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -203,5 +203,3 @@ CREATE TABLE `schedule` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2023-08-30 22:18:46
