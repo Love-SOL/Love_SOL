@@ -5,7 +5,7 @@ USE `lovesol`;
 -- Host: localhost    Database: lovesol
 -- ------------------------------------------------------
 -- Server version	8.0.32
-
+-- temp
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -53,8 +53,8 @@ CREATE TABLE `couple` (
   PRIMARY KEY (`couple_id`),
   KEY `FK_onwer_id__idx` (`onwer_id`),
   KEY `FK_sub_onwer_id__idx` (`sub_onwer_id`),
-  CONSTRAINT `FK_onwer_id` FOREIGN KEY (`onwer_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_sub_onwer_id` FOREIGN KEY (`sub_onwer_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_onwer_id` FOREIGN KEY (`onwer_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_sub_onwer_id` FOREIGN KEY (`sub_onwer_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,23 +96,25 @@ CREATE TABLE `image` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `member`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `member`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `member` (
-  `member_id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
   `id` varchar(25) NOT NULL,
   `password` varchar(255) NOT NULL,
   `personal_acount` varchar(25) NOT NULL,
   `name` varchar(25) NOT NULL,
   `birth_at` date DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`member_id`),
-  UNIQUE KEY `Member_UNIQUE` (`id`),
-  UNIQUE KEY `Member_id_UNIQUE` (`member_id`)
+  `deposit_at` date default null,
+  `amount` int default 0,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_UNIQUE` (`id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -132,8 +134,8 @@ CREATE TABLE `notice` (
   PRIMARY KEY (`notice_id`),
   KEY `send_id__idx` (`send_id`),
   KEY `FK_received_id__idx` (`receive_id`),
-  CONSTRAINT `FK_received_id` FOREIGN KEY (`receive_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_send_id` FOREIGN KEY (`send_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_received_id` FOREIGN KEY (`receive_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_send_id` FOREIGN KEY (`send_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
