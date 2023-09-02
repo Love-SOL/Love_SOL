@@ -60,12 +60,12 @@ public class DateLogController {
 
     /**
      * 해당 데이트 일기를 삭제한다.
-     * @param dateLog
+     * @param dateLogId
      * @return
      * @throws Exception
      */
     @DeleteMapping("/{dateLogId")
-    public ResponseResult removeDateLog(@PathVariable String dateLog) throws  Exception {
+    public ResponseResult removeDateLog(@PathVariable String dateLogId) throws  Exception {
         // TODO: 데이트 로그가 존재하는지 검사한다.
 
         // TODO: 데이트 로그에 존재하는 모든 이미지 객체들을 삭제한다.
