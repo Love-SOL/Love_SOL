@@ -14,7 +14,6 @@ import io.swagger.v3.oas.models.info.Info;
  */
 
 @Configuration
-
 public class OpenApiConfig {
 	@Bean
 	public OpenAPI openApi() {
@@ -34,9 +33,9 @@ public class OpenApiConfig {
 				)
 				.info(
 						new Info()
-								.title("BenePick API Document")
+								.title("Love-Sol API Document")
 								.version("v0.0.1")
-								.description("BenePick API 명세서입니다.")
+								.description("Love-Sol API 명세서입니다.")
 				);
 	}
 }
