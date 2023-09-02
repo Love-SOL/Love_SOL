@@ -38,6 +38,12 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime birthAt;
 
+    @Column(nullable =true)
+    private int amount;
+
+    @Column(nullable =true)
+    private int depositAt;
+
     // 어떤 User가 여러 개의 알람을 "받을 수" 있는 경우
     @OneToMany(mappedBy = "receiver" , cascade = CascadeType.ALL)
     private List<Notice> receiveNoticeList;
