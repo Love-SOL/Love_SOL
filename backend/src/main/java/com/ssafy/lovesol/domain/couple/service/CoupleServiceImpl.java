@@ -19,7 +19,13 @@ public class CoupleServiceImpl implements CoupleService{
     private final UserService userService;
     @Override
     public long createCouple(CoupleCreateRequestDto coupleDto) {
-        Couple couple = coupleDto.toEntity(userService.getUserByUserId(coupleDto.getOwnerId()));
+        log.info("후보2");
+        User user = userService.getUserById(coupleDto.getId());
+        log.info("후보1");
+        if(user == null) return -1;
+        log.info("커플통장 생성 전 owner 객체 " + user.toString());
+        Couple couple = coupleDto.toEntity(user);
+        log.info(couple.toString());
         return coupleRepository.save(couple).getCoupleId();
 
     }
@@ -28,7 +34,7 @@ public class CoupleServiceImpl implements CoupleService{
     @Override
     public String getCoupleInfo(long userId) {
         log.info("getCoupleInfo : 커플 계좌 정보 도출");
-        User user = userService.getUserById(userId);
+        User user = userService.getUserByUserId(userId);
         Optional<Couple> couple = coupleRepository.findBySubOwner(user);
         if(!couple.isEmpty()){
             return couple.get().getCommonAccount();
@@ -43,7 +49,7 @@ public class CoupleServiceImpl implements CoupleService{
     @Override
     public Couple getCoupleInfoByCoupleId(String userId) {
         log.info("getCoupleInfo : 커플 정보 return");
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserById(userId);
         Optional<Couple> couple = coupleRepository.findBySubOwner(user);
         if(!couple.isEmpty()){
             return couple.get();

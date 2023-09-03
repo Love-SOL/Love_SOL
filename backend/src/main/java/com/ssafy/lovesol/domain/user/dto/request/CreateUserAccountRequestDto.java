@@ -37,9 +37,9 @@ public class CreateUserAccountRequestDto {
 	@Schema(description = "사용자 휴대폰 번호", example = "01012341234")
 	private String phoneNumber;
 
-	@NotBlank
-	@Schema(description = "사용자 생일", example = "20001111")
-	private String birthAt;
+
+	@Schema(description = "사용자 생일", example = "2000-11-11")
+	private LocalDate birthAt;
 
 	@NotBlank
 	@Schema(description = "사용자 계좌", example = "318307106824124")

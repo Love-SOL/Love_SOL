@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "회원가입 요청 DTO")
+@Schema(description = "계좌정보 업데이트")
 public class UpdateUserAccountInfoDto {
 
 	@NotBlank
@@ -18,11 +18,11 @@ public class UpdateUserAccountInfoDto {
 	private String id;
 
 
-	@Schema(description = "사용자 로그인 ID", example = "shinhan")
+	@Schema(description = "사용자 자동입금 일자", example = "1:28")
 	private int depositAt;
 
 
-	@Schema(description = "사용자 로그인 ID", example = "shinhan")
+	@Schema(description = "사용자 자동 입금 금액", example = "0")
 	private int amount;
 
 }

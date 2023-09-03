@@ -25,7 +25,7 @@ public class CoupleCreateRequestDto {
     private LocalDate anniversary;
 
     @NotNull
-    private String OwnerId;
+    private String Id;
 
 
     public Couple toEntity(User owner){
