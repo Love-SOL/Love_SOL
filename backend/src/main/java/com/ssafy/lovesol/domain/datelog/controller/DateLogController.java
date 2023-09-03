@@ -60,9 +60,8 @@ public class DateLogController {
      */
     @GetMapping("/{dateLogId}")
     public ResponseResult getDateLog(@PathVariable String dateLogId) throws Exception {
-        log.info(dateLogId + " 데이트 기록을 조회합니다.");
+        log.info(dateLogId + " 데이트 일기를 조회합니다.");
         return new SingleResponseResult<DateLog>(dateLogService.getDateLog(Long.parseLong(dateLogId)));
-
     }
 
   
@@ -76,7 +75,7 @@ public class DateLogController {
      */
     @PostMapping("/{dateLogId}")
     public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestBody Image image) throws Exception {
-        log.info(dateLogId + " 데이트 로그에 이미지를 삽입합니다.");
+        log.info(dateLogId + " 데이트 일기에 이미지를 삽입합니다.");
         // 데이트 로그에 이미지를 삽입한다.
         dateLogService.insertImage(Long.parseLong(dateLogId), image);
         // TODO: 일기 작성 알림을 보낸다.
@@ -93,6 +92,7 @@ public class DateLogController {
      */
     @GetMapping("/{imageId}")
     public  ResponseResult getImageDetail(@PathVariable String imageId) throws Exception {
+        log.info(imageId + " 이미지를 상세 조회합니다.");
         // 이미지 객체 정보를 조회한다.
         return new SingleResponseResult<Image>(imageService.getImage(Long.parseLong(imageId)));
     }
@@ -107,14 +107,22 @@ public class DateLogController {
      */
     @PutMapping("/{imageId}")
     public ResponseResult modifyImage(@PathVariable String imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
+        log.info(imageId + " 이미지를 수정합니다.");
         // 이미지 객체를 수정한다.
         imageService.updateImage(updateImage);
         // TODO: 이미지 수정 알림을 보낸다.
         return ResponseResult.failResponse;
     }
 
+    /**
+     * 이미지를 삭제합니다.
+     * @param imageId
+     * @return
+     * @throws Exception
+     */
     @DeleteMapping("/{imageId}")
     public ResponseResult removeImage(@PathVariable String imageId) throws Exception {
+        log.info(imageId + " 이미지를 삭제합니다.");
         // 이미지 객체를 삭제한다.
         imageService.deleteImage(Long.parseLong(imageId));
         return ResponseResult.successResponse;

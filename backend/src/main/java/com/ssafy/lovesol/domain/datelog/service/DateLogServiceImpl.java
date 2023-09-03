@@ -29,10 +29,8 @@ public class DateLogServiceImpl implements DateLogService{
     public Long createDateLog(Long coupleId, LocalDateTime dateAt) {
         // TODO: 커플 not exist 예외 생성하기
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistDateLogException::new);
-        DateLog dateLog = new DateLog();
         // 커플 객체와 날짜를 dateLog에 삽입한다.
-        dateLog.setCouple(couple);
-        dateLog.setDateAt(dateAt);
+        DateLog dateLog = DateLog.create(couple, dateAt);
         return dateLogRepository.save(dateLog).getDateLogId();
     }
 
