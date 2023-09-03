@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.schedule.controller;
 
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
+import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.service.ScheduleService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +29,7 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    @Operation(summary = "Regist Schedule", description = "일정등록 하기")
+    @Operation(summary = "Create Schedule", description = "일정등록 하기")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "일정등록 성공"),
             @ApiResponse(responseCode = "400", description = "일정등록 실패")
@@ -41,4 +42,19 @@ public class ScheduleController {
             return ResponseResult.successResponse;
         return ResponseResult.failResponse;
     }
+
+    @Operation(summary = "Update Schedule", description = "일정 수정 하기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일정 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "일정 수정 실패")
+    })
+    @PutMapping("/{coupleId}")
+    public ResponseResult UpdateSchedule(@PathVariable(value = "coupleId") Long coupleId,
+                                         @Valid @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request) {
+        log.info("UserController_UpdateSchedule | 일정 수정");
+        scheduleService.UpdateSchedule(coupleId , updateScheduleRequestDto , request);
+        return ResponseResult.successResponse;
+    }
+
+
 }
