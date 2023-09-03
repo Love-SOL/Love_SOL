@@ -30,45 +30,22 @@ public class PetController {
     @GetMapping("/{coupleId}")
     public ResponseResult getPet(@PathVariable String coupleId) throws Exception {
         log.info(coupleId + "의 펫 정보를 불러옵니다.");
-        Pet pet = petService.getPet(Long.parseLong(coupleId));
-        if (pet != null){
-            return new SingleResponseResult<Pet>(pet);
-        }
-        return ResponseResult.failResponse;
+        petService.getPet(Long.parseLong(coupleId));
+        return ResponseResult.successResponse;
     }
 
     @PostMapping("/{coupleId}")
-    public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestBody Pet pet) throws Exception {
+    public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestBody String petName) throws Exception {
         log.info(coupleId + "의 펫을 생성합니다.");
-        // TODO: 커플 pet 객체에 커플 객체 삽입해야함
-        if (petService.createPet(pet) != null){
-            return ResponseResult.successResponse;
-        }
-        return ResponseResult.failResponse;
+        // pet 객체에 펫 이름과 커플 객체 넣어서 생성
+        petService.createPet(petName, Long.parseLong(coupleId));
+        return ResponseResult.successResponse;
     }
 
     @PutMapping("/{coupleId}")
     public ResponseResult modifyPet(@PathVariable String coupleId, @Valid @RequestBody int exp) throws  Exception {
         log.info(coupleId + "의 펫에게 " + exp + "만큼의 경험치를 부여합니다.");
-        Pet pet = petService.getPet(Long.parseLong(coupleId));
-        if (pet == null) {
-            return ResponseResult.failResponse;
-        }
-        pet.setExp(pet.getExp() + exp);
-        if (petService.modifyPet(pet) == null) {
-            return ResponseResult.failResponse;
-        }
+        petService.gainExp(Long.parseLong(coupleId), exp);
         return ResponseResult.successResponse;
-    }
-
-    @DeleteMapping("/{coupleId}")
-    public ResponseResult removePet(@PathVariable String coupleId) throws  Exception {
-        log.info(coupleId + "의 펫을 삭제합니다.");
-        Pet pet = petService.getPet(Long.parseLong(coupleId));
-        petService.deletePet(pet);
-        if (pet == null) {
-            return ResponseResult.successResponse;
-        }
-        return ResponseResult.failResponse;
     }
 }

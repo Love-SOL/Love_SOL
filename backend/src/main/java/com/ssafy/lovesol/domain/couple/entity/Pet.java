@@ -33,4 +33,15 @@ public class Pet {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "couple_id")
     private Couple couple;
+
+    public void gainExp(int exp) {
+        this.exp += exp;
+    }
+
+    public static Pet create(String petName, Couple couple) {
+        return Pet.builder()
+                .name(petName)
+                .couple(couple)
+                .build();
+    }
 }
