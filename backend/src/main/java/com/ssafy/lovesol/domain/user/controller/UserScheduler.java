@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.user.controller;
 
 
+import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
@@ -29,7 +30,10 @@ public class UserScheduler {
         List<User> userList = userService.getAllUserByDepositAt(day);
 
         for(User user : userList){
+            String CoupleAccount = coupleService.getCoupleInfo(user.getUserId());
             //유저 번호를 기반으로 couple 계좌를 찾아서 입금 api 동작 진행할 예정
+            if(CoupleAccount.equals("")) continue;
+
         }
 
         log.info(day + "일 Scheduler success");
