@@ -28,7 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     @Transactional
-    public Long CreateSchedule(Long coupleId, CreateScheduleRequestDto createScheduleRequestDto ,
+    public Long createSchedule(Long coupleId, CreateScheduleRequestDto createScheduleRequestDto ,
                                HttpServletRequest request
                                ) {
         log.info("ScheduleServiceImpl_CreateSchedule | 일정 작성");
@@ -51,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void UpdateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto, HttpServletRequest request) {
+    public void updateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto, HttpServletRequest request) {
         log.info("ScheduleServiceImpl_UpdateSchedule | 일정 수정");
 
         Schedule schedule = scheduleRepository.findById(updateScheduleRequestDto.getScheduleId()).get();
@@ -60,6 +60,12 @@ public class ScheduleServiceImpl implements ScheduleService{
         User user = userRepository.findByLoginId(loginId).get();
         ScheduleType scheduleType = getScheduleType(couple, user, updateScheduleRequestDto.getScheduleType());
         schedule.updateSchedule(updateScheduleRequestDto , scheduleType);
+    }
+
+    @Override
+    public void deleteSchedule(Long scheduleId) {
+        log.info("ScheduleServiceImpl_deleteSchedule | 일정 삭제");
+        scheduleRepository.deleteById(scheduleId);
     }
 
 }

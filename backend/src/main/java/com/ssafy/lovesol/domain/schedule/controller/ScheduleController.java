@@ -38,7 +38,7 @@ public class ScheduleController {
     public ResponseResult CreateSchedule(@PathVariable(value = "coupleId") Long coupleId,
                                          @Valid @RequestBody CreateScheduleRequestDto createScheduleRequestDto , HttpServletRequest request) {
         log.info("UserController_CreateSchedule | 일정 등록");
-        if(scheduleService.CreateSchedule(coupleId , createScheduleRequestDto , request) >= 0)
+        if(scheduleService.createSchedule(coupleId , createScheduleRequestDto , request) >= 0)
             return ResponseResult.successResponse;
         return ResponseResult.failResponse;
     }
@@ -52,7 +52,19 @@ public class ScheduleController {
     public ResponseResult UpdateSchedule(@PathVariable(value = "coupleId") Long coupleId,
                                          @Valid @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request) {
         log.info("UserController_UpdateSchedule | 일정 수정");
-        scheduleService.UpdateSchedule(coupleId , updateScheduleRequestDto , request);
+        scheduleService.updateSchedule(coupleId , updateScheduleRequestDto , request);
+        return ResponseResult.successResponse;
+    }
+
+    @Operation(summary = "Delete Schedule", description = "일정 삭제 하기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일정 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "일정 삭제 실패")
+    })
+    @DeleteMapping("/{scheduleId}")
+    public ResponseResult DeleteSchedule(@PathVariable(value = "scheduleId") Long scheduleId) {
+        log.info("UserController_DeleteSchedule | 일정 삭제");
+        scheduleService.deleteSchedule(scheduleId);
         return ResponseResult.successResponse;
     }
 

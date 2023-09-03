@@ -8,7 +8,8 @@ import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface ScheduleService {
-    Long CreateSchedule(Long coupleId , CreateScheduleRequestDto createScheduleRequestDto, HttpServletRequest request);
+    Long createSchedule(Long coupleId , CreateScheduleRequestDto createScheduleRequestDto, HttpServletRequest request);
     ScheduleType getScheduleType(Couple couple , User user , int ScheduleType);
-    void UpdateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request);
+    void updateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request);
+    void deleteSchedule(Long scheduleId);
 }
