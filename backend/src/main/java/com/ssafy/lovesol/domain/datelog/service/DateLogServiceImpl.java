@@ -4,6 +4,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.couple.repository.PetRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
@@ -22,9 +23,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Service
 public class DateLogServiceImpl implements DateLogService{
-    DateLogRepository dateLogRepository;
-    CoupleRepository coupleRepository;
-    PetRepository petRepository;
+    final private DateLogRepository dateLogRepository;
+    final private CoupleRepository coupleRepository;
+    final private PetRepository petRepository;
     @Override
     public Long createDateLog(Long coupleId, LocalDate dateAt) {
         // 커플 정보가 존재하는지 검사한다.
@@ -35,10 +36,11 @@ public class DateLogServiceImpl implements DateLogService{
     }
 
     @Override
-    public DateLog getDateLog(Long dateLogId) {
+    public DateLogResponseDto getDateLog(Long dateLogId) {
         // 해당 데이트 일기가 존재하는지 검사한다.
         // 데이트 로그에 속하는 날짜, 적립된 마일리지와 이미지 객체들을 조회한다.
-        return dateLogRepository.findById(dateLogId).orElseThrow(NotExistDateLogException::new);
+        DateLog dateLog = dateLogRepository.findById(dateLogId).orElseThrow(NotExistDateLogException::new);
+        return dateLog.toDateLogResponseDto();
     }
 
     @Override
