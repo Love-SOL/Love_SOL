@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @Builder
@@ -43,13 +46,16 @@ public class CreateUserAccountRequestDto {
 	private String personalAccount;
 
 	public User toEntity(){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate updatedBirthAt = LocalDate.parse(birthAt, formatter);
+
 		return User.builder()
 				.id(id)
 				.password(password)
 				.simplePassword(simplePassword)
 				.name(name)
 				.phoneNumber(phoneNumber)
-				.birthAt(birthAt)
+				.birthAt(updatedBirthAt)
 				.personalAccount(personalAccount)
 				.build();
 	}

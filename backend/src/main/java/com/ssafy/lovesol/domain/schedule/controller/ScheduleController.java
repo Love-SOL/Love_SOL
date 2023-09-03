@@ -4,6 +4,7 @@ import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.service.ScheduleService;
 import com.ssafy.lovesol.global.response.ResponseResult;
+import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,6 +67,18 @@ public class ScheduleController {
         log.info("UserController_DeleteSchedule | 일정 삭제");
         scheduleService.deleteSchedule(scheduleId);
         return ResponseResult.successResponse;
+    }
+
+    @Operation(summary = "Get All Schedule", description = "전체 일정 조회 하기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "전체 일정 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "전체 일정 조회 실패")
+    })
+    @GetMapping("/{coupleId}")
+    public ResponseResult getAllScheduleByYearAndMonth(
+            @PathVariable(value = "coupleId") Long coupleId , @RequestParam(value = "year") int year , @RequestParam(value = "month") int month) {
+        log.info("UserController_getAllScheduleByYearAndMonth | 전체 일정 조회");
+        return new SingleResponseResult<>(scheduleService.getAllScheduleByYearAndMonth(coupleId, year, month));
     }
 
 

@@ -23,9 +23,9 @@ public class UpdateScheduleRequestDto {
     @Schema(description = "일정 타입", example = "0")
     private int scheduleType;
 
-    @Schema(description = "일정 시작 날짜", example = "2023-09-03T14:30:40.123")
-    private LocalDateTime startAt;
+    @Schema(description = "일정 시작 날짜", example = "20230903")
+    private String startAt;
 
-    @Schema(description = "일정 종료 날짜", example = "2023-09-04T14:30:40.123")
-    private LocalDateTime endAt;
+    @Schema(description = "일정 종료 날짜", example = "20230904")
+    private String endAt;
 }
