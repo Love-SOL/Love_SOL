@@ -14,7 +14,6 @@ import lombok.Setter;
 @Schema(description = "샘플 반환 DTO")
 public class SampleResponseDto {
 
-    @NotNull
     @Schema(description = "설명", example = "예시")
     private String sample;
 

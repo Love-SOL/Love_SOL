@@ -53,11 +53,13 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User getUserByUserId(String userId){
-        Optional<User> user = userRepository.findById(userId);
+    public User getUserById(String id){
+        Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()){
+            log.info("not found user");
             return null;
         }
+        log.info("return Not null");
         return user.get();
     }
 
@@ -75,7 +77,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User getUserById(long userId){
+    public User getUserByUserId(long userId){
         Optional<User> user = userRepository.findByUserId(userId);
         if(user.isEmpty()){
             return null;

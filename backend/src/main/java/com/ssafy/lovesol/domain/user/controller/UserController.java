@@ -3,6 +3,8 @@ package com.ssafy.lovesol.domain.user.controller;
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
+import com.ssafy.lovesol.domain.user.dto.response.UserResponseDto;
+import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
@@ -17,6 +19,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -68,6 +72,23 @@ public class UserController {
         log.info("UserController_Deposit -> 자동 입금 정보 설정");
         userService.UpdateDepositInfo(updateUserAccountInfoDto);
         return ResponseResult.successResponse;
+    }
+
+    @GetMapping("/account/{id}")
+    public SingleResponseResult<UserResponseDto> setDeposit(@PathVariable String id){
+        log.info("UserController_Deposit -> 자동 입금 정보 조회");
+        User user = userService.getUserById(id);
+        return new SingleResponseResult<UserResponseDto>(
+                UserResponseDto.builder()
+                        .id(user.getId())
+                        .personalAccount(user.getPersonalAccount())
+                        .name(user.getName())
+                        .phoneNumber(user.getPhoneNumber())
+                        .birthAt(user.getBirthAt())
+                        .amount(user.getAmount())
+                        .depositAt(user.getDepositAt())
+                        .build()
+        );
     }
 
 }

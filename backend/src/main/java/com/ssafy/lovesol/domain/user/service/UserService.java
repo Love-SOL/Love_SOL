@@ -16,8 +16,8 @@ public interface UserService {
     void login(LoginRequestDto loginRequestDto, HttpServletResponse response);
     void setToken(User user, HttpServletResponse response);
     List<User> getAllUserByDepositAt(int day);
-    User getUserById(long userId);
-    User getUserByUserId(String userId);
+    User getUserByUserId(long userId);
+    User getUserById(String userId);
 
     void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
 }
