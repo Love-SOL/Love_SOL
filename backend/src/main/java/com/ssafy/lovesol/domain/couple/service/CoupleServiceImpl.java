@@ -18,9 +18,9 @@ public class CoupleServiceImpl implements CoupleService{
     private final CoupleRepository coupleRepository;
     private final UserService userService;
     @Override
-    public void createCouple(CoupleCreateRequestDto coupleDto) {
+    public long createCouple(CoupleCreateRequestDto coupleDto) {
         Couple couple = coupleDto.toEntity(userService.getUserByUserId(coupleDto.getOwnerId()));
-        coupleRepository.save(couple);
+        return coupleRepository.save(couple).getCoupleId();
 
     }
 

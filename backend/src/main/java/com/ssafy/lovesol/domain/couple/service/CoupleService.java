@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CoupleService {
 
-    void createCouple(CoupleCreateRequestDto coupleDto);
+    long createCouple(CoupleCreateRequestDto coupleDto);
 //    void updateCouple(CoupleUpdateRequestDto coupleDto);
     String getCoupleInfo(long userId);
 
