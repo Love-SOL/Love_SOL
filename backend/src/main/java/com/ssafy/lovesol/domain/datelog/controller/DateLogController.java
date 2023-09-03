@@ -1,9 +1,11 @@
 package com.ssafy.lovesol.domain.datelog.controller;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.datelog.dto.request.UpdateImageDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
+import com.ssafy.lovesol.domain.datelog.service.ImageService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +34,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/date-log")
 public class DateLogController {
     DateLogService dateLogService;
+    ImageService imageService;
     /**
      * 데이트 일기를 생성하는 API
      * 해당 날짜의 데이트 일기를 생성한다.
@@ -87,34 +90,30 @@ public class DateLogController {
      */
     @GetMapping("/{imageId}")
     public  ResponseResult getImageDetail(@PathVariable String imageId) throws Exception {
-        // TODO: 해당 이미지가 존재하는지 검사한다.
-
-        // TODO: 이미지 객체에 속하는 모든 댓글을 조회한다.
-
-        return ResponseResult.failResponse;
+        // 이미지 객체 정보를 조회한다.
+        return new SingleResponseResult<Image>(imageService.getImage(Long.parseLong(imageId)));
     }
 
     /**
      * 해당 이미지 내용을 수정한다.
      * 이미지 혹은 이미지 내용을 수정할 수 있다.
      * @param imageId
-     * @param image
+     * @param updateImage
      * @return
      * @throws Exception
      */
     @PutMapping("/{imageId}")
-    public ResponseResult modifyImage(@PathVariable String imageId, @Valid @RequestBody Image image) throws Exception {
-        // TODO: 해당 이미지가 존재하는지 검사한다.
-
-        // TODO: 이미지 객체를 수정한다.
+    public ResponseResult modifyImage(@PathVariable String imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
+        // 이미지 객체를 수정한다.
+        imageService.updateImage(updateImage);
+        // TODO: 이미지 수정 알림을 보낸다.
         return ResponseResult.failResponse;
     }
 
     @DeleteMapping("/{imageId}")
     public ResponseResult removeImage(@PathVariable String imageId) throws Exception {
-        // TODO: 해당 이미지가 존재하는지 검사한다.
-
-        // TODO: 이미지 객체를 삭제한다.
-        return ResponseResult.failResponse;
+        // 이미지 객체를 삭제한다.
+        imageService.deleteImage(Long.parseLong(imageId));
+        return ResponseResult.successResponse;
     }
 }
