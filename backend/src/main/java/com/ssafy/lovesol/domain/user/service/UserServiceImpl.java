@@ -3,6 +3,7 @@ package com.ssafy.lovesol.domain.user.service;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
 import com.ssafy.lovesol.global.exception.NotExistAccountException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +60,19 @@ public class UserServiceImpl implements UserService{
         }
         return user.get();
     }
+
+    @Override
+    @Transactional
+    public void UpdateDepositInfo(UpdateUserAccountInfoDto userDto) {
+        Optional<User> user = userRepository.findById(userDto.getId());
+        if(!user.isEmpty()) {
+            log.info("isEmpty Check ");
+            User use = user.get();
+            use.setAutoDeposit(userDto.getDepositAt(),userDto.getAmount());
+        }
+
+    }
+
 
     @Override
     public User getUserById(long userId){
