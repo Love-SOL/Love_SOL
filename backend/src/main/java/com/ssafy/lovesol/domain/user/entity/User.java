@@ -55,4 +55,9 @@ public class User {
     @OneToMany(mappedBy = "sender" , cascade = CascadeType.ALL)
     private List<Notice> sendNoticeList;
 
+
+    public void setAutoDeposit(int depositAt, int amount){
+        this.amount = amount;
+        this.depositAt = depositAt;
+    }
 }

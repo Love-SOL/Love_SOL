@@ -27,7 +27,7 @@ public class CoupleServiceImpl implements CoupleService{
 
     @Override
     public String getCoupleInfo(long userId) {
-        log.info("getCoupleInfo : 커플 정보 도출");
+        log.info("getCoupleInfo : 커플 계좌 정보 도출");
         User user = userService.getUserById(userId);
         Optional<Couple> couple = coupleRepository.findBySubOwner(user);
         if(!couple.isEmpty()){

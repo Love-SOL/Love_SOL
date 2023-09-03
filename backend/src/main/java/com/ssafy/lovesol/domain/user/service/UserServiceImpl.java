@@ -3,6 +3,7 @@ package com.ssafy.lovesol.domain.user.service;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
 import com.ssafy.lovesol.global.exception.NotExistAccountException;
@@ -58,6 +59,14 @@ public class UserServiceImpl implements UserService{
         }
         return user.get();
     }
+
+    @Override
+    public void UpdateDepositInfo(UpdateUserAccountInfoDto userDto) {
+        Optional<User> user = userRepository.findById(userDto.getId());
+        if(!user.isEmpty()) user.get().setAutoDeposit(userDto.getDepositAt(),userDto.getAmount());
+
+    }
+
 
     @Override
     public User getUserById(long userId){
