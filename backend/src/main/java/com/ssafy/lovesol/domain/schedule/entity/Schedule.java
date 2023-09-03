@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.schedule.entity;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +36,11 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "couple_id", nullable = false)
     private Couple couple;
+
+    public void updateSchedule(UpdateScheduleRequestDto updateScheduleRequestDto, ScheduleType scheduleType){
+        this.content = updateScheduleRequestDto.getContent();
+        this.startAt = updateScheduleRequestDto.getStartAt();
+        this.endAt = updateScheduleRequestDto.getEndAt();
+        this.scheduleType = scheduleType;
+    }
 }
