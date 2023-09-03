@@ -30,12 +30,11 @@ public class PetController {
     @GetMapping("/{coupleId}")
     public ResponseResult getPet(@PathVariable String coupleId) throws Exception {
         log.info(coupleId + "의 펫 정보를 불러옵니다.");
-        petService.getPet(Long.parseLong(coupleId));
-        return ResponseResult.successResponse;
+        return new SingleResponseResult<Pet>(petService.getPet(Long.parseLong(coupleId)));
     }
 
-    @PostMapping("/{coupleId}")
-    public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestBody String petName) throws Exception {
+    @GetMapping("/{coupleId}")
+    public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestParam String petName) throws Exception {
         log.info(coupleId + "의 펫을 생성합니다.");
         // pet 객체에 펫 이름과 커플 객체 넣어서 생성
         petService.createPet(petName, Long.parseLong(coupleId));
