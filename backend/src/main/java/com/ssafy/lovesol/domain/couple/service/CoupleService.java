@@ -13,6 +13,9 @@ public interface CoupleService {
 //    void updateCouple(CoupleUpdateRequestDto coupleDto);
     String getCoupleInfo(long userId);
 
+    Couple getCoupleInfoByCoupleId(String userId);
+
+
 
 
 

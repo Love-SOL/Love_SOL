@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,9 +62,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void UpdateDepositInfo(UpdateUserAccountInfoDto userDto) {
         Optional<User> user = userRepository.findById(userDto.getId());
-        if(!user.isEmpty()) user.get().setAutoDeposit(userDto.getDepositAt(),userDto.getAmount());
+        if(!user.isEmpty()) {
+            log.info("isEmpty Check ");
+            User use = user.get();
+            use.setAutoDeposit(userDto.getDepositAt(),userDto.getAmount());
+        }
 
     }
 

@@ -19,5 +19,5 @@ public interface UserService {
     User getUserById(long userId);
     User getUserByUserId(String userId);
 
-    void UpdateDepositInfo(UpdateUserAccountInfoDto userDto) throws NotExistAccountException;
+    void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
 }

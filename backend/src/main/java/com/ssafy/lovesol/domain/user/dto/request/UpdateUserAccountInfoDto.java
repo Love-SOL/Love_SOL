@@ -18,12 +18,10 @@ public class UpdateUserAccountInfoDto {
 	private String id;
 
 
-	@NotBlank
 	@Schema(description = "사용자 로그인 ID", example = "shinhan")
 	private int depositAt;
 
 
-	@NotBlank
 	@Schema(description = "사용자 로그인 ID", example = "shinhan")
 	private int amount;
 

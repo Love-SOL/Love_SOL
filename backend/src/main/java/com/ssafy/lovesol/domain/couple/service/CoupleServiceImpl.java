@@ -40,5 +40,20 @@ public class CoupleServiceImpl implements CoupleService{
         return "";
     }
 
+    @Override
+    public Couple getCoupleInfoByCoupleId(String userId) {
+        log.info("getCoupleInfo : 커플 정보 return");
+        User user = userService.getUserByUserId(userId);
+        Optional<Couple> couple = coupleRepository.findBySubOwner(user);
+        if(!couple.isEmpty()){
+            return couple.get();
+        }
+        couple = coupleRepository.findByOwner(user);
+        if(!couple.isEmpty()){
+            return couple.get();
+        }
+        return null;
+    }
+
 
 }
