@@ -47,7 +47,7 @@ public class DateLogController {
     @GetMapping("/{coupleId}/{dateAt}")
     public ResponseResult createDateLog(@PathVariable String coupleId, @PathVariable String dateAt) throws Exception {
         log.info(coupleId + "의 데이트 일기를 생성합니다.");
-        if (dateLogService.createDateLog(Long.parseLong(coupleId), LocalDateTime.parse(dateAt)) >= 0){
+        if (dateLogService.createDateLog(Long.parseLong(coupleId), LocalDate.parse(dateAt)) >= 0){
             return ResponseResult.successResponse;
         }
         return ResponseResult.failResponse;

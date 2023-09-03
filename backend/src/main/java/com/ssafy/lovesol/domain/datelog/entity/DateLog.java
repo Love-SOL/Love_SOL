@@ -48,7 +48,7 @@ public class DateLog {
         this.mileage += mileage;
     }
 
-    public static DateLog create(Couple couple, LocalDateTime dateAt){
+    public static DateLog create(Couple couple, LocalDate dateAt){
         return DateLog.builder()
                 .couple(couple)
                 .dateAt(dateAt)
