@@ -1,10 +1,7 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +33,14 @@ public class Image{
 
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
+
+    public void updateImageUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
 
 
