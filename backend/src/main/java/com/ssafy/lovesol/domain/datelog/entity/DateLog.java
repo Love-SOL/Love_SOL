@@ -35,6 +35,10 @@ public class DateLog {
     @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
 
+    public void accumulateMileage(int mileage) {
+        this.mileage += mileage;
+    }
+
     public static DateLog create(Couple couple, LocalDateTime dateAt){
         return DateLog.builder()
                 .couple(couple)

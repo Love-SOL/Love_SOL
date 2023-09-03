@@ -5,18 +5,14 @@ import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
+import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.exception.NotExistDateLogException;
-import com.ssafy.lovesol.global.response.ResponseResult;
-import com.ssafy.lovesol.global.response.SingleResponseResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
 
 
 @Slf4j
@@ -27,8 +23,8 @@ public class DateLogServiceImpl implements DateLogService{
     CoupleRepository coupleRepository;
     @Override
     public Long createDateLog(Long coupleId, LocalDateTime dateAt) {
-        // TODO: 커플 not exist 예외 생성하기
-        Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistDateLogException::new);
+        // 커플 정보가 존재하는지 검사한다.
+        Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         // 커플 객체와 날짜를 dateLog에 삽입한다.
         DateLog dateLog = DateLog.create(couple, dateAt);
         return dateLogRepository.save(dateLog).getDateLogId();
@@ -50,7 +46,7 @@ public class DateLogServiceImpl implements DateLogService{
         // 데이트 일기에 이미지를 삽입한다.
         dateLog.getImageList().add(image);
         // 데이트 일기에마일리지(exp)를 적립한다.
-        dateLog.setMileage(dateLog.getMileage() + 10);
+        dateLog.accumulateMileage(10);
         // TODO: 커플에게 마일리지를 적립한다.
     }
 }
