@@ -1,9 +1,11 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class DateLog {
     private Long dateLogId;
 
     @Column(nullable = false)
-    private LocalDateTime dateAt;
+    private LocalDate dateAt;
 
     @Column(nullable = false)
     private int mileage;
@@ -35,4 +37,11 @@ public class DateLog {
 
     @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
+
+    public DateLogForCalenderResponseDto toDateLogForCalenderResponseDto(){
+        return DateLogForCalenderResponseDto.builder()
+                .dateLogId(dateLogId)
+                .dateAt(dateAt)
+                .build();
+    }
 }

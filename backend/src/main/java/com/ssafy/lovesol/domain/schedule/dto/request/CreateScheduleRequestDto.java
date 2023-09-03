@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -24,19 +26,23 @@ public class CreateScheduleRequestDto {
     @Schema(description = "일정 타입", example = "0")
     private int scheduleType;
 
-    @Schema(description = "일정 시작 날짜", example = "2023-09-03T14:30:40.123")
-    private LocalDateTime startAt;
+    @Schema(description = "일정 시작 날짜", example = "20230903")
+    private String startAt;
 
-    @Schema(description = "일정 종료 날짜", example = "2023-09-04T14:30:40.123")
-    private LocalDateTime endAt;
+    @Schema(description = "일정 종료 날짜", example = "20230904")
+    private String endAt;
 
     public Schedule toScheduleEntity(Couple couple , ScheduleType scheduleType){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate updatedStartAt = LocalDate.parse(startAt, formatter);
+        LocalDate updatedEndAt = LocalDate.parse(endAt, formatter);
+
         return Schedule.builder()
                 .couple(couple)
                 .scheduleType(scheduleType)
                 .content(content)
-                .startAt(startAt)
-                .endAt(endAt)
+                .startAt(updatedStartAt)
+                .endAt(updatedEndAt)
                 .build();
     }
 
