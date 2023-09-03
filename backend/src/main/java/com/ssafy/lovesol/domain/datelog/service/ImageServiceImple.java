@@ -7,6 +7,7 @@ import com.ssafy.lovesol.global.exception.NotExistImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class ImageServiceImple implements ImageService{
     }
 
     @Override
+    @Transactional
     public void updateImage(UpdateImageDto updateImageDto) {
         // TODO: 이미지 not exist 예외 추가하기
         Image image = imageRepository.findById(updateImageDto.getImageId()).orElseThrow(NotExistImageException::new);

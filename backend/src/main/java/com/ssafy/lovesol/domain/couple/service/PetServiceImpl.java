@@ -8,6 +8,7 @@ import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class PetServiceImpl implements PetService{
     }
 
     @Override
+    @Transactional
     public void gainExp(Long coupleId, int exp) {
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         couple.getPet().gainExp(exp);
