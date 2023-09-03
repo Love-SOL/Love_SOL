@@ -59,20 +59,20 @@ CREATE TABLE `couple` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `datelog`
+-- Table structure for table `date_log`
 --
 
-DROP TABLE IF EXISTS `datelog`;
+DROP TABLE IF EXISTS `date_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `datelog` (
-  `datelog_id` varchar(255) NOT NULL,
+CREATE TABLE `date_log` (
+  `date_log_id` varchar(255) NOT NULL,
   `couple_id` int NOT NULL,
   `date_at` date NOT NULL,
   `mileage` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`datelog_id`),
-  KEY `FK_DateLog_Couple_id__idx` (`couple_id`),
-  CONSTRAINT `FK_DateLog_Couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`date_log_id`),
+  KEY `FK_date_log_Couple_id__idx` (`couple_id`),
+  CONSTRAINT `FK_date_log_Couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,13 +85,13 @@ DROP TABLE IF EXISTS `image`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `image` (
   `image_id` int NOT NULL AUTO_INCREMENT,
-  `datelog_id` varchar(255) NOT NULL,
+  `date_log_id` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `create_at` datetime DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`image_id`),
-  KEY `KF_Image_DateLog_id__idx` (`datelog_id`),
-  CONSTRAINT `KF_Image_DateLog_id` FOREIGN KEY (`datelog_id`) REFERENCES `datelog` (`datelog_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `KF_Image_date_log_id__idx` (`date_log_id`),
+  CONSTRAINT `KF_Image_date_log_id` FOREIGN KEY (`date_log_id`) REFERENCES `date_log` (`date_log_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -129,32 +129,32 @@ CREATE TABLE `notice` (
   `notice_id` int NOT NULL AUTO_INCREMENT,
   `content` varchar(255) NOT NULL,
   `createAt` varchar(45) NOT NULL,
-  `send_id` int NOT NULL,
-  `receive_id` int NOT NULL,
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
   PRIMARY KEY (`notice_id`),
-  KEY `send_id__idx` (`send_id`),
-  KEY `FK_received_id__idx` (`receive_id`),
-  CONSTRAINT `FK_received_id` FOREIGN KEY (`receive_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_send_id` FOREIGN KEY (`send_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `sender_id__idx` (`sender_id`),
+  KEY `FK_received_id__idx` (`receiver_id`),
+  CONSTRAINT `FK_received_id` FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_sender_id` FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `paymentlog`
+-- Table structure for table `payment_log`
 --
 
-DROP TABLE IF EXISTS `paymentlog`;
+DROP TABLE IF EXISTS `payment_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `paymentlog` (
+CREATE TABLE `payment_log` (
   `payment_id` varchar(45) NOT NULL,
-  `datelog_id` varchar(255) NOT NULL,
+  `date_log_id` varchar(255) NOT NULL,
   `amount` int NOT NULL,
   `pay_at` datetime NOT NULL,
   `detail` varchar(255) NOT NULL,
   PRIMARY KEY (`Payment_id`),
-  KEY `FK_Payment_DateLog_id__idx` (`dateLog_id`),
-  CONSTRAINT `FK_Payment_DateLog_id` FOREIGN KEY (`dateLog_id`) REFERENCES `datelog` (`datelog_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_Payment_date_log_id__idx` (`date_log_id`),
+  CONSTRAINT `FK_Payment_date_log_id` FOREIGN KEY (`date_log_id`) REFERENCES `date_log` (`date_log_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

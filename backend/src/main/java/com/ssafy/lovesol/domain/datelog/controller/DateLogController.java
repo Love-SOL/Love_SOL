@@ -62,7 +62,10 @@ public class DateLogController {
     public ResponseResult getDateLog(@PathVariable String dateLogId) throws Exception {
         log.info(dateLogId + " 데이트 기록을 조회합니다.");
         return new SingleResponseResult<DateLog>(dateLogService.getDateLog(Long.parseLong(dateLogId)));
+
     }
+
+  
 
     /**
      * 해당 데이트 일기에 이미지를 첨부한다.

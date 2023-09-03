@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -25,7 +26,7 @@ public class Couple {
     private String commonAccount;
 
     @Column(nullable = false)
-    private LocalDateTime anniversary;
+    private LocalDate anniversary;
 
     @Column(nullable = false)
     private double ownerTotal;
