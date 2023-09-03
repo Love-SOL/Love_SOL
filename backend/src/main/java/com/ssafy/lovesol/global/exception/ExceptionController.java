@@ -39,7 +39,7 @@ public class ExceptionController {
 		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_DATE_LOG);
 	}
 
-	@ExceptionHandler(NotExistAccountException.class)
+	@ExceptionHandler(NotExistImageException.class)
 	public ResponseResult notExistImageException(Exception err) {
 		log.info("Error : {}", err.getClass());
 		log.info("Error Message : {}", err.getMessage());
