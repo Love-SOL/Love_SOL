@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,15 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .collect(Collectors.toList());
 
         return CalenderResponseDto.createCalenderResponseDto(scheduleResponseDtoList , dateLogForCalenderResponseDtoList);
+    }
+
+    @Override
+    public List<ScheduleResponseDto> getScheduleByDate(Long scheduleId, LocalDate dateAt) {
+        log.info("ScheduleServiceImpl_getAllScheduleByYearAndMonth | 특정 날짜 일정 조회");
+
+        return scheduleRepository.findAllByDateInRangeAndCoupleId(scheduleId,dateAt)
+                .stream().map(schedule -> schedule.toScheduleResponseDto())
+                .collect(Collectors.toList());
     }
 
 }
