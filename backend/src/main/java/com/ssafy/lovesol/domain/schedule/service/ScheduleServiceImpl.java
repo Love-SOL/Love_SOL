@@ -34,7 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         log.info("ScheduleServiceImpl_CreateSchedule | 일정 작성");
         Couple couple = coupleRepository.findById(coupleId).get();
         String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
-        User user = userRepository.findByLoginId(loginId).get();
+        User user = userRepository.findById(loginId).get();
         Schedule schedule = createScheduleRequestDto.toScheduleEntity(couple, getScheduleType(couple, user, createScheduleRequestDto.getScheduleType()));
         return scheduleRepository.save(schedule).getScheduleId();
     }
@@ -57,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(updateScheduleRequestDto.getScheduleId()).get();
         Couple couple = coupleRepository.findById(coupleId).get();
         String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
-        User user = userRepository.findByLoginId(loginId).get();
+        User user = userRepository.findById(loginId).get();
         ScheduleType scheduleType = getScheduleType(couple, user, updateScheduleRequestDto.getScheduleType());
         schedule.updateSchedule(updateScheduleRequestDto , scheduleType);
     }
