@@ -38,4 +38,15 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleRepository.save(schedule).getScheduleId();
     }
 
+    @Override
+    public ScheduleType getScheduleType(Couple couple, User user , int ScheduleTypeInt) {
+        log.info("ScheduleServiceImpl_getScheduleType | 일정 타입 파악");
+        if(ScheduleTypeInt == 2)
+            return ScheduleType.SHARED_SCHEDULE;
+
+        if(couple.getOwner().getUserId().equals(user.getUserId()))
+            return ScheduleType.MAIN_OWNER_SCHEDULE;
+        return ScheduleType.SUB_OWNER_SCHEDULE;
+    }
+
 }
