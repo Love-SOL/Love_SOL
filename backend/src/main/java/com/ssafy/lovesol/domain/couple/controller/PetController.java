@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.controller;
 
+import com.ssafy.lovesol.domain.couple.dto.response.ResponsePetDto;
 import com.ssafy.lovesol.domain.couple.entity.Pet;
 import com.ssafy.lovesol.domain.couple.service.PetService;
 import com.ssafy.lovesol.global.response.ResponseResult;
@@ -30,10 +31,10 @@ public class PetController {
     @GetMapping("/{coupleId}")
     public ResponseResult getPet(@PathVariable String coupleId) throws Exception {
         log.info(coupleId + "의 펫 정보를 불러옵니다.");
-        return new SingleResponseResult<Pet>(petService.getPet(Long.parseLong(coupleId)));
+        return new SingleResponseResult<ResponsePetDto>(petService.getPet(Long.parseLong(coupleId)));
     }
 
-    @GetMapping("/{coupleId}")
+    @PostMapping("/{coupleId}")
     public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestParam String petName) throws Exception {
         log.info(coupleId + "의 펫을 생성합니다.");
         // pet 객체에 펫 이름과 커플 객체 넣어서 생성
