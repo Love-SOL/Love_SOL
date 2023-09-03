@@ -8,6 +8,9 @@ import java.util.Optional;
 public interface CoupleRepository extends JpaRepository<Couple,Long> {
 
 
+
     Optional<Couple> findBySubOwner(long userId);
     Optional<Couple> findByOwner(long userId);
+
+
 }

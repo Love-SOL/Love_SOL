@@ -7,6 +7,8 @@ import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
+import java.util.Optional;
+
 public interface UserService {
 
     Long createUserAccount(CreateUserAccountRequestDto createUserAccountRequestDto);
@@ -14,4 +16,5 @@ public interface UserService {
     void setToken(User user, HttpServletResponse response);
     List<User> getAllUserByDepositAt(int day);
 
+    User getUserByUserId(String userId);
 }

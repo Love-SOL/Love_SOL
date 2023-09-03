@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,5 +47,15 @@ public class UserServiceImpl implements UserService{
         log.info("UserServiceImpl_setToken | 로그인 성공, 토큰 생성");
         String accessToken = jwtService.createAccessToken("userLoginId", user.getId());
         response.setHeader("Authorization","Bearer " + accessToken);
+    }
+
+
+    @Override
+    public User getUserByUserId(String userId){
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            return null;
+        }
+        return user.get();
     }
 }

@@ -32,7 +32,8 @@ public class UserScheduler {
         for(User user : userList){
             String CoupleAccount = coupleService.getCoupleInfo(user.getUserId());
             //유저 번호를 기반으로 couple 계좌를 찾아서 입금 api 동작 진행할 예정
-            
+            if(CoupleAccount.equals("")) continue;
+
         }
 
         log.info(day + "일 Scheduler success");
