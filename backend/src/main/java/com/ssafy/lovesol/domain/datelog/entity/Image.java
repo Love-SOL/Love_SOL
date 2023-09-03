@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
+import com.ssafy.lovesol.domain.couple.entity.Couple;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,6 +41,15 @@ public class Image{
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public static Image create(DateLog dateLog, String imgUrl, String content, LocalDateTime createAt){
+        return Image.builder()
+                .dateLog(dateLog)
+                .imgUrl(imgUrl)
+                .content(content)
+                .createAt(createAt)
+                .build();
     }
 }
 

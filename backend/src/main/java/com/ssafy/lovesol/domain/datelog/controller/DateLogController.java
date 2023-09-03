@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.datelog.controller;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.request.UpdateImageDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
@@ -70,14 +71,14 @@ public class DateLogController {
      * 해당 데이트 일기에 이미지를 첨부한다.
      * 이미지 객체에는 이미지 URL과 이미지의 텍스트 내용이 존재한다.
      * @param dateLogId
-     * @param image
+     * @param insertImage
      * @return
      */
     @PostMapping("/{dateLogId}")
-    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestBody Image image) throws Exception {
+    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestBody InsertImageDto insertImage) throws Exception {
         log.info(dateLogId + " 데이트 일기에 이미지를 삽입합니다.");
         // 데이트 로그에 이미지를 삽입한다.
-        dateLogService.insertImage(Long.parseLong(dateLogId), image);
+        dateLogService.insertImage(Long.parseLong(dateLogId), insertImage);
         // TODO: 일기 작성 알림을 보낸다.
 
         return ResponseResult.successResponse;
