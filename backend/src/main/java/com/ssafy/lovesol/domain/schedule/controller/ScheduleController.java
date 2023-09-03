@@ -3,6 +3,7 @@ package com.ssafy.lovesol.domain.schedule.controller;
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.service.ScheduleService;
+import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -79,6 +82,18 @@ public class ScheduleController {
             @PathVariable(value = "coupleId") Long coupleId , @RequestParam(value = "year") int year , @RequestParam(value = "month") int month) {
         log.info("UserController_getAllScheduleByYearAndMonth | 전체 일정 조회");
         return new SingleResponseResult<>(scheduleService.getAllScheduleByYearAndMonth(coupleId, year, month));
+    }
+
+    @Operation(summary = "Get Date Schedule", description = "특정 날짜 일정 조회 하기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "특정 날짜 일정 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "특정 날짜 일정 조회 실패")
+    })
+    @GetMapping("/{coupleId}/{dateAt}")
+    public ResponseResult getScheduleByDate(
+            @PathVariable(value = "coupleId") Long coupleId , @PathVariable(value = "dateAt") String dateAt) {
+        log.info("UserController_getScheduleByDate | 특정 날짜 일정 조회");
+        return new ListResponseResult<>(scheduleService.getScheduleByDate(coupleId, LocalDate.parse(dateAt)));
     }
 
 

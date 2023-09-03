@@ -4,6 +4,8 @@ import com.ssafy.lovesol.domain.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
 import java.util.*;
 
 public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
@@ -14,4 +16,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
             "(FUNCTION('MONTH', s.startAt) = :month OR FUNCTION('MONTH', s.endAt) = :month)")
     List<Schedule> findAllByCoupleIdAndYearAndMonth(@Param("coupleId") Long coupleId, @Param("year") int year, @Param("month") int month);
 
+    @Query("SELECT s FROM Schedule s WHERE :targetDate BETWEEN s.startAt AND s.endAt AND s.couple.coupleId = :coupleId")
+    List<Schedule> findAllByDateInRangeAndCoupleId(@Param("coupleId") Long coupleId , @Param("targetDate") LocalDate targetDate);
 }
