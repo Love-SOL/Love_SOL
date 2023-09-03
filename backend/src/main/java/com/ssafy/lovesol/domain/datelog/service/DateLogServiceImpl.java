@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -25,7 +26,7 @@ public class DateLogServiceImpl implements DateLogService{
     CoupleRepository coupleRepository;
     PetRepository petRepository;
     @Override
-    public Long createDateLog(Long coupleId, LocalDateTime dateAt) {
+    public Long createDateLog(Long coupleId, LocalDate dateAt) {
         // 커플 정보가 존재하는지 검사한다.
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         // 커플 객체와 날짜를 dateLog에 삽입한다.

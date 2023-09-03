@@ -2,8 +2,12 @@ package com.ssafy.lovesol.domain.schedule.service;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
+import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
+import com.ssafy.lovesol.domain.schedule.dto.response.CalenderResponseDto;
+import com.ssafy.lovesol.domain.schedule.dto.response.ScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.entity.Schedule;
 import com.ssafy.lovesol.domain.schedule.entity.ScheduleType;
 import com.ssafy.lovesol.domain.schedule.repository.ScheduleRepository;
@@ -16,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -24,6 +31,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     private final ScheduleRepository scheduleRepository;
     private final CoupleRepository coupleRepository;
     private final UserRepository userRepository;
+    private final DateLogRepository dateLogRepository;
     private final JwtService jwtService;
 
     @Override
@@ -66,6 +74,21 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void deleteSchedule(Long scheduleId) {
         log.info("ScheduleServiceImpl_deleteSchedule | 일정 삭제");
         scheduleRepository.deleteById(scheduleId);
+    }
+
+    @Override
+    public CalenderResponseDto getAllScheduleByYearAndMonth(Long coupleId, int year, int month) {
+        log.info("ScheduleServiceImpl_getAllScheduleByYearAndMonth | 전체 일정 조회");
+
+        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
+                .stream().map(schedule -> schedule.toScheduleResponseDto())
+                .collect(Collectors.toList());
+
+        List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoList = dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
+                .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
+                .collect(Collectors.toList());
+
+        return CalenderResponseDto.createCalenderResponseDto(scheduleResponseDtoList , dateLogForCalenderResponseDtoList);
     }
 
 }

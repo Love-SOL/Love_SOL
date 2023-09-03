@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.service;
 
+import com.ssafy.lovesol.domain.couple.dto.response.ResponsePetDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.entity.Pet;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
@@ -20,10 +21,11 @@ public class PetServiceImpl implements PetService{
     private final CoupleRepository coupleRepository;
 
     @Override
-    public Pet getPet(Long coupleId) {
+    public ResponsePetDto getPet(Long coupleId) {
         log.info("PetServiceImpl_getPet | 커플 펫 조회");
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
-        return couple.getPet();
+        Pet pet = couple.getPet();
+        return pet.toResponsePetDto();
     }
 
     @Override

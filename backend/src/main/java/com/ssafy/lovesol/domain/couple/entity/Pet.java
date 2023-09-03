@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.entity;
 
+import com.ssafy.lovesol.domain.couple.dto.response.ResponsePetDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,6 +43,18 @@ public class Pet {
         return Pet.builder()
                 .name(petName)
                 .couple(couple)
+                .level(1)
+                .build();
+    }
+
+    public ResponsePetDto toResponsePetDto(){
+        return ResponsePetDto.builder()
+                .petId(petId)
+                .name(name)
+                .exp(exp)
+                .status(status)
+                .kind(kind)
+                .level(level)
                 .build();
     }
 }
