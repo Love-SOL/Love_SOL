@@ -43,6 +43,7 @@ public class Pet {
         return Pet.builder()
                 .name(petName)
                 .couple(couple)
+                .level(1)
                 .build();
     }
 
