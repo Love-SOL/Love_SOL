@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -19,6 +22,12 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+
+    @Override
+    public List<User> getAllUserByDepositAt (int day) {
+        log.info("UserServiceImpl_getAllUserByDepositAt | 자동 입금 사용자 목록");
+        return userRepository.findAllByDepositAt(day);
+    }
 
     @Override
     public Long createUserAccount(CreateUserAccountRequestDto createUserAccountRequestDto) {
@@ -38,5 +47,24 @@ public class UserServiceImpl implements UserService{
         log.info("UserServiceImpl_setToken | 로그인 성공, 토큰 생성");
         String accessToken = jwtService.createAccessToken("userLoginId", user.getId());
         response.setHeader("Authorization","Bearer " + accessToken);
+    }
+
+
+    @Override
+    public User getUserByUserId(String userId){
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            return null;
+        }
+        return user.get();
+    }
+
+    @Override
+    public User getUserById(long userId){
+        Optional<User> user = userRepository.findByUserId(userId);
+        if(user.isEmpty()){
+            return null;
+        }
+        return user.get();
     }
 }

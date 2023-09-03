@@ -2,10 +2,7 @@ package com.ssafy.lovesol.domain.datelog.entity;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,4 +34,15 @@ public class DateLog {
 
     @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
+
+    public void accumulateMileage(int mileage) {
+        this.mileage += mileage;
+    }
+
+    public static DateLog create(Couple couple, LocalDateTime dateAt){
+        return DateLog.builder()
+                .couple(couple)
+                .dateAt(dateAt)
+                .build();
+    }
 }
