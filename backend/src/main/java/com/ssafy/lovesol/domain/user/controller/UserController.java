@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.user.controller;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
@@ -15,10 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -57,4 +55,19 @@ public class UserController {
         userService.login(loginRequestDto, response);
         return ResponseResult.successResponse;
     }
+
+
+    @Operation(summary = "Deposit", description = "사용자가 자동 입금 날짜 및 금액을 설정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description ="자동 입금 설정 성공")
+    })
+
+
+    @PutMapping("/account")
+    public ResponseResult setDeposit(@Valid @RequestBody UpdateUserAccountInfoDto updateUserAccountInfoDto){
+        log.info("UserController_Deposit -> 자동 입금 정보 설정");
+        userService.UpdateDepositInfo(updateUserAccountInfoDto);
+        return ResponseResult.successResponse;
+    }
+
 }

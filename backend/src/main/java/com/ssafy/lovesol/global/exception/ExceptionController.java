@@ -25,6 +25,13 @@ public class ExceptionController {
 		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_ACCOUNT_EXCEPTION);
 	}
 
+	@ExceptionHandler(NotExistCoupleException.class)
+	public ResponseResult NotExistCoupleException(NotExistCoupleException err) {
+		log.info("Error : {}", err.getClass());
+		log.info("Error Message : {}", err.getMessage());
+		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_COUPLE_EXCEPTION);
+	}
+
 	@ExceptionHandler(NotExistDateLogException.class)
 	public ResponseResult notExistDateLogException(Exception err) {
 		log.info("Error : {}", err.getClass());

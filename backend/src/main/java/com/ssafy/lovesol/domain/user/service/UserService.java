@@ -3,11 +3,12 @@ package com.ssafy.lovesol.domain.user.service;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.global.exception.NotExistAccountException;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -17,4 +18,6 @@ public interface UserService {
     List<User> getAllUserByDepositAt(int day);
     User getUserById(long userId);
     User getUserByUserId(String userId);
+
+    void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
 }

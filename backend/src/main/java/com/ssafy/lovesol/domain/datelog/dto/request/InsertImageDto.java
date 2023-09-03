@@ -1,21 +1,19 @@
 package com.ssafy.lovesol.domain.datelog.dto.request;
 
 import com.ssafy.lovesol.domain.datelog.entity.Image;
-import com.ssafy.lovesol.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "이미지 변경 요청 DTO")
-public class UpdateImageDto {
-
-    @NotBlank
-    @Schema(description = "이미지 ID")
-    private Long imageId;
+@Schema(description = "이미지 삽입 요청 DTO")
+public class InsertImageDto {
     @NotBlank
     @Schema(description = "이미지 URL")
     private String imgUrl;
@@ -26,7 +24,6 @@ public class UpdateImageDto {
 
     public Image toEntity(){
         return Image.builder()
-                .imageId(imageId)
                 .imgUrl(imgUrl)
                 .content(content)
                 .build();

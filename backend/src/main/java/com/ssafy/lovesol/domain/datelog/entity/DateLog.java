@@ -12,7 +12,6 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -41,6 +40,17 @@ public class DateLog {
     public DateLogForCalenderResponseDto toDateLogForCalenderResponseDto(){
         return DateLogForCalenderResponseDto.builder()
                 .dateLogId(dateLogId)
+                .dateAt(dateAt)
+                .build();
+    }
+  
+    public void accumulateMileage(int mileage) {
+        this.mileage += mileage;
+    }
+
+    public static DateLog create(Couple couple, LocalDateTime dateAt){
+        return DateLog.builder()
+                .couple(couple)
                 .dateAt(dateAt)
                 .build();
     }
