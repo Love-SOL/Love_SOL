@@ -25,7 +25,7 @@ public class ExceptionController {
 		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_ACCOUNT_EXCEPTION);
 	}
 
-	@ExceptionHandler(NotExistAccountException.class)
+	@ExceptionHandler(NotExistCoupleException.class)
 	public ResponseResult NotExistCoupleException(NotExistCoupleException err) {
 		log.info("Error : {}", err.getClass());
 		log.info("Error Message : {}", err.getMessage());
