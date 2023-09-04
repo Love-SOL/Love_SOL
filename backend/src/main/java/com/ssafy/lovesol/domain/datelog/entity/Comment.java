@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
+import com.ssafy.lovesol.domain.datelog.dto.response.CommentResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,4 +37,13 @@ public class Comment {
                 .createAt(createAt)
                 .build();
     }
+
+    public CommentResponseDto toCommentResponseDto() {
+        return CommentResponseDto.builder()
+                .commentId(commentId)
+                .content(content)
+                .createAt(createAt)
+                .build();
+    }
+
 }
