@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.controller;
 
+import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
@@ -54,6 +55,15 @@ public class CoupleController {
         return ResponseResult.successResponse;
     }
 
+    @PostMapping("/share/{ownerId}")
+    public ResponseResult connectCouple(@PathVariable long coupleId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto){
+        log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
+        if(!coupleService.connectCouple(coupleRequestDto,coupleId)){
+            return ResponseResult.failResponse;
+        }
+
+        return ResponseResult.successResponse;
+    }
 //    @PostMapping("")
 
 }

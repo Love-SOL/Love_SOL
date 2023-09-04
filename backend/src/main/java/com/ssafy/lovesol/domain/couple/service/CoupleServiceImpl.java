@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.service;
 
+import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
@@ -8,6 +9,7 @@ import com.ssafy.lovesol.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -59,6 +61,31 @@ public class CoupleServiceImpl implements CoupleService{
             return couple.get();
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public boolean connectCouple(ConnectCoupleRequestDto coupleDto, long coupleId) {
+        Optional<Couple> coupleOption = coupleRepository.findById(coupleId);
+        if(coupleOption.isEmpty()) {
+            return false;
+            //일단 커플이 없었기때문에 버그가 발생한 부분인데 에러처리는 나중에 해줘야한다.
+        }
+        Couple couple = coupleOption.get();
+        if(coupleDto.getCheck()>0){
+            //커플 연결 거절
+            log.info("Coupler Service -> 커플 계좌 신청 반려");
+            coupleRepository.delete(couple);
+            return true;
+        }
+        if(coupleDto.getCheck()==0){
+            User subOwner = userService.getUserById(coupleDto.getSubOnwerId());
+            couple.setSubOwner(subOwner);
+            return true;
+        }
+        log.info("connectCouple Error Happen");
+        return false;
+        //여기는 오류 발생
     }
 
 
