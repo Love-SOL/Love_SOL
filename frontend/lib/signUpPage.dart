@@ -203,6 +203,8 @@ class SignUpPage2 extends StatelessWidget {
               children: [
                 buildInputBox('아이디', '아이디를 입력하세요'),
                 SizedBox(height: 20),
+                buildInputBox('비밀번호', '비밀번호를 입력해주세요'),
+                SizedBox(height: 150),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
