@@ -1,7 +1,9 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
+import com.ssafy.lovesol.domain.couple.dto.response.ResponsePetDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -52,6 +55,18 @@ public class DateLog {
         return DateLog.builder()
                 .couple(couple)
                 .dateAt(dateAt)
+                .build();
+    }
+
+    public DateLogResponseDto toDateLogResponseDto(){
+
+
+        return DateLogResponseDto.builder()
+                .dateLogId(dateLogId)
+                .dateAt(dateAt)
+                .mileage(mileage)
+                .paymentLogList(paymentLogList)
+                .imageList(imageList.stream().map(image -> image.toImageResponseDto()).collect(Collectors.toList()))
                 .build();
     }
 }

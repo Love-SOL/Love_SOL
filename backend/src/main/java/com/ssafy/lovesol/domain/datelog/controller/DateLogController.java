@@ -3,6 +3,7 @@ package com.ssafy.lovesol.domain.datelog.controller;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.request.UpdateImageDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
@@ -34,8 +35,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/date-log")
 public class DateLogController {
-    DateLogService dateLogService;
-    ImageService imageService;
+    final private DateLogService dateLogService;
+    final private ImageService imageService;
     /**
      * 데이트 일기를 생성하는 API
      * 해당 날짜의 데이트 일기를 생성한다.
@@ -60,9 +61,9 @@ public class DateLogController {
      * @throws Exception
      */
     @GetMapping("/{dateLogId}")
-    public ResponseResult getDateLog(@PathVariable String dateLogId) throws Exception {
+    public ResponseResult getDateLog(@PathVariable Long dateLogId) throws Exception {
         log.info(dateLogId + " 데이트 일기를 조회합니다.");
-        return new SingleResponseResult<DateLog>(dateLogService.getDateLog(Long.parseLong(dateLogId)));
+        return new SingleResponseResult<DateLogResponseDto>(dateLogService.getDateLog(dateLogId));
     }
 
   
@@ -91,7 +92,7 @@ public class DateLogController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/{imageId}")
+    @GetMapping("/image/{imageId}")
     public  ResponseResult getImageDetail(@PathVariable String imageId) throws Exception {
         log.info(imageId + " 이미지를 상세 조회합니다.");
         // 이미지 객체 정보를 조회한다.
@@ -106,7 +107,7 @@ public class DateLogController {
      * @return
      * @throws Exception
      */
-    @PutMapping("/{imageId}")
+    @PutMapping("/image/{imageId}")
     public ResponseResult modifyImage(@PathVariable String imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
         log.info(imageId + " 이미지를 수정합니다.");
         // 이미지 객체를 수정한다.
@@ -121,7 +122,7 @@ public class DateLogController {
      * @return
      * @throws Exception
      */
-    @DeleteMapping("/{imageId}")
+    @DeleteMapping("/image/{imageId}")
     public ResponseResult removeImage(@PathVariable String imageId) throws Exception {
         log.info(imageId + " 이미지를 삭제합니다.");
         // 이미지 객체를 삭제한다.
