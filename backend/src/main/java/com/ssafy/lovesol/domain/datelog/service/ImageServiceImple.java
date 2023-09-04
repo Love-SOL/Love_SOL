@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class ImageServiceImple implements ImageService{
-    ImageRepository imageRepository;
+    final private ImageRepository imageRepository;
     @Override
     public Image getImage(Long imageId) {
         return imageRepository.findById(imageId).orElseThrow(NotExistImageException::new);
@@ -21,8 +21,8 @@ public class ImageServiceImple implements ImageService{
 
     @Override
     @Transactional
-    public void updateImage(UpdateImageDto updateImageDto) {
-        Image image = imageRepository.findById(updateImageDto.getImageId()).orElseThrow(NotExistImageException::new);
+    public void updateImage(Long imageId, UpdateImageDto updateImageDto) {
+        Image image = imageRepository.findById(imageId).orElseThrow(NotExistImageException::new);
         image.updateImageUrl(updateImageDto.getImgUrl());
         image.updateContent(updateImageDto.getContent());
         // TODO: S3에 이미지 변경하기
