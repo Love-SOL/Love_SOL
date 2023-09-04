@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -58,12 +59,14 @@ public class DateLog {
     }
 
     public DateLogResponseDto toDateLogResponseDto(){
+
+
         return DateLogResponseDto.builder()
                 .dateLogId(dateLogId)
                 .dateAt(dateAt)
                 .mileage(mileage)
                 .paymentLogList(paymentLogList)
-                .imageList(imageList)
+                .imageList(imageList.stream().map(image -> image.toImageResponseDto()).collect(Collectors.toList()))
                 .build();
     }
 }

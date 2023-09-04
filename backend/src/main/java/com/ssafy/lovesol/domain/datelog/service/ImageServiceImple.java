@@ -16,14 +16,12 @@ public class ImageServiceImple implements ImageService{
     ImageRepository imageRepository;
     @Override
     public Image getImage(Long imageId) {
-        // TODO: 이미지 not exist 예외 추가하기
         return imageRepository.findById(imageId).orElseThrow(NotExistImageException::new);
     }
 
     @Override
     @Transactional
     public void updateImage(UpdateImageDto updateImageDto) {
-        // TODO: 이미지 not exist 예외 추가하기
         Image image = imageRepository.findById(updateImageDto.getImageId()).orElseThrow(NotExistImageException::new);
         image.updateImageUrl(updateImageDto.getImgUrl());
         image.updateContent(updateImageDto.getContent());

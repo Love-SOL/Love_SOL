@@ -23,6 +23,6 @@ public class DateLogResponseDto {
     @Schema(description = "해당 날짜 결제 내역")
     private List<PaymentLog> paymentLogList;
     @Schema(description = "데이트 일기 이미지 목록")
-    private List<Image> imageList;
+    private List<ImageResponseDto> imageList;
 
 }
