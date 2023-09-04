@@ -28,13 +28,46 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 20),
             buildInputBox('계좌번호', '12자리 입력',
                 controller: accountNumberController),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('인증번호 보내기'),
+                      content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('닫기'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '인증번호 보내기 >',
+                  style: TextStyle(
+                    color: Color(0xFF777777),
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+            buildInputBox('인증번호', '숫자 6자리 입력',
+                controller: verificationCodeController),
+            SizedBox(height: 20),
             SizedBox(height: 80),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate back to the previous page (MainPage)
                     Navigator.of(context).pop();
                   },
                   child: Text(
@@ -42,6 +75,7 @@ class SignUpPage extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFDADADA),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -50,9 +84,9 @@ class SignUpPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to SignUpPage2
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
                   },
                   child: Text(
                     '확인',
