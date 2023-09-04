@@ -28,4 +28,12 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
+
+    public static Comment write(Image image, String content, LocalDateTime createAt) {
+        return Comment.builder()
+                .image(image)
+                .content(content)
+                .createAt(createAt)
+                .build();
+    }
 }
