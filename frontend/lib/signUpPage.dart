@@ -26,6 +26,8 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 20),
             buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
             SizedBox(height: 20),
+            buildInputBox('계좌번호', '12자리 입력',
+                controller: accountNumberController),
             SizedBox(height: 80),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
