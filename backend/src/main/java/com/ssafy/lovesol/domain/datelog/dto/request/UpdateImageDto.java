@@ -14,9 +14,6 @@ import lombok.*;
 public class UpdateImageDto {
 
     @NotBlank
-    @Schema(description = "이미지 ID")
-    private Long imageId;
-    @NotBlank
     @Schema(description = "이미지 URL")
     private String imgUrl;
 
@@ -26,7 +23,6 @@ public class UpdateImageDto {
 
     public Image toEntity(){
         return Image.builder()
-                .imageId(imageId)
                 .imgUrl(imgUrl)
                 .content(content)
                 .build();

@@ -46,16 +46,13 @@ public class CreateUserAccountRequestDto {
 	private String personalAccount;
 
 	public User toEntity(){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDate updatedBirthAt = LocalDate.parse(birthAt, formatter);
-
 		return User.builder()
 				.id(id)
 				.password(password)
 				.simplePassword(simplePassword)
 				.name(name)
 				.phoneNumber(phoneNumber)
-				.birthAt(updatedBirthAt)
+				.birthAt(birthAt)
 				.personalAccount(personalAccount)
 				.build();
 	}

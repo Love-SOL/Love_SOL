@@ -108,12 +108,12 @@ public class DateLogController {
      * @throws Exception
      */
     @PutMapping("/image/{imageId}")
-    public ResponseResult modifyImage(@PathVariable String imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
+    public ResponseResult modifyImage(@PathVariable Long imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
         log.info(imageId + " 이미지를 수정합니다.");
         // 이미지 객체를 수정한다.
-        imageService.updateImage(updateImage);
+        imageService.updateImage(imageId, updateImage);
         // TODO: 이미지 수정 알림을 보낸다.
-        return ResponseResult.failResponse;
+        return ResponseResult.successResponse;
     }
 
     /**

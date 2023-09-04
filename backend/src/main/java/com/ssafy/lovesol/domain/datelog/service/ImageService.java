@@ -5,6 +5,6 @@ import com.ssafy.lovesol.domain.datelog.entity.Image;
 
 public interface ImageService {
     Image getImage(Long ImageId);
-    void updateImage(UpdateImageDto updateImageDto);
+    void updateImage(Long imageId, UpdateImageDto updateImageDto);
     void deleteImage(Long imageId);
 }
