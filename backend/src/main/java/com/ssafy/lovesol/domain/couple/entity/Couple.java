@@ -3,16 +3,14 @@ package com.ssafy.lovesol.domain.couple.entity;
 
 import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -44,4 +42,5 @@ public class Couple {
 
     @OneToOne(mappedBy = "couple", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Pet pet;
+
 }
