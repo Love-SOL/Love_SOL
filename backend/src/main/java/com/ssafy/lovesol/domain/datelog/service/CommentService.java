@@ -10,4 +10,6 @@ public interface CommentService {
     void writeComment(Long imageId, InsertCommentRequestDto insertCommentRequestDto);
 
     void modifyComment(UpdateCommentRequestDto updateCommentRequestDto);
+
+    void deleteComment(Long commentId);
 }

@@ -54,15 +54,12 @@ public class CommentController {
     /**
      * 해당 댓글을 삭제한다.
      * @param commentId
-     * @param comment
      * @return
      * @throws Exception
      */
     @DeleteMapping("/{commentId}")
-    public ResponseResult removeComment(@PathVariable String commentId, @Valid @RequestBody Comment comment) throws  Exception {
-        // TODO: 해당 댓글이 존재하는지 검사한다.
-
-        // TODO: 댓글을 삭제한다.
-        return ResponseResult.failResponse;
+    public ResponseResult removeComment(@PathVariable Long commentId) throws  Exception {
+        commentService.deleteComment(commentId);
+        return ResponseResult.successResponse;
     }
 }

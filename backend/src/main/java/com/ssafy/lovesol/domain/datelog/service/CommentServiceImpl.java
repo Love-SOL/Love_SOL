@@ -36,4 +36,10 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = commentRepository.findById(updateCommentRequestDto.getCommentId()).orElseThrow(NotExistCommentException::new);
         comment.modifyContent(updateCommentRequestDto.getContent());
     }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(NotExistCommentException::new);
+        commentRepository.delete(comment);
+    }
 }
