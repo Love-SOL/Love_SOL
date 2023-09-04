@@ -24,6 +24,8 @@ class SignUpPage extends StatelessWidget {
           children: [
             buildInputBox('이름', '이름을 입력하세요'),
             SizedBox(height: 20),
+            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
+            SizedBox(height: 20),
             SizedBox(height: 80),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
