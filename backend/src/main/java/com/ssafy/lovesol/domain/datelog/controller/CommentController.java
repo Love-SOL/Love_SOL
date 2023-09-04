@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.datelog.controller;
 
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertCommentRequestDto;
+import com.ssafy.lovesol.domain.datelog.dto.request.UpdateCommentRequestDto;
 import com.ssafy.lovesol.domain.datelog.entity.Comment;
 import com.ssafy.lovesol.domain.datelog.service.CommentService;
 import com.ssafy.lovesol.global.response.ResponseResult;
@@ -40,17 +41,14 @@ public class CommentController {
 
     /**
      * 해당 댓글을 수정한다.
-     * @param commentId
-     * @param comment
+     * @param updateCommentRequestDto
      * @return
      * @throws Exception
      */
-    @PutMapping("/{commentId}")
-    public ResponseResult modifyComment(@PathVariable String commentId, @Valid @RequestBody Comment comment) throws Exception {
-        // TODO: 해당 댓글이 존재하는지 검사한다.
-
-        // TODO: 댓글을 수정한다.
-        return ResponseResult.failResponse;
+    @PutMapping("")
+    public ResponseResult modifyComment(@Valid @RequestBody UpdateCommentRequestDto updateCommentRequestDto) throws Exception {
+        commentService.modifyComment(updateCommentRequestDto);
+        return ResponseResult.successResponse;
     }
 
     /**

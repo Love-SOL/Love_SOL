@@ -45,4 +45,11 @@ public class ExceptionController {
 		log.info("Error Message : {}", err.getMessage());
 		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_IMAGE);
 	}
+
+	@ExceptionHandler(NotExistCommentException.class)
+	public ResponseResult notExistCommentException(Exception err) {
+		log.info("Error : {}", err.getClass());
+		log.info("Error Message : {}", err.getMessage());
+		return ResponseResult.exceptionResponse(ExceptionCode.NOT_EXIST_COMMENT);
+	}
 }

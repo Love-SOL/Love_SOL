@@ -38,6 +38,10 @@ public class Comment {
                 .build();
     }
 
+    public void modifyContent(String content) {
+        this.content = content;
+    }
+
     public CommentResponseDto toCommentResponseDto() {
         return CommentResponseDto.builder()
                 .commentId(commentId)
