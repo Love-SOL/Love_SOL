@@ -24,10 +24,10 @@ public class Transaction {
     private LocalDateTime transactionAt;
 
     @Column(nullable = false)
-    private double WithdrawalAmount;
+    private double withdrawalAmount;
 
     @Column(nullable = false)
-    private double DepositAmount;
+    private double depositAmount;
 
     @Column(nullable = false)
     private String content;
@@ -45,8 +45,8 @@ public class Transaction {
                 .account(account)
                 .content(content)
                 .branchName(branchName)
-                .DepositAmount(depositAmount)
-                .WithdrawalAmount(withdrawalAmount)
+                .depositAmount(depositAmount)
+                .withdrawalAmount(withdrawalAmount)
                 .build();
 
     }
