@@ -23,6 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -74,8 +75,8 @@ public class CoupleController {
     @GetMapping("/test")
     public ResponseEntity<String> test(){
         log.info("CoupleController -> 환율 조회 ");
-        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("조회일자","20230901");
+        Map<String, String> data = new HashMap<>();
+        data.put("조회일자","20230901");
        return CommonHttpSend.autoDeposit(data, "/search/fxrate/number");
 
     }
