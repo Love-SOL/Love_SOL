@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "샘플 요청 DTO")
+@Schema(description = "펫 생성 요청 DTO")
 public class CreatePetRequestDto {
 
     @NotNull

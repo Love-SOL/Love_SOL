@@ -39,6 +39,10 @@ public class Pet {
         this.exp += exp;
     }
 
+    public void levelUp() {
+        this.level++;
+    }
+
     public static Pet create(String petName, Couple couple) {
         return Pet.builder()
                 .name(petName)
