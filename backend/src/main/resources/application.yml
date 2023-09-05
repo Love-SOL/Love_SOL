@@ -42,4 +42,4 @@ springdoc:
     disabled: true
 
 env:
-  shinhanAPI :
+  shinPI: 202thon

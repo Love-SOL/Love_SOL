@@ -13,7 +13,7 @@ public class CommonHttpSend {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.append("dateHeader","{ apikey : 2023_Shinhan_SSAFY_Hackathon}");
+        jsonObject.append("dateHeader","{ apiky : 2_Hackathon}");
         jsonObject.append("dataBody", data.toString());
 
         HttpEntity<String> entity = new HttpEntity<String>(jsonObject.toString(), headers);
