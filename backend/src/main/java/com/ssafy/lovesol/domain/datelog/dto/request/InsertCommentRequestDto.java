@@ -15,12 +15,16 @@ import lombok.NoArgsConstructor;
 @Schema(description = "댓글 작성 요청 DTO")
 public class InsertCommentRequestDto {
     @NotBlank
+    @Schema(description = "댓글 작성자 ID", example = "작성자 ID 입니다.")
+    private Long userId;
+    @NotBlank
     @Schema(description = "댓글 내용", example = "작성할 댓글 내용입니다.")
     private String content;
 
     public Comment toEntity() {
         return Comment.builder()
                 .content(content)
+                .userId(userId)
                 .build();
     }
 }
