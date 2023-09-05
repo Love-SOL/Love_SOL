@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public void writeComment(Long imageId, InsertCommentRequestDto insertCommentRequestDto) {
         Image image = imageRepository.findById(imageId).orElseThrow(NotExistImageException::new);
-        Comment comment = Comment.write(image, insertCommentRequestDto.getContent(), LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+        Comment comment = Comment.write(image, insertCommentRequestDto.getContent(), LocalDateTime.now(ZoneId.of("Asia/Seoul")), insertCommentRequestDto.getUserId());
         image.getCommentList().add(comment);
     }
 
