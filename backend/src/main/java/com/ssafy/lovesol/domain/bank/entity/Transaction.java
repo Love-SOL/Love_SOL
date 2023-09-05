@@ -17,19 +17,17 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
     @Column(nullable = false)
     private LocalDateTime transactionAt;
 
     @Column(nullable = false)
-    private double WithdrawalAmount;
+    private double withdrawalAmount;
 
     @Column(nullable = false)
-    private double DepositAmount;
-
-    @Column(nullable = false)
-    private double balance;
+    private double depositAmount;
 
     @Column(nullable = false)
     private String content;
@@ -40,4 +38,16 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_number" , nullable = false)
     private Account account;
+
+    public static Transaction createTransaction(Account account , String content , String branchName , int depositAmount , int withdrawalAmount){
+        return Transaction.builder()
+                .transactionAt(LocalDateTime.now())
+                .account(account)
+                .content(content)
+                .branchName(branchName)
+                .depositAmount(depositAmount)
+                .withdrawalAmount(withdrawalAmount)
+                .build();
+
+    }
 }

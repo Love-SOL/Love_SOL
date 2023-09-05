@@ -5,7 +5,6 @@ import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
-import com.ssafy.lovesol.global.exception.NotExistAccountException;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
