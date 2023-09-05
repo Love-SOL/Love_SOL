@@ -40,7 +40,8 @@ public class Couple {
     @JoinColumn(name = "sub_owner_id")
     private User subOwner;
 
-    @OneToOne(mappedBy = "couple", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "couple_id")
     private Pet pet;
 
 }
