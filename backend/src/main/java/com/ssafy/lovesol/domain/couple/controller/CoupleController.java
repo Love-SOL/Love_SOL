@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.couple.controller;
 
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.global.response.ResponseResult;
@@ -79,6 +80,12 @@ public class CoupleController {
         data.put("조회일자","20230901");
        return CommonHttpSend.autoDeposit(data, "/search/fxrate/number");
 
+    }
+
+    @GetMapping("/{coupleId}/balance")
+    public SingleResponseResult<ResponseAccountInfoDto> accountTotalInfo(@PathVariable long coupleId){
+        ResponseAccountInfoDto dto = coupleService.getAccountTotal(coupleId);
+        return new SingleResponseResult<Couple>(dto);
     }
 
 //    @PostMapping("")

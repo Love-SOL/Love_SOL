@@ -2,15 +2,21 @@ package com.ssafy.lovesol.domain.couple.service;
 
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
+import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -86,6 +92,21 @@ public class CoupleServiceImpl implements CoupleService{
         log.info("connectCouple Error Happen");
         return false;
         //여기는 오류 발생
+    }
+
+    @Override
+    public ResponseAccountInfoDto getAccountTotal(long coupleId) {
+        Optional<Couple> op_couple = coupleRepository.findById(coupleId);
+        if(op_couple.isEmpty()) return null;
+        Couple couple = op_couple.get();
+//          "지불가능잔액":"331551"
+        Map<String, Object> data = new HashMap<>();
+        data.put("출금계좌번호",couple.getCommonAccount());
+        ResponseEntity<String> response =  CommonHttpSend.autoDeposit( data,"/account/balance/detail");
+        return ResponseAccountInfoDto.builder()
+                .coupleId(couple.getCoupleId())
+                .coupleAccount(couple.getCommonAccount())
+                .build();
     }
 
 
