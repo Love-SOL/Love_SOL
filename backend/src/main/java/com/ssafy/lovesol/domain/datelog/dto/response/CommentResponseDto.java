@@ -20,4 +20,6 @@ public class CommentResponseDto {
     private String content;
     @Schema(description = "댓글 작성 날짜", example = "2023-09-04T15:30:00.123")
     private LocalDateTime createAt;
+    @Schema(description = "댓글 작성자 ID", example = "1")
+    private Long userId;
 }
