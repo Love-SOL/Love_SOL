@@ -6,6 +6,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
+import com.ssafy.lovesol.global.util.CommonHttpSend;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +16,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -64,6 +71,15 @@ public class CoupleController {
 
         return ResponseResult.successResponse;
     }
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        log.info("CoupleController -> 환율 조회 ");
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("조회일자","20230901");
+       return CommonHttpSend.autoDeposit(data, "/search/fxrate/number");
+
+    }
+
 //    @PostMapping("")
 
 }
