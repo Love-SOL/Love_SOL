@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.bank.controller;
 
 import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.global.response.ResponseResult;
@@ -34,13 +35,26 @@ public class AccountController {
 
     @Operation(summary = "1Won Transfer", description = "입력한 계좌번호로 1원 이체를 합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공")
+            @ApiResponse(responseCode = "200", description = "1원이체 성공")
     })
     @PostMapping
     public ResponseResult transferOneWon(
             @Valid @RequestBody TransferRequestDto transferRequestDto) {
-        log.info("UserController_transferOneWon");
+        log.info("AccountController_transferOneWon");
         return new SingleResponseResult<>(accountService.transferOneWon(transferRequestDto));
+    }
+
+    @Operation(summary = "1Won Transfer Auth", description = "1원이체 인증번호 인증")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "1원이체 인증번호 인증 성공")
+    })
+    @PostMapping("/auth")
+    public ResponseResult transferOneWonAuth(
+            @Valid @RequestBody TransferAuthRequestDto transferAuthRequestDto) {
+        log.info("AccountController_transferOneWonAuth");
+        if(accountService.transferOneWonAuth(transferAuthRequestDto))
+            return ResponseResult.successResponse;
+        return ResponseResult.failResponse;
     }
 
 

@@ -3,9 +3,11 @@ package com.ssafy.lovesol.domain.bank.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
+import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import java.util.Random;
 public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     @Transactional
@@ -55,6 +58,15 @@ public class AccountServiceImpl implements AccountService{
         }
 
         return Integer.valueOf(randomSixNumber);
+    }
+
+    @Override
+    public boolean transferOneWonAuth(TransferAuthRequestDto transferAuthRequestDto) {
+        log.info("AccountServiceImpl_transferOneWonAuth | 1원 이체 인증번호 인증 기능");
+        Transaction transaction = transactionRepository.findByAccountAndDepositAmount(accountRepository.findByAccountNumber(transferAuthRequestDto.getAccountNumber()).get(), 1).get();
+        if(!transaction.getContent().equals(transferAuthRequestDto.getAuthNumber()))
+            return false;
+        return true;
     }
 
     private String generateSixDigitNumber() {
