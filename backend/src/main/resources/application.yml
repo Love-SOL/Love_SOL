@@ -40,3 +40,6 @@ springdoc:
       enabled: true
   cache:
     disabled: true
+
+env:
+  shinhanAPI :

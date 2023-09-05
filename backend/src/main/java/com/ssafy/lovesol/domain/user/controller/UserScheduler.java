@@ -34,19 +34,6 @@ public class UserScheduler {
         List<User> userList = userService.getAllUserByDepositAt(day);
 
 
-        /*{
-            "dataHeader": {
-            "apikey": "2023_Shinhan_SSAFY_Hackathon"
-        },
-            "dataBody": {
-            "출금계좌번호":"1102008999999",
-                    "입금은행코드":"088",
-                    "입금계좌번호":"110054999999",
-                    "이체금액":"30000",
-                    "입금계좌통장메모":"김신한",
-                    "출금계좌통장메모":"회비"
-        }
-        }*/
         for(User user : userList){
             //입금 도착지
             String CoupleAccount = coupleService.getCoupleInfo(user.getUserId());
