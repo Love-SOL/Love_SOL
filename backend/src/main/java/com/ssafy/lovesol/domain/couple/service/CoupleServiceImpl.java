@@ -100,7 +100,7 @@ public class CoupleServiceImpl implements CoupleService{
         if(op_couple.isEmpty()) return null;
         Couple couple = op_couple.get();
 //          "지불가능잔액":"331551"
-        Map<String, Object> data = new HashMap<>();
+        Map<String, String> data = new HashMap<>();
         data.put("출금계좌번호",couple.getCommonAccount());
         ResponseEntity<String> response =  CommonHttpSend.autoDeposit( data,"/account/balance/detail");
         return ResponseAccountInfoDto.builder()

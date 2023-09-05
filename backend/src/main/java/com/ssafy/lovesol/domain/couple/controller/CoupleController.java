@@ -85,7 +85,7 @@ public class CoupleController {
     @GetMapping("/{coupleId}/balance")
     public SingleResponseResult<ResponseAccountInfoDto> accountTotalInfo(@PathVariable long coupleId){
         ResponseAccountInfoDto dto = coupleService.getAccountTotal(coupleId);
-        return new SingleResponseResult<Couple>(dto);
+        return new SingleResponseResult<ResponseAccountInfoDto>(dto);
     }
 
 //    @PostMapping("")
