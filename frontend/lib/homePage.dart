@@ -160,7 +160,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
 class HomePage2 extends StatefulWidget {
   @override
   _HomePage2State createState() => _HomePage2State();
