@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
     @Column(nullable = false)
@@ -29,9 +30,6 @@ public class Transaction {
     private double DepositAmount;
 
     @Column(nullable = false)
-    private double balance;
-
-    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
@@ -40,4 +38,16 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_number" , nullable = false)
     private Account account;
+
+    public static Transaction createTransaction(Account account , String content , String branchName , int depositAmount , int withdrawalAmount){
+        return Transaction.builder()
+                .transactionAt(LocalDateTime.now())
+                .account(account)
+                .content(content)
+                .branchName(branchName)
+                .DepositAmount(depositAmount)
+                .WithdrawalAmount(withdrawalAmount)
+                .build();
+
+    }
 }

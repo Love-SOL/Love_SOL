@@ -6,7 +6,7 @@ import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
-import com.ssafy.lovesol.global.exception.NotExistAccountException;
+import com.ssafy.lovesol.global.exception.NotExistUserException;
 import com.ssafy.lovesol.global.util.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info("UserServiceImpl_login | 사용자 로그인 시도");
-        User loginUser = userRepository.findByIdAndPassword(loginRequestDto.getId(), loginRequestDto.getPassword()).orElseThrow(NotExistAccountException::new);
+        User loginUser = userRepository.findByIdAndPassword(loginRequestDto.getId(), loginRequestDto.getPassword()).orElseThrow(NotExistUserException::new);
         setToken(loginUser , response);
     }
 
