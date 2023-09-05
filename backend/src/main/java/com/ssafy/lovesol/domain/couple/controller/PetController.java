@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.couple.controller;
 
 import com.ssafy.lovesol.domain.couple.dto.request.CreatePetRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.request.IncreasePetExpRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponsePetDto;
 import com.ssafy.lovesol.domain.couple.entity.Pet;
 import com.ssafy.lovesol.domain.couple.service.PetService;
@@ -44,9 +45,9 @@ public class PetController {
     }
 
     @PutMapping("/{coupleId}")
-    public ResponseResult modifyPet(@PathVariable String coupleId, @Valid @RequestBody int exp) throws  Exception {
-        log.info(coupleId + "의 펫에게 " + exp + "만큼의 경험치를 부여합니다.");
-        petService.gainExp(Long.parseLong(coupleId), exp);
+    public ResponseResult increasePetExp(@PathVariable Long coupleId, @Valid @RequestBody IncreasePetExpRequestDto increasePetExpRequestDto) throws  Exception {
+        log.info(coupleId + "의 펫에게 " + increasePetExpRequestDto.getExp() + "만큼의 경험치를 부여합니다.");
+        petService.gainExp(coupleId, increasePetExpRequestDto.getExp());
         return ResponseResult.successResponse;
     }
 }

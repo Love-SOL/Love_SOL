@@ -49,7 +49,6 @@ public class DateLogServiceImpl implements DateLogService{
     public void insertImage(Long dateLogId, InsertImageDto insertImage) {
         // 해당 데이트 일기가 존재하는지 검사한다.
         DateLog dateLog = dateLogRepository.findById(dateLogId).orElseThrow(NotExistDateLogException::new);
-
         // 데이트 로그, 이미지 url, 이미지 내용, 현재 작성된 시간을 가진 이미지 객체 생성
         Image image = Image.create(dateLog, insertImage.getImgUrl(), insertImage.getContent(), LocalDateTime.now());
         // 데이트 일기에 이미지를 삽입한다.

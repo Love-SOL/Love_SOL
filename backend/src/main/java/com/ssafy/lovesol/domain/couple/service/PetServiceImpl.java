@@ -38,7 +38,13 @@ public class PetServiceImpl implements PetService{
     @Transactional
     public void gainExp(Long coupleId, int exp) {
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
-        couple.getPet().gainExp(exp);
+        Pet pet = couple.getPet();
+        pet.gainExp(exp);
+        if (pet.getExp() >= 1000 || pet.getExp() >= 3000) {
+            pet.levelUp();
+            log.info(couple.getCoupleId() + " 펫 " + pet.getName() + " 레벨 업");
+            //TODO: 클라이언트에 알림 보내기
+        }
     }
 
     @Override
