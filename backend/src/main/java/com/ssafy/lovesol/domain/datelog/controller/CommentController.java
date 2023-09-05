@@ -1,6 +1,9 @@
 package com.ssafy.lovesol.domain.datelog.controller;
 
+import com.ssafy.lovesol.domain.datelog.dto.request.InsertCommentRequestDto;
+import com.ssafy.lovesol.domain.datelog.dto.request.UpdateCommentRequestDto;
 import com.ssafy.lovesol.domain.datelog.entity.Comment;
+import com.ssafy.lovesol.domain.datelog.service.CommentService;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,49 +25,41 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/comment")
 public class CommentController {
+    final private CommentService commentService;
     /**
      * 해당 이미지에 댓글을 작성한다.
      * @param imageId
-     * @param comment
+     * @param insertCommentRequestDto
      * @return
      * @throws Exception
      */
     @PostMapping("/{imageId}")
-    public ResponseResult writeComment(@PathVariable String imageId, @Valid @RequestBody Comment comment) throws Exception {
-        // TODO: 해당 이미지가 존재하는지 검사한다.
-
-        // TODO: 이미지에 댓글을 작성한다.
-
-        return ResponseResult.failResponse;
+    public ResponseResult writeComment(@PathVariable Long imageId, @Valid @RequestBody InsertCommentRequestDto insertCommentRequestDto) throws Exception {
+        commentService.writeComment(imageId, insertCommentRequestDto);
+        return ResponseResult.successResponse;
     }
 
     /**
      * 해당 댓글을 수정한다.
-     * @param commentId
-     * @param comment
+     * @param updateCommentRequestDto
      * @return
      * @throws Exception
      */
-    @PutMapping("/{commentId}")
-    public ResponseResult modifyComment(@PathVariable String commentId, @Valid @RequestBody Comment comment) throws Exception {
-        // TODO: 해당 댓글이 존재하는지 검사한다.
-
-        // TODO: 댓글을 수정한다.
-        return ResponseResult.failResponse;
+    @PutMapping("")
+    public ResponseResult modifyComment(@Valid @RequestBody UpdateCommentRequestDto updateCommentRequestDto) throws Exception {
+        commentService.modifyComment(updateCommentRequestDto);
+        return ResponseResult.successResponse;
     }
 
     /**
      * 해당 댓글을 삭제한다.
      * @param commentId
-     * @param comment
      * @return
      * @throws Exception
      */
     @DeleteMapping("/{commentId}")
-    public ResponseResult removeComment(@PathVariable String commentId, @Valid @RequestBody Comment comment) throws  Exception {
-        // TODO: 해당 댓글이 존재하는지 검사한다.
-
-        // TODO: 댓글을 삭제한다.
-        return ResponseResult.failResponse;
+    public ResponseResult removeComment(@PathVariable Long commentId) throws  Exception {
+        commentService.deleteComment(commentId);
+        return ResponseResult.successResponse;
     }
 }

@@ -27,7 +27,6 @@ import java.util.List;
 public class DateLogServiceImpl implements DateLogService{
     final private DateLogRepository dateLogRepository;
     final private CoupleRepository coupleRepository;
-    final private ImageRepository imageRepository;
     @Override
     public Long createDateLog(Long coupleId, LocalDate dateAt) {
         // 커플 정보가 존재하는지 검사한다.
@@ -53,13 +52,10 @@ public class DateLogServiceImpl implements DateLogService{
 
         // 데이트 로그, 이미지 url, 이미지 내용, 현재 작성된 시간을 가진 이미지 객체 생성
         Image image = Image.create(dateLog, insertImage.getImgUrl(), insertImage.getContent(), LocalDateTime.now());
-        System.out.println(image + " 이미지");
         // 데이트 일기에 이미지를 삽입한다.
         dateLog.getImageList().add(image);
-        System.out.println("이미지 삽입");
         // 데이트 일기에마일리지(exp)를 적립한다.
         dateLog.accumulateMileage(10);
-        System.out.println("마일리지 적립");
         // TODO: 펫에게 마일리지를 적립한다.
 
     }

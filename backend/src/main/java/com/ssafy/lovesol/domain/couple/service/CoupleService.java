@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.couple.service;
 
+import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleUpdateRequestDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
@@ -16,6 +17,7 @@ public interface CoupleService {
     Couple getCoupleInfoByCoupleId(String userId);
 
 
+    boolean connectCouple(ConnectCoupleRequestDto coupleDto,long coupleId);
 
 
 

@@ -8,6 +8,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -58,6 +59,7 @@ public class Image{
                 .imageId(imageId)
                 .imgUrl(imgUrl)
                 .content(content)
+                .commentList(commentList.stream().map(comment -> comment.toCommentResponseDto()).collect(Collectors.toList()))
                 .createAt(createAt)
                 .build();
     }

@@ -1,6 +1,6 @@
 package com.ssafy.lovesol.domain.datelog.dto.request;
 
-import com.ssafy.lovesol.domain.datelog.entity.Image;
+import com.ssafy.lovesol.domain.datelog.entity.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,19 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "이미지 삽입 요청 DTO")
-public class InsertImageDto {
+@Schema(description = "댓글 작성 요청 DTO")
+public class InsertCommentRequestDto {
     @NotBlank
-    @Schema(description = "이미지 URL")
-    private String imgUrl;
-
-    @NotBlank
-    @Schema(description = "이미지 내용", example = "작성할 이미지 내용입니다.")
+    @Schema(description = "댓글 내용", example = "작성할 댓글 내용입니다.")
     private String content;
 
-    public Image toEntity(){
-        return Image.builder()
-                .imgUrl(imgUrl)
+    public Comment toEntity() {
+        return Comment.builder()
                 .content(content)
                 .build();
     }
