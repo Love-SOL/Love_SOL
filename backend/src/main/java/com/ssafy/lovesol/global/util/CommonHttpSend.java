@@ -25,7 +25,7 @@ public class CommonHttpSend {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, Object> dataHeader = new HashMap<>();
-//        dataHeader.put("apikey", "2023_Shinhan_SSAFY_Hackathon");
+        dataHeader.put("apikey", "2023_Shinhan_SSAFY_Hackathon");
 
         log.info("2023_Shinhan_SSAFY_Hackathon");
 
