@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
-              children:[
+              children: [
                 // "내 계좌" 박스
                 GestureDetector(
                   onTap: () {
@@ -73,7 +73,8 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -253,9 +254,7 @@ class _HomePage2State extends State<HomePage2> {
             ),
           ),
           Expanded(
-            child: _selectedPageIndex == 0
-                ? PersonalPage()
-                : CouplePage(),
+            child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
           ),
         ],
       ),
@@ -322,7 +321,8 @@ class PersonalPage extends StatelessWidget {
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center, // 수직 정렬을 가운데로 변경
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // 텍스트를 왼쪽, 버튼을 오른쪽 정렬
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // 텍스트를 왼쪽, 버튼을 오른쪽 정렬
               children: [
                 Text(
                   '개인통장',
@@ -411,20 +411,19 @@ class CouplePage extends StatelessWidget {
           buildContainer(
             'Calender',
             Color(0xFFF7F7F7),
-                () {
-              // Calender 페이지로 이동하는 코드
+            () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => CalendarPage(), // CalenderPage로 이동
                 ),
               );
             },
-          ), // 두 번째 컨테이너 (버튼 추가)
+          ),
           SizedBox(height: 3),
           buildContainer(
             'Pet',
             Color(0xFFF7F7F7),
-                () {
+            () {
               // Calender 페이지로 이동하는 코드
               Navigator.of(context).push(
                 MaterialPageRoute(
