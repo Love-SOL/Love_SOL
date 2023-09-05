@@ -173,6 +173,8 @@ CREATE TABLE `pet` (
   `status` int NOT NULL DEFAULT '0',
   `kind` int DEFAULT '0',
   `level` int DEFAULT '1',
+  `pet_id` bigint NOT NULL,
+  PRIMARY KEY (`pet_id`),
   KEY `FK_couple_id_idx` (`couple_id`),
   CONSTRAINT `FK_couple_id` FOREIGN KEY (`couple_id`) REFERENCES `couple` (`couple_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

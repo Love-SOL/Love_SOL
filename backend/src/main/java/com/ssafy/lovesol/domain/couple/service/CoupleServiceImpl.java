@@ -21,9 +21,7 @@ public class CoupleServiceImpl implements CoupleService{
     private final UserService userService;
     @Override
     public long createCouple(CoupleCreateRequestDto coupleDto) {
-        log.info("후보2");
         User user = userService.getUserById(coupleDto.getId());
-        log.info("후보1");
         if(user == null) return -1;
         log.info("커플통장 생성 전 owner 객체 " + user.toString());
         Couple couple = coupleDto.toEntity(user);

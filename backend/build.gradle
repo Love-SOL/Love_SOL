@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20230227'
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'

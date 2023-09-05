@@ -1,7 +1,8 @@
 package com.ssafy.lovesol.domain.datelog.entity;
 
-import com.ssafy.lovesol.domain.couple.entity.Couple;
+
 import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
+import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +34,10 @@ public class Image{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "date_log_id", nullable = false)
     private DateLog dateLog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", nullable =false)
+    private User user;
 
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();

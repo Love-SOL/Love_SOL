@@ -55,7 +55,7 @@ public class CoupleController {
         return ResponseResult.successResponse;
     }
 
-    @PostMapping("/share/{ownerId}")
+    @PostMapping("/share/{coupleId}")
     public ResponseResult connectCouple(@PathVariable long coupleId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto){
         log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
         if(!coupleService.connectCouple(coupleRequestDto,coupleId)){
