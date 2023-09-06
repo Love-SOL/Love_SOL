@@ -43,3 +43,16 @@ springdoc:
 
   api:
     shinhan: ${shinhanapi}
+
+# AWS S3 Configuration
+cloud:
+  aws:
+    region:
+      static: ${BUCKET_REGION}
+    s3:
+      bucket: ${BUCKET_NAME}
+  credentials:
+    access-key: ${ACCESS_KEY}
+    secret-key: ${SECRET_KEY}
+    stack:
+      auto: false
