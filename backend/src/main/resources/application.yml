@@ -48,11 +48,11 @@ springdoc:
 cloud:
   aws:
     region:
-      static: ${BUCKET_REGION}
+      static: ap-northeast-2
     s3:
       bucket: ${BUCKET_NAME}
-  credentials:
-    access-key: ${ACCESS_KEY}
-    secret-key: ${SECRET_KEY}
-    stack:
-      auto: false
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+      stack:
+        auto: false
