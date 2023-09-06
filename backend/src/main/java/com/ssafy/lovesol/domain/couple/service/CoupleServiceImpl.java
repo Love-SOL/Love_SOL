@@ -25,6 +25,7 @@ import java.util.Optional;
 public class CoupleServiceImpl implements CoupleService{
     private final CoupleRepository coupleRepository;
     private final UserService userService;
+    private final CommonHttpSend commonHttpSend;
     @Override
     public long createCouple(CoupleCreateRequestDto coupleDto) {
         log.info("후보2");
@@ -102,7 +103,7 @@ public class CoupleServiceImpl implements CoupleService{
 //          "지불가능잔액":"331551"
         Map<String, String> data = new HashMap<>();
         data.put("출금계좌번호",couple.getCommonAccount());
-        ResponseEntity<String> response =  CommonHttpSend.autoDeposit( data,"/account/balance/detail");
+        ResponseEntity<String> response =  commonHttpSend.autoDeposit( data,"/account/balance/detail");
         return ResponseAccountInfoDto.builder()
                 .coupleId(couple.getCoupleId())
                 .coupleAccount(couple.getCommonAccount())

@@ -5,6 +5,7 @@ import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
+import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
@@ -37,7 +38,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/couple")
 public class CoupleController {
     private final CoupleService coupleService;
-
+    private final CommonHttpSend commonHttpSend;
     @Operation(summary = "Couple info", description = "사용자의 커플 정보를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커플 테이블 조회 성공")
@@ -78,7 +79,7 @@ public class CoupleController {
         log.info("CoupleController -> 환율 조회 ");
         Map<String, String> data = new HashMap<>();
         data.put("조회일자","20230901");
-       return CommonHttpSend.autoDeposit(data, "/search/fxrate/number");
+       return commonHttpSend.autoDeposit(data, "/search/fxrate/number");
 
     }
 
@@ -87,7 +88,11 @@ public class CoupleController {
         ResponseAccountInfoDto dto = coupleService.getAccountTotal(coupleId);
         return new SingleResponseResult<ResponseAccountInfoDto>(dto);
     }
+    @GetMapping("/{coupleId}/detail")
+    public ListResponseResult<Object> accountDetail(@PathVariable long coupleId){
+        return null;
 
+    }
 //    @PostMapping("")
 
 }
