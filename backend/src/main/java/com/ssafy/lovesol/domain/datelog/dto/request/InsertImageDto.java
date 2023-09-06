@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @Schema(description = "이미지 삽입 요청 DTO")
 public class InsertImageDto {
-    @NotBlank
+
     @Schema(description = "이미지 파일")
     private MultipartFile imageFile;
 

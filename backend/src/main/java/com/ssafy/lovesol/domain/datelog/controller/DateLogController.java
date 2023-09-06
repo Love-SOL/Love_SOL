@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,10 +77,10 @@ public class DateLogController {
      * @return
      */
     @PostMapping("/{dateLogId}")
-    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestBody InsertImageDto insertImage) throws Exception {
+    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestParam MultipartFile insertImage, @Valid @RequestParam String content) throws Exception {
         log.info(dateLogId + " 데이트 일기에 이미지를 삽입합니다.");
         // 데이트 로그에 이미지를 삽입한다.
-        dateLogService.insertImage(Long.parseLong(dateLogId), insertImage);
+        dateLogService.insertImage(Long.parseLong(dateLogId), insertImage, content);
         // TODO: 일기 작성 알림을 보낸다.
 
         return ResponseResult.successResponse;

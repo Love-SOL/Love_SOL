@@ -1,18 +1,16 @@
 package com.ssafy.lovesol.domain.datelog.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
-import com.ssafy.lovesol.domain.couple.repository.PetRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
-import com.ssafy.lovesol.domain.datelog.repository.ImageRepository;
 import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.exception.NotExistDateLogException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -34,8 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class DateLogServiceImpl implements DateLogService{
-
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -60,10 +56,10 @@ public class DateLogServiceImpl implements DateLogService{
 
     @Override
     @Transactional
-    public void insertImage(Long dateLogId, InsertImageDto insertImage) throws IOException {
+    public void insertImage(Long dateLogId, MultipartFile insertImage, String content) throws IOException {
         // 해당 데이트 일기가 존재하는지 검사한다.
         DateLog dateLog = dateLogRepository.findById(dateLogId).orElseThrow(NotExistDateLogException::new);
-        MultipartFile imageFile = insertImage.getImageFile();
+        MultipartFile imageFile = insertImage;
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(imageFile.getContentType());
@@ -77,14 +73,14 @@ public class DateLogServiceImpl implements DateLogService{
         String key = "date-log/" + storeFileName;
 
         try (InputStream inputStream = imageFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
+            amazonS3.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         }
 
-        String storeFileUrl = amazonS3Client.getUrl(bucket, key).toString();
+        String storeFileUrl = amazonS3.getUrl(bucket, key).toString();
 
         // 데이트 로그, 이미지 url, 이미지 내용, 현재 작성된 시간을 가진 이미지 객체 생성
-        Image image = Image.create(dateLog, storeFileUrl, insertImage.getContent(), LocalDateTime.now());
+        Image image = Image.create(dateLog, storeFileUrl, content, LocalDateTime.now());
         // 데이트 일기에 이미지를 삽입한다.
         dateLog.getImageList().add(image);
         // 데이트 일기에마일리지(exp)를 적립한다.
