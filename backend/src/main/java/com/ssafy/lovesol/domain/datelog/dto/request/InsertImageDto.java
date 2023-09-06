@@ -1,12 +1,12 @@
 package com.ssafy.lovesol.domain.datelog.dto.request;
 
-import com.ssafy.lovesol.domain.datelog.entity.Image;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -15,17 +15,12 @@ import lombok.NoArgsConstructor;
 @Schema(description = "이미지 삽입 요청 DTO")
 public class InsertImageDto {
     @NotBlank
-    @Schema(description = "이미지 URL")
-    private String imgUrl;
+    @Schema(description = "이미지 파일")
+    private MultipartFile imageFile;
+
 
     @NotBlank
     @Schema(description = "이미지 내용", example = "작성할 이미지 내용입니다.")
     private String content;
 
-    public Image toEntity(){
-        return Image.builder()
-                .imgUrl(imgUrl)
-                .content(content)
-                .build();
-    }
 }
