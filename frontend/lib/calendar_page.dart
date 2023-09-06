@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:cr_calendar/cr_calendar.dart';
 import 'colors.dart';
-import 'dayitemwidget.dart';
 import 'weekdayswidget.dart';
 import 'package:flutter/material.dart';
 
@@ -41,18 +40,17 @@ class _CalendarPageState extends State<Calendar> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
       floatingActionButton: FloatingActionButton(
         onPressed: _addEvent,
         child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
-            IconButton(
-              tooltip: 'Go to current date',
-              icon: const Icon(Icons.calendar_today),
-              onPressed: _showCurrentMonth,
-            ),
+          IconButton(
+            tooltip: 'Go to current date',
+            icon: const Icon(Icons.calendar_today),
+            onPressed: _showCurrentMonth,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -67,7 +65,9 @@ class _CalendarPageState extends State<Calendar> {
                 builder: (ctx, value, child) => Text(
                   value,
                   style: const TextStyle(
-                      fontSize: 16, color: Color(0xff69695D), fontWeight: FontWeight.w600),
+                      fontSize: 16,
+                      color: Color(0xff69695D),
+                      fontWeight: FontWeight.w600),
                 ),
               ),
               IconButton(
@@ -169,9 +169,9 @@ class _CalendarPageState extends State<Calendar> {
         isScrollControlled: true,
         context: context,
         builder: (context) => DayEventsBottomSheet(
-          events: events,
-          day: day,
-          screenHeight: MediaQuery.of(context).size.height,
-        ));
+              events: events,
+              day: day,
+              screenHeight: MediaQuery.of(context).size.height,
+            ));
   }
 }
