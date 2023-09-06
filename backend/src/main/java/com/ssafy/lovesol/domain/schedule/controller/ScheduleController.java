@@ -96,5 +96,17 @@ public class ScheduleController {
         return new ListResponseResult<>(scheduleService.getScheduleByDate(coupleId, LocalDate.parse(dateAt)));
     }
 
+    @Operation(summary = "Get Recent Couple Schedule", description = "가장 가까운 커플 일정 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "가장 가까운 커플 일정 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "가장 가까운 커플 일정 조회 실패")
+    })
+    @GetMapping("/recent/{coupleId}")
+    public ResponseResult getRecentCoupleSchedule(
+            @PathVariable(value = "coupleId") Long coupleId) {
+        log.info("UserController_getRecentCoupleSchedule");
+        return new ListResponseResult<>(scheduleService.getRecentCoupleSchedule(coupleId));
+    }
+
 
 }

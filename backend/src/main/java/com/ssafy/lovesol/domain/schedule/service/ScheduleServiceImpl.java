@@ -101,4 +101,14 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ScheduleResponseDto> getRecentCoupleSchedule(Long coupleId) {
+        log.info("ScheduleServiceImpl_getRecentCoupleSchedule | 가장 가까운 커플 일정 조회");
+        LocalDate closestFutureScheduleDate = scheduleRepository.findClosestFutureScheduleDate(LocalDate.now() , coupleId);
+
+        return scheduleRepository.findAllSchedulesOnClosestDate(closestFutureScheduleDate , coupleId)
+                .stream().map(s -> s.toScheduleResponseDto()).collect(Collectors.toList());
+    }
+
+
 }

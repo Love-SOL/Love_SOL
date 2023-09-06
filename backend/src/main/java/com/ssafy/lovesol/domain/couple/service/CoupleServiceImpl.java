@@ -7,6 +7,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
+import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -108,6 +111,13 @@ public class CoupleServiceImpl implements CoupleService{
                 .coupleId(couple.getCoupleId())
                 .coupleAccount(couple.getCommonAccount())
                 .build();
+    }
+
+    @Override
+    public int getCoupleAnniversary(Long coupleId) {
+        log.info("CoupleServiceImpl_getCoupleAnniversary | 커플의 D-DAY 계산");
+        Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
+        return (int)ChronoUnit.DAYS.between(couple.getAnniversary(), LocalDate.now()) + 1;
     }
 
 

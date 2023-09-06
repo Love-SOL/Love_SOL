@@ -18,4 +18,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     @Query("SELECT s FROM Schedule s WHERE :targetDate BETWEEN s.startAt AND s.endAt AND s.couple.coupleId = :coupleId")
     List<Schedule> findAllByDateInRangeAndCoupleId(@Param("coupleId") Long coupleId , @Param("targetDate") LocalDate targetDate);
+
+    @Query("SELECT MIN(s.startAt) FROM Schedule s WHERE s.startAt >= :currentDate AND s.couple.coupleId = :coupleId")
+    LocalDate findClosestFutureScheduleDate(@Param("currentDate") LocalDate currentDate, @Param("coupleId") Long coupleId);
+
+    @Query("SELECT s FROM Schedule s WHERE s.startAt = :closestDate AND s.couple.coupleId = :coupleId")
+    List<Schedule> findAllSchedulesOnClosestDate(@Param("closestDate") LocalDate closestDate, @Param("coupleId") Long coupleId);
 }
