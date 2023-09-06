@@ -1,7 +1,6 @@
 package com.ssafy.lovesol.domain.datelog.dto.response;
 
 import com.ssafy.lovesol.domain.datelog.entity.Image;
-import com.ssafy.lovesol.domain.datelog.entity.PaymentLog;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -20,8 +19,7 @@ public class DateLogResponseDto {
     private LocalDate dateAt;
     @Schema(description = "해당 일에 적립된 마일리지", example = "1")
     private int mileage;
-    @Schema(description = "해당 날짜 결제 내역")
-    private List<PaymentLog> paymentLogList;
+
     @Schema(description = "데이트 일기 이미지 목록")
     private List<ImageResponseDto> imageList;
 

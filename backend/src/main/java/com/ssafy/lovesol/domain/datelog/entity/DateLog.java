@@ -35,9 +35,6 @@ public class DateLog {
     private Couple couple;
 
     @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaymentLog> paymentLogList;
-
-    @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
 
     public DateLogForCalenderResponseDto toDateLogForCalenderResponseDto(){
@@ -65,7 +62,6 @@ public class DateLog {
                 .dateLogId(dateLogId)
                 .dateAt(dateAt)
                 .mileage(mileage)
-                .paymentLogList(paymentLogList)
                 .imageList(imageList.stream().map(image -> image.toImageResponseDto()).collect(Collectors.toList()))
                 .build();
     }

@@ -41,8 +41,11 @@ springdoc:
   cache:
     disabled: true
 
+#private Key configuration
+key:
   api:
-    shinhan: ${shinhanapi}
+    shinhan: ${SHINHANAPI}
+
 
 # AWS S3 Configuration
 cloud:
