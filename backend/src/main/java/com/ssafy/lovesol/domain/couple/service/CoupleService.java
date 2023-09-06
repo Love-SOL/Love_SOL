@@ -20,7 +20,7 @@ public interface CoupleService {
 
     boolean connectCouple(ConnectCoupleRequestDto coupleDto,long coupleId);
     ResponseAccountInfoDto getAccountTotal(long coupleId);
-
+    int getCoupleAnniversary(Long coupleId);
 
 }
 
