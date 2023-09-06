@@ -18,4 +18,5 @@ public interface ScheduleService {
     void deleteSchedule(Long scheduleId);
     CalenderResponseDto getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);
     List<ScheduleResponseDto> getScheduleByDate(Long scheduleId , LocalDate dateAt);
+    List<ScheduleResponseDto> getRecentCoupleSchedule(Long coupleId);
 }
