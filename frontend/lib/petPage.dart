@@ -5,22 +5,26 @@ class PetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pet Page'), // 페이지 제목
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Pet Page Contents', // 페이지 내용 (더미 텍스트)
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            // 다른 원하는 위젯 또는 콘텐츠 추가 가능
-          ],
+        backgroundColor: Color(0xFFF7F7F7),
+        elevation: 0,
+        title: Text(
+          "펫",
+          style: TextStyle(color: Colors.black),
         ),
+        actions: [
+          IconButton(
+            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
+            onPressed: () {
+              // 아이콘을 눌렀을 때 수행할 작업 추가
+            },
+          ),
+          IconButton(
+            icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
+            onPressed: () {
+              // 아이콘을 눌렀을 때 수행할 작업 추가
+            },
+          ),
+        ],
       ),
     );
   }

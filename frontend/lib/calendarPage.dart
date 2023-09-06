@@ -3,8 +3,6 @@ import 'dart:core';
 import 'calendar_page.dart';
 import 'package:cr_calendar/src/cr_calendar.dart';
 
-
-
 class CalendarPage extends StatefulWidget {
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -76,22 +74,21 @@ class _CalendarPageState extends State<CalendarPage> {
                             ),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children:[
-                              Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                '+240',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
                                 ),
-                              ),
-                            ]
-                          )
+                                SizedBox(width: 5),
+                                Text(
+                                  '+240',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ])
                         ],
                       ),
                       Text(
@@ -124,8 +121,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ],
                 ),
                 child: Center(
-                  child: Calendar(
-                  ),
+                  child: Calendar(),
                 ),
               ),
             ],
