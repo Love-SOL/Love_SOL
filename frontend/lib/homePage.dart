@@ -459,34 +459,43 @@ class CouplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
-      child: Column(
+      child:
+      Column(
         children: [
-          buildContainer('커플통장', Color(0xFFF7F7F7), null), // 첫 번째 컨테이너
-          SizedBox(height: 3),
-          buildContainer(
-            'Calender',
-            Color(0xFFF7F7F7),
-            () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CalendarPage(), // CalenderPage로 이동
-                ),
-              );
-            },
+          Expanded(
+            flex: 1,
+            child: buildContainer('커플통장', Color(0xFFF7F7F7), null),
           ),
           SizedBox(height: 3),
-          buildContainer(
-            'Pet',
-            Color(0xFFF7F7F7),
-            () {
-              // Calender 페이지로 이동하는 코드
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PetPage(), // CalenderPage로 이동
-                ),
-              );
-            },
-          ), // 두 번째 컨테이너 (버튼 추가) // 세 번째 컨테이너 (예시)
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              'Calendar',
+              Color(0xFFF7F7F7),
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CalendarPage(),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              'Pet',
+              Color(0xFFF7F7F7),
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PetPage(),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
