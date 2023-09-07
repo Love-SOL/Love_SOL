@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,16 +32,12 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
-            onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
-            },
+            icon: Image.asset('personicon.png'),
+            onPressed: () {},
           ),
           IconButton(
-            icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
-            onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
-            },
+            icon: Image.asset('bellicon.png'),
+            onPressed: () {},
           ),
         ],
       ),
@@ -48,79 +45,137 @@ class HomePage extends StatelessWidget {
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                // "내 계좌" 박스
-                GestureDetector(
-                  onTap: () {
-                    // "내 계좌"를 누를 때 수행할 작업 추가
-                  },
-                  child: Container(
-                    width: screenWidth - 40, // 화면 가로 크기에서 여백 20을 뺀 크기
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0, 2),
-                          blurRadius: 4.0,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '내 계좌',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+            Expanded(
+              flex : 1,
+              child:
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, 2),
+                            blurRadius: 4.0,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // "전체보기"를 누를 때 다른 화면으로 이동
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => HomePage2(),
-                              ));
-                            },
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '전체보기 >',
+                              '내 계좌',
                               style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xFF0046FF),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => HomePage2(),
+                                ));
+                              },
+                              child: Text(
+                                '전체보기 >',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF0046FF),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              flex:2,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF0046FF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '개인',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            // 추가 박스 1
-            buildBox(
-              screenWidth - 40,
-              Color(0xFF0046FF),
-              '개인\n111-111-1111\n여백',
-              70,
+            SizedBox(height: 16),
+            Expanded(
+              flex : 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '빈공간',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color : Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            // 추가 박스 2
-            buildBox(screenWidth - 40, Colors.white, '여백', 140),
           ],
         ),
       ),
