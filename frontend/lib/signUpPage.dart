@@ -172,13 +172,25 @@ class SignUpPage2 extends StatelessWidget {
         backgroundColor: Color(0XFF0046FF),
         elevation: 0,
       ),
+
       body: Container(
+
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
+
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+
           children: [
+            Expanded(
+              flex: 1,
+              child: SizedBox(),
+            ),
+            Expanded(
+                flex: 2,
+                child:
             Container(
               decoration: BoxDecoration(
                 color: Color(0xFFDADADA),
@@ -209,13 +221,20 @@ class SignUpPage2 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            ),
+          SizedBox(height: 20),
+            Expanded(
+              flex: 6,
+              child:
             Column(
               children: [
                 buildInputBox('아이디', '아이디를 입력하세요'),
                 SizedBox(height: 20),
                 buildInputBox('비밀번호', '비밀번호를 입력해주세요'),
-                SizedBox(height: 150),
+                SizedBox(height: 20),
+                Expanded(
+                    flex: 1,
+                    child:
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -253,7 +272,9 @@ class SignUpPage2 extends StatelessWidget {
                     ),
                   ],
                 ),
+                ),
               ],
+            ),
             ),
           ],
         ),
