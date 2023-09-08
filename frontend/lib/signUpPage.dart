@@ -5,7 +5,7 @@ import 'homePage.dart';
 class SignUpPage extends StatelessWidget {
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController verificationCodeController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
 
   @override
@@ -19,50 +19,62 @@ class SignUpPage extends StatelessWidget {
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildInputBox('이름', '이름을 입력하세요'),
-            SizedBox(height: 20),
-            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
-            SizedBox(height: 20),
-            buildInputBox('계좌번호', '12자리 입력',
-                controller: accountNumberController),
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('인증번호 보내기'),
-                      content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
+            Expanded(
+              flex: 1,
+              child: SizedBox(),
+            ),
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildInputBox('이름', '이름을 입력하세요'),
+                    SizedBox(height: 20),
+                    buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
+                    SizedBox(height: 20),
+                    buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('인증번호 보내기'),
+                              content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('닫기'),
+                                ),
+                              ],
+                            );
                           },
-                          child: Text('닫기'),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '인증번호 보내기 >',
+                          style: TextStyle(
+                            color: Color(0xFF777777),
+                            fontSize: 15,
+                          ),
                         ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '인증번호 보내기 >',
-                  style: TextStyle(
-                    color: Color(0xFF777777),
-                    fontSize: 15,
-                  ),
+                      ),
+                    ),
+                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController),
+                  ],
                 ),
               ),
             ),
-            buildInputBox('인증번호', '숫자 6자리 입력',
-                controller: verificationCodeController),
-            SizedBox(height: 20),
-            SizedBox(height: 80),
+          Expanded(
+            flex: 4,
+            child:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -100,6 +112,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ],
             ),
+          )
           ],
         ),
       ),
