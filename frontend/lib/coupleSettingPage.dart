@@ -24,8 +24,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 유의사항 Section
-            SizedBox(height: 20), // 여기서부터 아래의 컨텐츠가 시작됩니다.
+            SizedBox(height: 20),
             Column(
               children: [
                 buildInputBox('이름', '이름을 입력해주세요'),

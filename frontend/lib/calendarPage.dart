@@ -39,11 +39,13 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child:
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 디데이를 포함하는 Container
-              Container(
+        Expanded(flex: 1,
+            child:
+          Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Color(0xFFE4ECFF), // 배경색
@@ -103,8 +105,11 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ),
               ),
+        ),
               SizedBox(height: 16),
-              // CrCalendar를 포함하는 다른 Container
+              Expanded(
+                  flex: 4,
+                  child:
               Container(
                 width: double.infinity,
                 height: 400, // CrCalendar Container의 원하는 높이 설정
@@ -124,6 +129,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: Calendar(),
                 ),
               ),
+              )
             ],
           ),
         ),

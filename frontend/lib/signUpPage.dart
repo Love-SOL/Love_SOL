@@ -23,10 +23,19 @@ class SignUpPage extends StatelessWidget {
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {name = value;}),
+            Expanded(
+              flex: 1,
+              child: SizedBox(),
+            ),
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {name = value;}),
             SizedBox(height: 20),
             buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
             SizedBox(height: 20),
@@ -43,29 +52,31 @@ class SignUpPage extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
+                                ),
+                              ],
+                            );
                           },
-                          child: Text('닫기'),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '인증번호 보내기 >',
+                          style: TextStyle(
+                            color: Color(0xFF777777),
+                            fontSize: 15,
+                          ),
                         ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '인증번호 보내기 >',
-                  style: TextStyle(
-                    color: Color(0xFF777777),
-                    fontSize: 15,
-                  ),
+                      ),
+                    ),
+                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController),
+                  ],
                 ),
               ),
             ),
-            buildInputBox('인증번호', '숫자 6자리 입력',
-                controller: verificationCodeController),
-            SizedBox(height: 20),
-            SizedBox(height: 80),
+          Expanded(
+            flex: 4,
+            child:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -78,7 +89,6 @@ class SignUpPage extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFDADADA),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -96,7 +106,6 @@ class SignUpPage extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0XFF0046FF),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -105,6 +114,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ],
             ),
+          )
           ],
         ),
       ),
@@ -213,13 +223,25 @@ class SignUpPage2 extends StatelessWidget {
         backgroundColor: Color(0XFF0046FF),
         elevation: 0,
       ),
+
       body: Container(
+
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
+
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+
           children: [
+            Expanded(
+              flex: 1,
+              child: SizedBox(),
+            ),
+            Expanded(
+                flex: 2,
+                child:
             Container(
               decoration: BoxDecoration(
                 color: Color(0xFFDADADA),
@@ -250,13 +272,20 @@ class SignUpPage2 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            ),
+          SizedBox(height: 20),
+            Expanded(
+              flex: 6,
+              child:
             Column(
               children: [
                 buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {id = value;}),
                 SizedBox(height: 20),
                 buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {password = value;}),
-                SizedBox(height: 150),
+                SizedBox(height: 20),
+                Expanded(
+                    flex: 1,
+                    child:
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -292,7 +321,9 @@ class SignUpPage2 extends StatelessWidget {
                     ),
                   ],
                 ),
+                ),
               ],
+            ),
             ),
           ],
         ),
