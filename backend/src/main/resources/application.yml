@@ -42,4 +42,4 @@ springdoc:
     disabled: true
 
   api:
-    shinhan: ${shinhanapi}
+    shinhan: 2023_Shinhan_SSAFY_Hackathon

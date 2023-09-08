@@ -318,95 +318,108 @@ class _HomePage2State extends State<HomePage2> {
 }
 
 class PersonalPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    void _showConfirmationDialog() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('커플통장으로 전환하시겠습니까?'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('예'),
-                onPressed: () {
-                  // 커플통장으로 전환하는 작업을 여기에 추가
-                  // 예를 눌렀을 때 실행할 코드를 작성하세요
-                  Navigator.of(context).pop(); // 다이얼로그 닫기
-                  // Couplesettingpage로 이동
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => Couplesettingpage(),
-                    ),
-                  );
-                },
-              ),
-              TextButton(
-                child: Text('아니오'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // 다이얼로그 닫기
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Container(
-        width: double.infinity,
-        height: 150,
-        margin: EdgeInsets.all(16),
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Color(0xFFF7F7F7), // 배경색
-          borderRadius: BorderRadius.circular(10), // 박스 모양 설정
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // 그림자 색상
-              spreadRadius: 2, // 그림자 확장 정도
-              blurRadius: 5, // 그림자 흐릿한 정도
-              offset: Offset(0, 2), // 그림자 위치 (x, y)
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center, // 수직 정렬을 가운데로 변경
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, // 텍스트를 왼쪽, 버튼을 오른쪽 정렬
-              children: [
-                Text(
-                  '개인통장',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _showConfirmationDialog, // 확인 창을 띄우는 함수 호출
-                  icon: Icon(Icons.arrow_forward), // 아이콘 추가
-                  label: Text(''), // 텍스트 없이 공백으로 설정
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(
-              '100,000원',
+  Widget buildContainer(String title, Color color, Function()? onPressed) {
+    return Container(
+      width: double.infinity,
+      height: 150,
+      margin: EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              title,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ),
+          ),
+          SizedBox(height: 5),
+          // 이 컨테이너에 대한 추가 디자인 요소 추가
+          if (onPressed != null)
+            Align(
+              alignment: Alignment.topRight,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                child: Text('버튼'), // 버튼 텍스트 설정
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child:
+      Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+            '개인통장',
+              Color(0xFFF7F7F7),
+              () {
+              Navigator.of(context).push(
+              MaterialPageRoute(
+              builder: (context) => CalendarPage(),
+              ),
+              );
+              },
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '개인통장',
+              Color(0xFFF7F7F7),
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CalendarPage(),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '개인통장',
+              Color(0xFFF7F7F7),
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PetPage(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
 
 class CouplePage extends StatelessWidget {
   // 공통으로 사용하는 컨테이너 생성 함수
