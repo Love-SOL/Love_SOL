@@ -16,11 +16,12 @@ public class SendCoupleAmountRequestDto {
 
 
     @NotNull
-    private String subOnwerId;
+    @Schema(description = "커플pk값", example = "1")
+    private long couplId;
 
     @NotNull
-    @Schema(description = "0,1 승인/거절", example = "예시")
-    private int check; // 0: 승인 1: 거절
+    @Schema(description = "금액", example = "5000")
+    private int amount; // 0: 승인 1: 거절
 
 
 }
