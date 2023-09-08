@@ -10,8 +10,6 @@ class LoginPage extends StatelessWidget {
 
   onTapLogin(String id, String password, BuildContext context) async {
     try {
-      print(id);
-      print(password);
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
@@ -34,8 +32,7 @@ class LoginPage extends StatelessWidget {
         ));
 
       } else {
-        print("실패다");
-        print(response.body);
+        print(statusCode);
         // 로그인 실패
         // 여기에서 로그인 실패 시의 처리를 수행하세요.
       }

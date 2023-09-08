@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'homePage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController birthdateController = TextEditingController();
-  final TextEditingController verificationCodeController =
-      TextEditingController();
+  final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    String name = '';
+    String birthAt = '';
+    String personalAccount = '';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -22,12 +26,11 @@ class SignUpPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildInputBox('이름', '이름을 입력하세요'),
+            buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {name = value;}),
             SizedBox(height: 20),
-            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
+            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
             SizedBox(height: 20),
-            buildInputBox('계좌번호', '12자리 입력',
-                controller: accountNumberController),
+            buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
             GestureDetector(
               onTap: () {
                 showDialog(
@@ -85,7 +88,7 @@ class SignUpPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SignUpPage2(),
+                      builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
                     ));
                   },
                   child: Text(
@@ -109,7 +112,7 @@ class SignUpPage extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller}) {
+      {TextEditingController? controller, Function(String)? onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -135,9 +138,12 @@ class SignUpPage extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            onChanged: onChanged,
             inputFormatters: [
-              LengthLimitingTextInputFormatter(label == '계좌번호' ? 12 : 6),
-              FilteringTextInputFormatter.digitsOnly,
+              if (label == '계좌번호' || label == '생년월일')
+                LengthLimitingTextInputFormatter(label == '계좌번호' ? 12 : 8),
+              if (label == '계좌번호' || label == '생년월일')
+                FilteringTextInputFormatter.digitsOnly,
             ],
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -154,8 +160,54 @@ class SignUpPage extends StatelessWidget {
 }
 
 class SignUpPage2 extends StatelessWidget {
+
+  onTapSignUp(String id, String password, String name, String birthAt, String persnalAccount, BuildContext context) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          "id": id,
+          "password": password,
+          "simplePassword": "123456",
+          "name": name,
+          "phoneNumber": "01012341234",
+          "birthAt": '${birthAt.substring(0, 4)}-${birthAt.substring(4, 6)}-${birthAt.substring(6, 8)}',
+          "personalAccount": persnalAccount
+        }),
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      Map<String, dynamic> responseData = json.decode(response.body);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseData['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 로그인 성공 후 페이지 이동
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ));
+
+      } else {
+        print(statusCode);
+        // 로그인 실패
+        // 여기에서 로그인 실패 시의 처리를 수행하세요.
+      }
+    }
+    catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  final String name;
+  final String birthAt;
+  final String persnalAccount;
+  SignUpPage2({required this.name, required this.birthAt, required this.persnalAccount});
   @override
   Widget build(BuildContext context) {
+    String id = ''; // 아이디를 저장할 변수 초기화
+    String password = ''; // 비밀번호를 저장할 변수 초기화
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -201,9 +253,9 @@ class SignUpPage2 extends StatelessWidget {
             SizedBox(height: 20),
             Column(
               children: [
-                buildInputBox('아이디', '아이디를 입력하세요'),
+                buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {id = value;}),
                 SizedBox(height: 20),
-                buildInputBox('비밀번호', '비밀번호를 입력해주세요'),
+                buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {password = value;}),
                 SizedBox(height: 150),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -225,9 +277,7 @@ class SignUpPage2 extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ));
+                        onTapSignUp(id, password, name, birthAt, persnalAccount, context);
                       },
                       child: Text(
                         '확인',
@@ -251,7 +301,7 @@ class SignUpPage2 extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller}) {
+      {TextEditingController? controller, Function(String)? onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,6 +327,7 @@ class SignUpPage2 extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            onChanged: onChanged,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(16.0),
