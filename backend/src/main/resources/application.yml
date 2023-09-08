@@ -41,5 +41,21 @@ springdoc:
   cache:
     disabled: true
 
+#private Key configuration
+key:
   api:
-    shinhan: 2023_Shinhan_SSAFY_Hackathon
+    shinhan: ${SHINHANAPI}
+
+
+# AWS S3 Configuration
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ${BUCKET_NAME}
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+      stack:
+        auto: false

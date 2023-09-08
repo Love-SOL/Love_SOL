@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -72,14 +73,14 @@ public class DateLogController {
      * 해당 데이트 일기에 이미지를 첨부한다.
      * 이미지 객체에는 이미지 URL과 이미지의 텍스트 내용이 존재한다.
      * @param dateLogId
-     * @param insertImage
+     * @param image
      * @return
      */
     @PostMapping("/{dateLogId}")
-    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestBody InsertImageDto insertImage) throws Exception {
+    public ResponseResult registImage(@PathVariable String dateLogId, @Valid @RequestParam MultipartFile image, @Valid @RequestParam String content) throws Exception {
         log.info(dateLogId + " 데이트 일기에 이미지를 삽입합니다.");
         // 데이트 로그에 이미지를 삽입한다.
-        dateLogService.insertImage(Long.parseLong(dateLogId), insertImage);
+        dateLogService.insertImage(Long.parseLong(dateLogId), image, content);
         // TODO: 일기 작성 알림을 보낸다.
 
         return ResponseResult.successResponse;
@@ -103,15 +104,15 @@ public class DateLogController {
      * 해당 이미지 내용을 수정한다.
      * 이미지 혹은 이미지 내용을 수정할 수 있다.
      * @param imageId
-     * @param updateImage
+     * @param image
      * @return
      * @throws Exception
      */
     @PutMapping("/image/{imageId}")
-    public ResponseResult modifyImage(@PathVariable Long imageId, @Valid @RequestBody UpdateImageDto updateImage) throws Exception {
+    public ResponseResult modifyImage(@PathVariable Long imageId, @Valid @RequestParam MultipartFile image, @Valid @RequestParam String content) throws Exception {
         log.info(imageId + " 이미지를 수정합니다.");
         // 이미지 객체를 수정한다.
-        imageService.updateImage(imageId, updateImage);
+        imageService.updateImage(imageId, image, content);
         // TODO: 이미지 수정 알림을 보낸다.
         return ResponseResult.successResponse;
     }

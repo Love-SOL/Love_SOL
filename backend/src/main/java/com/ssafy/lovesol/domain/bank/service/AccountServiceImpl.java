@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-
+    private final CommonHttpSend commonHttpSend;
     @Override
     @Transactional
     public int transferOneWon(TransferRequestDto transferRequestDto) {
@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService{
         data.put("입금은행코드","088");
         data.put("입금계좌번호",transferRequestDto.getAccountNumber());
         data.put("입금통장메모",randomSixNumber);
-        ResponseEntity<String> response = CommonHttpSend.autoDeposit(data, "/auth/1transfer");
+        ResponseEntity<String> response = commonHttpSend.autoDeposit(data, "/auth/1transfer");
 
         try {
             // String 형태의 응답 본문을 JsonNode 객체로 변환
