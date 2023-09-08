@@ -2,13 +2,53 @@ import 'package:flutter/material.dart';
 import 'simplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
 import 'signUpPage.dart'; // 회원가입 페이지 임포트
 import 'homePage.dart'; // 홈페이지 임포트
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
+  onTapLogin(String id, String password, BuildContext context) async {
+    try {
+      print(id);
+      print(password);
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'id': id,
+          'password': password,
+        }),
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      Map<String, dynamic> responseData = json.decode(response.body);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseData['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 로그인 성공 후 페이지 이동
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ));
+
+      } else {
+        print("실패다");
+        print(response.body);
+        // 로그인 실패
+        // 여기에서 로그인 실패 시의 처리를 수행하세요.
+      }
+    }
+    catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String id = ''; // 아이디를 저장할 변수 초기화
+    String password = ''; // 비밀번호를 저장할 변수 초기화
     return Scaffold(
       body: Stack(
         children: [
@@ -63,6 +103,9 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
+                              onChanged: (value) {
+                                id = value; // 아이디 입력 변경 감지
+                              },
                             ),
                           ),
                         ),
@@ -93,6 +136,9 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
+                              onChanged: (value) {
+                                password = value; // 비밀번호 입력 변경 감지
+                              },
                             ),
                           ),
                         ),
@@ -113,10 +159,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      // 로그인 버튼을 누를 때 다른 페이지로 이동
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ));
+                      onTapLogin(id, password, context);
                     },
                     child: Container(
                       width: 250,
