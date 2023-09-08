@@ -66,12 +66,28 @@ public class UserScheduler {
             if(successCode != 0 ){
                 log.info("입금을 실패 했습니다.");
                 //여기서 notice를 추가해주자.
+                continue;
             }
-//            Transaction entity = Transaction.builder()
-//                    .transactionAt().depositAmount()
-//                    .depositAmount()
-//                    .build();
-//            transactionService.registTransactionInfo(entity);
+            LocalDateTime now = LocalDateTime.now();
+            Transaction withdrawal = Transaction.builder()
+                    .transactionAt(now)
+                    .depositAmount(0)
+                    .withdrawalAmount(user.getAmount())
+                    .content("LoveSol")
+                    .branchName("LoveSol 자동이체")
+                    .account(accountService.findAccountByAccountNumber(personalAccount))
+                    .build();
+            transactionService.registTransactionInfo(withdrawal);
+
+            Transaction deposit = Transaction.builder()
+                    .transactionAt(now)
+                    .depositAmount(user.getAmount())
+                    .withdrawalAmount(0)
+                    .content("LoveSol")
+                    .branchName("LoveSol 자동이체")
+                    .account(accountService.findAccountByAccountNumber(coupleAccount))
+                    .build();
+            transactionService.registTransactionInfo(deposit);
 
 
 //            ResponseEntity<String> response =  CommonHttpSend.CommonHttpSend();
