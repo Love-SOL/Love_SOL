@@ -318,6 +318,36 @@ class _HomePage2State extends State<HomePage2> {
 }
 
 class PersonalPage extends StatelessWidget {
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('커플통장으로 전환하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('예'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Couplesettingpage(),
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: Text('아니오'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget buildContainer(String title, Color color, Function()? onPressed) {
     return Container(
       width: double.infinity,
@@ -349,13 +379,12 @@ class PersonalPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          // 이 컨테이너에 대한 추가 디자인 요소 추가
           if (onPressed != null)
             Align(
               alignment: Alignment.topRight,
               child: ElevatedButton(
                 onPressed: onPressed,
-                child: Text('버튼'), // 버튼 텍스트 설정
+                child: Text('버튼'),
               ),
             ),
         ],
@@ -367,20 +396,15 @@ class PersonalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
-      child:
-      Column(
+      child: Column(
         children: [
           Expanded(
             flex: 1,
             child: buildContainer(
-            '개인통장',
+              '개인통장',
               Color(0xFFF7F7F7),
-              () {
-              Navigator.of(context).push(
-              MaterialPageRoute(
-              builder: (context) => CalendarPage(),
-              ),
-              );
+                  () {
+                _showConfirmationDialog(context);
               },
             ),
           ),
@@ -391,11 +415,7 @@ class PersonalPage extends StatelessWidget {
               '개인통장',
               Color(0xFFF7F7F7),
                   () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CalendarPage(),
-                  ),
-                );
+                _showConfirmationDialog(context);
               },
             ),
           ),
@@ -406,11 +426,7 @@ class PersonalPage extends StatelessWidget {
               '개인통장',
               Color(0xFFF7F7F7),
                   () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PetPage(),
-                  ),
-                );
+                _showConfirmationDialog(context);
               },
             ),
           ),
