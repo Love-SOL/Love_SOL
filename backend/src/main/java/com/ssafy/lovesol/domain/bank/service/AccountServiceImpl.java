@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public boolean transferOneWonAuth(TransferAuthRequestDto transferAuthRequestDto) {
         log.info("AccountServiceImpl_transferOneWonAuth | 1원 이체 인증번호 인증 기능");
-        Transaction transaction = transactionRepository.findByAccountAndDepositAmount(accountRepository.findByAccountNumber(transferAuthRequestDto.getAccountNumber()).get(), 1).get();
+        Transaction transaction = transactionRepository.findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(accountRepository.findByAccountNumber(transferAuthRequestDto.getAccountNumber()).get(), 1).get();
         if(!transaction.getContent().equals(transferAuthRequestDto.getAuthNumber()))
             return false;
         return true;

@@ -28,7 +28,7 @@ class SignUpPage extends StatelessWidget {
 
       // 필요한 작업 수행
       if (statusCode == 200) {
-        //1원 이체 성공
+          //1원 이체 성공
 
 
       } else {
@@ -102,10 +102,10 @@ class SignUpPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {name = value;}),
-                    SizedBox(height: 20),
-                    buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
-                    SizedBox(height: 20),
-                    buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
+            SizedBox(height: 20),
+            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
+            SizedBox(height: 20),
+            buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
                     GestureDetector(
                       onTap: () {
                         onTap1WonTransfer(personalAccount,context);
@@ -159,51 +159,67 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              flex: 4,
-              child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      '이전',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      minimumSize: Size(120, 48),
-                    ),
+          Expanded(
+            flex: 4,
+            child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    '이전',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (name.isNotEmpty && birthAt.isNotEmpty && personalAccount.isNotEmpty && isAuth){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
-                        ));
-                      }else{
-                        print('');
-                      }
-                    },
-                    child: Text(
-                      '확인',
-                      style: TextStyle(color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      minimumSize: Size(120, 48),
-                    ),
+                    minimumSize: Size(120, 48),
                   ),
-                ],
-              ),
-            )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (name.isNotEmpty && birthAt.isNotEmpty && personalAccount.isNotEmpty && isAuth){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
+                      ));
+                    }else{
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('알림'),
+                            content: Text('이름 , 생년월일 , 계좌번호 , 인증을 모두 마치셔야합니다.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Alert 창 닫기
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: Text(
+                    '확인',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    minimumSize: Size(120, 48),
+                  ),
+                ),
+              ],
+            ),
+          )
           ],
         ),
       ),
@@ -283,15 +299,14 @@ class SignUpPage2 extends StatelessWidget {
       int statusCode = responseData['statusCode'];
       // 필요한 작업 수행
       if (statusCode == 200) {
-        // 로그인 성공 후 페이지 이동
+        // 회원가입 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),
         ));
 
       } else {
         print(statusCode);
-        // 로그인 실패
-        // 여기에서 로그인 실패 시의 처리를 수행하세요.
+        // 회원가입 실패
       }
     }
     catch (e) {
@@ -303,6 +318,7 @@ class SignUpPage2 extends StatelessWidget {
   final String birthAt;
   final String persnalAccount;
   SignUpPage2({required this.name, required this.birthAt, required this.persnalAccount});
+
   @override
   Widget build(BuildContext context) {
     String id = ''; // 아이디를 저장할 변수 초기화
@@ -329,90 +345,90 @@ class SignUpPage2 extends StatelessWidget {
               child: SizedBox(),
             ),
             Expanded(
-              flex: 2,
-              child:
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFFDADADA),
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0, 2),
-                      blurRadius: 4.0,
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      '유의사항',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '- 비밀번호는 영문자, 숫자, 특수문자 혼용(8~15)로 설정해주세요',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              flex: 6,
-              child:
-              Column(
-                children: [
-                  buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {id = value;}),
-                  SizedBox(height: 20),
-                  buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {password = value;}),
-                  SizedBox(height: 20),
-                  Expanded(
-                    flex: 1,
-                    child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            '이전',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            minimumSize: Size(120, 48),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            onTapSignUp(id, password, name, birthAt, persnalAccount, context);
-                          },
-                          child: Text(
-                            '확인',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            minimumSize: Size(120, 48),
-                          ),
-                        ),
-                      ],
-                    ),
+                flex: 2,
+                child:
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFDADADA),
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    offset: Offset(0, 2),
+                    blurRadius: 4.0,
                   ),
                 ],
               ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Text(
+                    '유의사항',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '- 비밀번호는 영문자, 숫자, 특수문자 혼용(8~15)로 설정해주세요',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            ),
+          SizedBox(height: 20),
+            Expanded(
+              flex: 6,
+              child:
+            Column(
+              children: [
+                buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {id = value;}),
+                SizedBox(height: 20),
+                buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {password = value;}),
+                SizedBox(height: 20),
+                Expanded(
+                    flex: 1,
+                    child:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        '이전',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        minimumSize: Size(120, 48),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        onTapSignUp(id, password, name, birthAt, persnalAccount, context);
+                      },
+                      child: Text(
+                        '확인',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        minimumSize: Size(120, 48),
+                      ),
+                    ),
+                  ],
+                ),
+                ),
+              ],
+            ),
             ),
           ],
         ),
