@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'coupleSettingPage.dart';
 import 'calendarPage.dart';
@@ -121,8 +122,79 @@ class HomePage extends StatelessWidget {
               70,
             ),
             SizedBox(height: 20),
-            // 추가 박스 2
-            buildBox(screenWidth - 40, Colors.white, '여백', 140),
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '내 소비',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1.3,
+                          child: PieChart(
+                            PieChartData(
+                              sections: [
+                                PieChartSectionData(
+                                  color: Colors.blue,
+                                  value: 25,
+                                  title: '항목1',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.red,
+                                  value: 30,
+                                  title: '항목2',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.green,
+                                  value: 15,
+                                  title: '항목3',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.orange,
+                                  value: 30,
+                                  title: '항목4',
+                                  radius: 50,
+                                ),
+                              ],
+                              sectionsSpace: 0,
+                              centerSpaceRadius: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
