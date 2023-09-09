@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'weekdayswidget.dart';
 import 'dart:core';
 import 'calendar_page.dart';
 import 'package:cr_calendar/src/cr_calendar.dart';
@@ -126,7 +127,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ],
                 ),
                 child: Center(
-                  child: Calendar(),
+                  child: CalendarWidget(),
                 ),
               ),
               )
