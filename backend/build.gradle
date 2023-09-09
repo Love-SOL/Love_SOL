@@ -44,8 +44,6 @@ dependencies {
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-	// hash encode
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
