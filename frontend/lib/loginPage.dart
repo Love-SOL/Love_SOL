@@ -158,7 +158,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20), // "회원가입" 텍스트와 "간편비밀번호" 텍스트 사이의 간격 조절
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
                       // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동

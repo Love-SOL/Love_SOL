@@ -1,7 +1,11 @@
 // import 'package:cr_calendar/cr_calendar.dart';
 // import 'colors.dart';
 // import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+
 // import 'package:intl/intl.dart';
 // import 'dart:io';
 // import 'package:image_picker/image_picker.dart';
@@ -586,149 +590,246 @@ import 'package:flutter/material.dart';
 // }
 
 
-  class CalendarWidget extends StatefulWidget {
-    @override
-    _CalendarWidgetState createState() => _CalendarWidgetState();
+class CalendarWidget extends StatefulWidget {
+  @override
+  _CalendarWidgetState createState() => _CalendarWidgetState();
+}
+
+class _CalendarWidgetState extends State<CalendarWidget> {
+  DateTime selectedDate = DateTime.now();
+
+  final weekDayAbbreviations = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+  ];
+
+  Map<DateTime, List<CalendarEvent>> events = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        _buildHeader(),
+        SizedBox(height: 30),
+        _buildWeekDays(),
+        Expanded(
+          child: _buildCalendar(),
+        ),
+      ],
+    );
   }
-  
-  class _CalendarWidgetState extends State<CalendarWidget> {
-    DateTime selectedDate = DateTime.now();
-  
-    final weekDayAbbreviations = [
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-      'Sun'
-    ];
-  
-    @override
-    Widget build(BuildContext context) {
-      return Column(
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _buildHeader(),
-          SizedBox(height: 30),
-          _buildWeekDays(),
-          Expanded(
-            child: _buildCalendar(),
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month - 1,
+                  selectedDate.day,
+                );
+              });
+            },
+          ),
+          Text(
+            DateFormat('yyyy년 MM월').format(selectedDate), // 원하는 형식으로 날짜 포맷
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month + 1,
+                  selectedDate.day,
+                );
+              });
+            },
           ),
         ],
-      );
-    }
-  
-    Widget _buildHeader() {
-      return Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                setState(() {
-                  selectedDate = DateTime(
-                    selectedDate.year,
-                    selectedDate.month - 1,
-                    selectedDate.day,
-                  );
-                });
-              },
+      ),
+    );
+  }
+
+  Widget _buildWeekDays() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: weekDayAbbreviations.map((day) {
+          return Text(
+            day,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              "${selectedDate.year}년 ${selectedDate.month}월",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildCalendar() {
+    final now = DateTime.now();
+    final daysInMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month + 1,
+      0,
+    ).day;
+    final firstDayOfMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      1,
+    );
+    final weekDayOfFirstDay = firstDayOfMonth.weekday;
+
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+      ),
+      itemBuilder: (context, index) {
+        if (index < weekDayOfFirstDay - 1 ||
+            index >= daysInMonth + weekDayOfFirstDay - 1) {
+          return Container();
+        } else {
+          final day = index - (weekDayOfFirstDay - 1) + 1;
+          final isToday = now.year == selectedDate.year &&
+              now.month == selectedDate.month &&
+              now.day == day;
+
+          final eventDate = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            day,
+          );
+
+          return GestureDetector(
+            onTap: () {
+              _showDateDialog(eventDate);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isToday ? Colors.red : Colors.transparent,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    "$day",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isToday ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  if (events.containsKey(eventDate))
+                    ...events[eventDate]!
+                        .map((event) => Text(event.title))
+                ],
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
+          );
+        }
+      },
+      itemCount: 7 * 6,
+    );
+  }
+
+  void _showDateDialog(DateTime date) async {
+    final eventDate = date;
+    final picker = ImagePicker();
+    XFile? image;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            DateFormat('yyyy년 MM월 dd일').format(eventDate), // 선택된 날짜 표시
+            style: TextStyle(fontSize: 16),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    // 사진 선택 기능
+                    image = await picker.pickImage(source: ImageSource.gallery);
+                  },
+                  child: Text('사진 추가'),
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: '일정 제목'),
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: '일정 내용'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (image != null) {
+                      final event = CalendarEvent(
+                        title: '일정 제목',
+                        description: '일정 내용',
+                        color: Colors.blue, // 일정에 대한 색상 설정
+                        startDate: eventDate,
+                        endDate: eventDate,
+                      );
+
+                      setState(() {
+                        if (events.containsKey(eventDate)) {
+                          events[eventDate]!.add(event);
+                        } else {
+                          events[eventDate] = [event];
+                        }
+                      });
+
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text('일정 추가'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
               onPressed: () {
-                setState(() {
-                  selectedDate = DateTime(
-                    selectedDate.year,
-                    selectedDate.month + 1,
-                    selectedDate.day,
-                  );
-                });
+                Navigator.of(context).pop();
               },
+              child: Text('취소'),
             ),
           ],
-        ),
-      );
-    }
-  
-    Widget _buildWeekDays() {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16), // 간격 추가
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: weekDayAbbreviations.map((day) {
-            return Text(
-              day,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          }).toList(),
-        ),
-      );
-    }
-  
-    Widget _buildCalendar() {
-      final now = DateTime.now(); // 현재 날짜 가져오기
-      final daysInMonth = DateTime(
-        selectedDate.year,
-        selectedDate.month + 1,
-        0,
-      ).day;
-      final firstDayOfMonth = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        1,
-      );
-      final weekDayOfFirstDay = firstDayOfMonth.weekday;
-  
-      return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-        ),
-        itemBuilder: (context, index) {
-          if (index < weekDayOfFirstDay - 1 ||
-              index >= daysInMonth + weekDayOfFirstDay - 1) {
-            return Container();
-          } else {
-            final day = index - (weekDayOfFirstDay - 1) + 1;
-            final isToday = now.year == selectedDate.year &&
-                now.month == selectedDate.month && now.day == day;
-  
-            return GestureDetector(
-              onTap: () {
-                print("Selected date: ${selectedDate.year}-${selectedDate
-                    .month}-$day");
-              },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-  
-                  color: isToday ? Colors.red : Colors
-                      .transparent, // 오늘 날짜면 빨간색 동그라미, 아니면 투명
-                ),
-                child: Text(
-                  "$day",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: isToday ? Colors.white : Colors
-                        .black, // 오늘 날짜면 글자 색상 변경
-                  ),
-                ),
-              ),
-            );
-          }
-        },
-        itemCount: 7 * 6,
-      );
-    }
+        );
+      },
+    );
   }
+}
+
+class CalendarEvent {
+  final String title;
+  final String description;
+  final Color color;
+  final DateTime startDate;
+  final DateTime endDate;
+
+  CalendarEvent({
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.startDate,
+    required this.endDate,
+  });
+}
