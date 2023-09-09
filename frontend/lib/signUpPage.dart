@@ -9,11 +9,78 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
 
+  onTap1WonTransfer(String accountNumber, BuildContext context) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/api/account'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'accountNumber': accountNumber,
+        }),
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      Map<String, dynamic> responseData = json.decode(response.body);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseData['statusCode'];
+
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 로그인 성공 후 페이지 이동
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ));
+
+      } else {
+        print(statusCode);
+        // 1원 이체 실패
+        // 1원 이체 실패 실패 시의 처리를 수행
+      }
+    }
+    catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  onTapAuth1WonTransfer(String accountNumber,String authNumber ,BuildContext context) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'accountNumber': accountNumber,
+          'authNumber': authNumber,
+        }),
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      Map<String, dynamic> responseData = json.decode(response.body);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseData['statusCode'];
+
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 인증 성공
+
+      } else {
+        print(statusCode);
+        // 인증 실패
+
+      }
+    }
+    catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String name = '';
     String birthAt = '';
     String personalAccount = '';
+    String authNumber ='';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -40,23 +107,27 @@ class SignUpPage extends StatelessWidget {
             buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
             SizedBox(height: 20),
             buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('인증번호 보내기'),
-                      content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                    GestureDetector(
+                      onTap: () {
+                        onTap1WonTransfer(personalAccount,context);
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return AlertDialog(
+                        //       title: Text('인증번호 보내기'),
+                        //       content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
+                        //       actions: [
+                        //         TextButton(
+                        //           onPressed: () {
+                        //             Navigator.of(context).pop();
+                        //           },
+                        //           child:
+                        //           Text('닫기'), // TextButton에 child 매개변수를 추가
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -69,7 +140,22 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController),
+                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController,onChanged: (value) {authNumber = value;}),
+                    GestureDetector(
+                      onTap: () {
+                        onTapAuth1WonTransfer(personalAccount,authNumber ,context);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '인증번호 인증',
+                          style: TextStyle(
+                            color: Color(0xFF777777),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
