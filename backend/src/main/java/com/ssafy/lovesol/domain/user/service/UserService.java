@@ -3,9 +3,11 @@ package com.ssafy.lovesol.domain.user.service;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.PhoneNumberRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 import java.util.List;
 
@@ -19,4 +21,5 @@ public interface UserService {
     User getUserById(String userId);
 
     void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
+    String sendMessage(PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException;
 }

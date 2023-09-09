@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.user.controller;
 
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.lovesol.domain.user.dto.request.PhoneNumberRequestDto;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.dto.response.UserResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -89,6 +91,16 @@ public class UserController {
                         .depositAt(user.getDepositAt())
                         .build()
         );
+    }
+
+    @Operation(summary = "PhoneNumber Auth", description = "사용자 휴대폰 번호인증을 요청합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "휴대폰번호로 문자메시지 발송 성공")
+    })
+    @PostMapping("/phone")
+    public ResponseResult sendMessage(@Valid @RequestBody PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException {
+        log.info("UserController_sendMessage -> 휴대폰 번호로 메시지 발송");
+        return new SingleResponseResult<String>(userService.sendMessage(phoneNumberRequestDto));
     }
 
 }
