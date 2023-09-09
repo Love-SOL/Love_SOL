@@ -8,6 +8,7 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
+  bool isAuth = false;
 
   onTap1WonTransfer(String accountNumber, BuildContext context) async {
     try {
@@ -27,10 +28,8 @@ class SignUpPage extends StatelessWidget {
 
       // 필요한 작업 수행
       if (statusCode == 200) {
-        // 로그인 성공 후 페이지 이동
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ));
+          //1원 이체 성공
+
 
       } else {
         print(statusCode);
@@ -44,6 +43,7 @@ class SignUpPage extends StatelessWidget {
   }
 
   onTapAuth1WonTransfer(String accountNumber,String authNumber ,BuildContext context) async {
+    print(authNumber);
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
@@ -55,6 +55,7 @@ class SignUpPage extends StatelessWidget {
           'authNumber': authNumber,
         }),
       );
+      print('');
       // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
       Map<String, dynamic> responseData = json.decode(response.body);
       // 파싱한 데이터에서 필드에 접근
@@ -63,7 +64,7 @@ class SignUpPage extends StatelessWidget {
       // 필요한 작업 수행
       if (statusCode == 200) {
         // 인증 성공
-
+        isAuth = true;
       } else {
         print(statusCode);
         // 인증 실패
@@ -183,9 +184,29 @@ class SignUpPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
-                    ));
+                    if (name.isNotEmpty && birthAt.isNotEmpty && personalAccount.isNotEmpty && isAuth){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
+                      ));
+                    }else{
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('알림'),
+                            content: Text('이름 , 생년월일 , 계좌번호 , 인증을 모두 마치셔야합니다.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Alert 창 닫기
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Text(
                     '확인',
@@ -258,6 +279,8 @@ class SignUpPage extends StatelessWidget {
 class SignUpPage2 extends StatelessWidget {
 
   onTapSignUp(String id, String password, String name, String birthAt, String persnalAccount, BuildContext context) async {
+    print('hi');
+    print(birthAt);
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
@@ -280,15 +303,14 @@ class SignUpPage2 extends StatelessWidget {
       int statusCode = responseData['statusCode'];
       // 필요한 작업 수행
       if (statusCode == 200) {
-        // 로그인 성공 후 페이지 이동
+        // 회원가입 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),
         ));
 
       } else {
         print(statusCode);
-        // 로그인 실패
-        // 여기에서 로그인 실패 시의 처리를 수행하세요.
+        // 회원가입 실패
       }
     }
     catch (e) {
@@ -300,6 +322,7 @@ class SignUpPage2 extends StatelessWidget {
   final String birthAt;
   final String persnalAccount;
   SignUpPage2({required this.name, required this.birthAt, required this.persnalAccount});
+
   @override
   Widget build(BuildContext context) {
     String id = ''; // 아이디를 저장할 변수 초기화
