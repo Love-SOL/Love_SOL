@@ -18,7 +18,7 @@ public class Account {
     private String accountNumber;
 
     @Column(nullable = false)
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false)
     private int bankCode;
