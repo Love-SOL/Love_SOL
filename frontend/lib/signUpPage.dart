@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'homePage.dart';
 
 class SignUpPage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
-  final TextEditingController verificationCodeController =
-  TextEditingController();
+  final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
 
   @override
@@ -31,7 +31,7 @@ class SignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    buildInputBox('이름', '이름을 입력하세요'),
+                    buildInputBox('이름', '이름을 입력하세요', controller: nameController),
                     SizedBox(height: 20),
                     buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController),
                     SizedBox(height: 20),
@@ -87,6 +87,7 @@ class SignUpPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFDADADA),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -104,6 +105,7 @@ class SignUpPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF0046FF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
