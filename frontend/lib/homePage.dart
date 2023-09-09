@@ -465,9 +465,17 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
     ),
   );
 }
-class CouplePage extends StatelessWidget {
+
+class CouplePage extends StatefulWidget {
+  @override
+  _CouplePageState createState() => _CouplePageState();
+}
+
+class _CouplePageState extends State<CouplePage> {
+  String petName = ''; // 펫 이름을 저장하는 변수
+
   // 공통으로 사용하는 컨테이너 생성 함수
-  Widget buildContainer(String title, Color color, Function()? onPressed) {
+  Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed) {
     return Container(
       width: double.infinity,
       height: 150,
@@ -498,7 +506,20 @@ class CouplePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          // 이 컨테이너에 대한 추가 디자인 요소 추가
+          if (centerText != null) // 가운데 텍스트 추가
+            InkWell(
+              onTap: onCenterTextPressed, // 클릭 이벤트 추가
+              child: Center(
+                child: Text(
+                  centerText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black, // 텍스트 색상을 원하는 색상으로 설정하세요.
+                  ),
+                ),
+              ),
+            ),
+          SizedBox(height: 5),
           if (onPressed != null)
             Align(
               alignment: Alignment.topRight,
@@ -512,38 +533,94 @@ class CouplePage extends StatelessWidget {
     );
   }
 
+  // 다이얼로그 창을 열어서 펫 이름을 설정하는 함수
+  void _setPetName(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('펫 이름 설정'),
+          content: TextField(
+            decoration: InputDecoration(hintText: '펫 이름을 입력하세요'),
+            onChanged: (value) {
+              setState(() {
+                petName = value; // 입력한 펫 이름을 저장
+              });
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // 여기서 필요한 작업을 수행하고 펫 이름을 저장할 수 있습니다.
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
         children: [
-          buildContainer('커플통장', Color(0xFFF7F7F7), null), // 첫 번째 컨테이너
-          SizedBox(height: 3),
-          buildContainer(
-            'Calender',
-            Color(0xFFF7F7F7),
-                () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CalendarPage(), // CalenderPage로 이동
-                ),
-              );
-            },
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '커플통장',
+              Color(0xFFF7F7F7),
+              null,
+              '가운데에 표시할 텍스트',
+              null,
+            ),
           ),
           SizedBox(height: 3),
-          buildContainer(
-            'Pet',
-            Color(0xFFF7F7F7),
-                () {
-              // Calender 페이지로 이동하는 코드
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PetPage(), // CalenderPage로 이동
-                ),
-              );
-            },
-          ), // 두 번째 컨테이너 (버튼 추가) // 세 번째 컨테이너 (예시)
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              'Calendar',
+              Color(0xFFF7F7F7),
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CalendarPage(),
+                  ),
+                );
+              },
+              null,
+              null,
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              'Pet',
+              Color(0xFFF7F7F7),
+                  () {
+                // 'PetPage'로 이동하는 코드
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PetPage(),
+                  ),
+                );
+              },
+              '펫 이름을 설정해주세요', // 펫 이름을 보여주는 부분
+                  () {
+                _setPetName(context); // 펫 이름 설정 창을 열어주는 함수 호출
+              },
+            ),
+          ),
         ],
       ),
     );
