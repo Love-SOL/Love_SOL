@@ -19,7 +19,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> accountData = {};
+  void initState() {
+    super.initState();
+    fetchAccountData(); // 초기 데이터 로드
+  }
+  Future<void> fetchAccountData() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/api/user/account/shinhan'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final data = responseData['data'];
+      setState(() {
+        accountData = Map<String, dynamic>.from(data);
+      });
+      print(accountData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -118,7 +142,7 @@ class HomePage extends StatelessWidget {
             buildBox(
               screenWidth - 40,
               Color(0xFF0046FF),
-              '개인\n111-111-1111\n여백',
+              accountData,
               70,
             ),
             SizedBox(height: 20),
@@ -201,14 +225,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildBox(double width, Color color, String text, double height) {
+  Widget buildBox(double width, Color color, Map<String, dynamic> accountData, double height) {
     return GestureDetector(
       onTap: () {
         // 각 박스를 누를 때 수행할 작업 추가
       },
       child: Container(
         width: width,
-        height: 50.0,
+        height: height,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),
@@ -220,15 +244,25 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '계좌번호: ${accountData["personalAccount"]}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          ),
+            Text(
+              '잔액: ${accountData["amount"]}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
