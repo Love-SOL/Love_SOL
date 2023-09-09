@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.global.util;
 
+import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.entity.Pet;
 import com.ssafy.lovesol.domain.user.entity.Notice;
@@ -18,10 +19,10 @@ public class InitDb {
 
     private final InitService initService;
 
-//    @PostConstruct
-//    public void init() {
-//        initService.UserInit();
-//    }
+    @PostConstruct
+    public void init() {
+        initService.UserInit();
+    }
 
     @Component
     @Transactional
@@ -32,24 +33,24 @@ public class InitDb {
 
         public void UserInit() {
             User user1 = User.builder()
-                    .id("ssafy")
+                    .id("shinhan")
                     .password("1234")
                     .amount(0)
                     .birthAt(LocalDate.of(2000,01,01))
                     .depositAt(0)
-                    .name("박싸피")
+                    .name("박신한")
                     .personalAccount("111222333")
                     .phoneNumber("01011112222")
                     .simplePassword("123456")
                     .build();
 
             User user2 = User.builder()
-                    .id("ssafy2")
+                    .id("shinhan2")
                     .password("1234")
                     .amount(0)
                     .birthAt(LocalDate.of(2000,11,11))
                     .depositAt(0)
-                    .name("김싸피")
+                    .name("김신한")
                     .personalAccount("123123123")
                     .phoneNumber("01033334444")
                     .simplePassword("123456")
@@ -69,6 +70,31 @@ public class InitDb {
 
             em.persist(couple);
 
+            Account account = Account.builder()
+                    .accountNumber("01011112222")
+                    .balance(100000)
+                    .name("박신한")
+                    .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
+                    .bankCode(88)
+                    .build();
+            Account account2 = Account.builder()
+                    .accountNumber("01012341234")
+                    .balance(100000)
+                    .name("박신한")
+                    .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
+                    .bankCode(88)
+                    .build();
+            Account account3 = Account.builder()
+                    .accountNumber("01033334444")
+                    .balance(100000)
+                    .name("김신한")
+                   .userId("a7c7664734060856bf6b826e2f4c78f8bfa4a0cd123354d4bdb27952c7922e1b")
+                    .bankCode(88)
+                    .build();
+
+            em.persist(account);
+            em.persist(account2);
+            em.persist(account3);
         }
 
 

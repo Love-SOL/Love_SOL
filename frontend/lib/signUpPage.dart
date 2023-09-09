@@ -43,7 +43,6 @@ class SignUpPage extends StatelessWidget {
   }
 
   onTapAuth1WonTransfer(String accountNumber,String authNumber ,BuildContext context) async {
-    print(authNumber);
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
@@ -55,7 +54,6 @@ class SignUpPage extends StatelessWidget {
           'authNumber': authNumber,
         }),
       );
-      print('');
       // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
       Map<String, dynamic> responseData = json.decode(response.body);
       // 파싱한 데이터에서 필드에 접근
@@ -279,8 +277,6 @@ class SignUpPage extends StatelessWidget {
 class SignUpPage2 extends StatelessWidget {
 
   onTapSignUp(String id, String password, String name, String birthAt, String persnalAccount, BuildContext context) async {
-    print('hi');
-    print(birthAt);
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
