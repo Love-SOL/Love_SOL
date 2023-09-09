@@ -301,7 +301,39 @@ class _HomePage2State extends State<HomePage2> {
           IconButton(
             icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
             onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림'),
+                    content: Container(
+                      width: double.maxFinite,
+                      height: 300, // 알림 목록의 높이 조절
+                      child: ListView(
+                        children: [
+                          ListTile(
+                            title: Text('알림 1'),
+                            subtitle: Text('알림 내용 1'),
+                          ),
+                          ListTile(
+                            title: Text('알림 2'),
+                            subtitle: Text('알림 내용 2'),
+                          ),
+                          // 여기에 추가적인 알림 항목을 추가하세요
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('닫기'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
