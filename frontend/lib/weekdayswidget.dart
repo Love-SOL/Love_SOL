@@ -586,127 +586,149 @@ import 'package:flutter/material.dart';
 // }
 
 
-class CalendarWidget extends StatefulWidget {
-  @override
-  _CalendarWidgetState createState() => _CalendarWidgetState();
-}
-
-class _CalendarWidgetState extends State<CalendarWidget> {
-  DateTime selectedDate = DateTime.now();
-
-  final weekDayAbbreviations = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _buildHeader(),
-        SizedBox(height: 30),
-        _buildWeekDays(),
-        Expanded(
-          child: _buildCalendar(),
-        ),
-      ],
-    );
+  class CalendarWidget extends StatefulWidget {
+    @override
+    _CalendarWidgetState createState() => _CalendarWidgetState();
   }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  
+  class _CalendarWidgetState extends State<CalendarWidget> {
+    DateTime selectedDate = DateTime.now();
+  
+    final weekDayAbbreviations = [
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'
+    ];
+  
+    @override
+    Widget build(BuildContext context) {
+      return Column(
         children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              setState(() {
-                selectedDate = DateTime(
-                  selectedDate.year,
-                  selectedDate.month - 1,
-                  selectedDate.day,
-                );
-              });
-            },
-          ),
-          Text(
-            "${selectedDate.year}년 ${selectedDate.month}월",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          IconButton(
-            icon: Icon(Icons.arrow_forward),
-            onPressed: () {
-              setState(() {
-                selectedDate = DateTime(
-                  selectedDate.year,
-                  selectedDate.month + 1,
-                  selectedDate.day,
-                );
-              });
-            },
+          _buildHeader(),
+          SizedBox(height: 30),
+          _buildWeekDays(),
+          Expanded(
+            child: _buildCalendar(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildWeekDays() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16), // 간격 추가
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: weekDayAbbreviations.map((day) {
-          return Text(
-            day,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+      );
+    }
+  
+    Widget _buildHeader() {
+      return Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                setState(() {
+                  selectedDate = DateTime(
+                    selectedDate.year,
+                    selectedDate.month - 1,
+                    selectedDate.day,
+                  );
+                });
+              },
             ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildCalendar() {
-    final daysInMonth = DateTime(
-      selectedDate.year,
-      selectedDate.month + 1,
-      0,
-    ).day;
-    final firstDayOfMonth = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      1,
-    );
-    final weekDayOfFirstDay = firstDayOfMonth.weekday;
-
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7,
-      ),
-      itemBuilder: (context, index) {
-        if (index < weekDayOfFirstDay - 1 || index >= daysInMonth + weekDayOfFirstDay - 1) {
-          return Container();
-        } else {
-          final day = index - (weekDayOfFirstDay - 1) + 1;
-          return GestureDetector(
-            onTap: () {
-              print("Selected date: ${selectedDate.year}-${selectedDate.month}-$day");
-            },
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                "$day",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Text(
+              "${selectedDate.year}년 ${selectedDate.month}월",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                setState(() {
+                  selectedDate = DateTime(
+                    selectedDate.year,
+                    selectedDate.month + 1,
+                    selectedDate.day,
+                  );
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  
+    Widget _buildWeekDays() {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16), // 간격 추가
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: weekDayAbbreviations.map((day) {
+            return Text(
+              day,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+  
+    Widget _buildCalendar() {
+      final now = DateTime.now(); // 현재 날짜 가져오기
+      final daysInMonth = DateTime(
+        selectedDate.year,
+        selectedDate.month + 1,
+        0,
+      ).day;
+      final firstDayOfMonth = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        1,
+      );
+      final weekDayOfFirstDay = firstDayOfMonth.weekday;
+  
+      return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 7,
+        ),
+        itemBuilder: (context, index) {
+          if (index < weekDayOfFirstDay - 1 ||
+              index >= daysInMonth + weekDayOfFirstDay - 1) {
+            return Container();
+          } else {
+            final day = index - (weekDayOfFirstDay - 1) + 1;
+            final isToday = now.year == selectedDate.year &&
+                now.month == selectedDate.month && now.day == day;
+  
+            return GestureDetector(
+              onTap: () {
+                print("Selected date: ${selectedDate.year}-${selectedDate
+                    .month}-$day");
+              },
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+  
+                  color: isToday ? Colors.red : Colors
+                      .transparent, // 오늘 날짜면 빨간색 동그라미, 아니면 투명
+                ),
+                child: Text(
+                  "$day",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: isToday ? Colors.white : Colors
+                        .black, // 오늘 날짜면 글자 색상 변경
+                  ),
                 ),
               ),
-            ),
-          );
-        }
-      },
-      itemCount: 7 * 6,
-    );
+            );
+          }
+        },
+        itemCount: 7 * 6,
+      );
+    }
   }
-}
