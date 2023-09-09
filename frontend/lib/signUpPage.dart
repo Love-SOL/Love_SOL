@@ -187,7 +187,7 @@ class SignUpPage extends StatelessWidget {
                           builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
                         ));
                       }else{
-                        print('')
+                        print('');
                       }
                     },
                     child: Text(
