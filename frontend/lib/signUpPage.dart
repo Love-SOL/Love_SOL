@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'simplePasswordPage.dart';
 import 'homePage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SignUpPage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
+
   bool isAuth = false;
 
   onTap1WonTransfer(String accountNumber,String phoneNumber, BuildContext context) async {
@@ -133,6 +133,7 @@ class SignUpPage extends StatelessWidget {
     String phoneNumber ='';
     String personalAccount = '';
     String authNumber ='';
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -164,6 +165,7 @@ class SignUpPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         onTap1WonTransfer(personalAccount,phoneNumber,context);
+
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -176,45 +178,32 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController,onChanged: (value) {authNumber = value;}),
-                    GestureDetector(
-                      onTap: () {
-                        onTapAuth1WonTransfer(personalAccount,authNumber ,context);
-                      },
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '인증번호 인증',
-                          style: TextStyle(
-                            color: Color(0xFF777777),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    )
+                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController),
                   ],
                 ),
               ),
             ),
-          Expanded(
-            flex: 4,
-            child:
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    '이전',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+            Expanded(
+              flex: 4,
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      '이전',
+                      style: TextStyle(color: Colors.white),
                     ),
-                    minimumSize: Size(120, 48),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFDADADA),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      minimumSize: Size(120, 48),
+                    ),
                   ),
                 ),
                 ElevatedButton(
@@ -251,12 +240,10 @@ class SignUpPage extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    minimumSize: Size(120, 48),
                   ),
-                ),
-              ],
-            ),
-          )
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -264,7 +251,7 @@ class SignUpPage extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller, Function(String)? onChanged}) {
+      {TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -290,12 +277,9 @@ class SignUpPage extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
-            onChanged: onChanged,
             inputFormatters: [
-              if (label == '계좌번호' || label == '생년월일')
-                LengthLimitingTextInputFormatter(label == '계좌번호' ? 12 : 8),
-              if (label == '계좌번호' || label == '생년월일')
-                FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(label == '계좌번호' ? 12 : 6),
+              FilteringTextInputFormatter.digitsOnly,
             ],
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -361,8 +345,6 @@ class SignUpPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String id = ''; // 아이디를 저장할 변수 초기화
-    String password = ''; // 비밀번호를 저장할 변수 초기화
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -385,66 +367,70 @@ class SignUpPage2 extends StatelessWidget {
               child: SizedBox(),
             ),
             Expanded(
-                flex: 2,
-                child:
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFDADADA),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 2),
-                    blurRadius: 4.0,
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Text(
-                    '유의사항',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              flex: 2,
+              child:
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFDADADA),
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, 2),
+                      blurRadius: 4.0,
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '- 비밀번호는 영문자, 숫자, 특수문자 혼용(8~15)로 설정해주세요',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
+                  ],
+                ),
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Text(
+                      '유의사항',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '- 비밀번호는 영문자, 숫자, 특수문자 혼용(8~15)로 설정해주세요',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             ),
-            ),
-          SizedBox(height: 20),
+            SizedBox(height: 20),
             Expanded(
               flex: 6,
               child:
-            Column(
-              children: [
-                buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {id = value;}),
-                SizedBox(height: 20),
-                buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {password = value;}),
-                SizedBox(height: 20),
-                Expanded(
+              Column(
+                children: [
+                  buildInputBox('아이디', '아이디를 입력하세요'),
+                  SizedBox(height: 20),
+                  buildInputBox('비밀번호', '비밀번호를 입력해주세요'),
+                  SizedBox(height: 20),
+                  Expanded(
                     flex: 1,
                     child:
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        '이전',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            '이전',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFDADADA),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            minimumSize: Size(120, 48),
+                          ),
                         ),
                         minimumSize: Size(120, 48),
                       ),
@@ -461,14 +447,11 @@ class SignUpPage2 extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        minimumSize: Size(120, 48),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -477,7 +460,7 @@ class SignUpPage2 extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller, Function(String)? onChanged}) {
+      {TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -503,7 +486,6 @@ class SignUpPage2 extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
-            onChanged: onChanged,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(16.0),

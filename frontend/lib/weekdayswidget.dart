@@ -1,585 +1,453 @@
-import 'package:cr_calendar/cr_calendar.dart';
-import 'colors.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-const kAppBarDateFormat = 'M/yyyy';
-const kMonthFormat = 'MMMM';
-const kMonthFormatWidthYear = 'MMMM yyyy';
-const kDateRangeFormat = 'dd-MM-yy';
-
-extension DateTimeExt on DateTime {
-  String format(String formatPattern) => DateFormat(formatPattern).format(this);
+void main() {
+  runApp(MyApp());
 }
 
-class WeekDaysWidget extends StatelessWidget {
-  const WeekDaysWidget({
-    required this.day,
-    super.key,
-  });
-
-  final WeekDay day;
-
+class MyApp extends StatelessWidget {
+  MaterialColor? color = Colors.blue;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      child: Center(
-        child: Text(
-          describeEnum(day).substring(0, 1).toUpperCase(),
-          style: TextStyle(
-            color: Color(0xff69695D).withOpacity(0.9),
-          ),
-        ),
+    return MaterialApp(
+      title: 'Calendar App',
+      theme: ThemeData(
+        primarySwatch: color,
       ),
+      home: CalendarWidget(),
     );
   }
 }
 
-class EventWidget extends StatelessWidget {
-  const EventWidget({
-    required this.drawer,
-    super.key,
-  });
+class CalendarWidget extends StatefulWidget {
+  @override
+  _CalendarWidgetState createState() => _CalendarWidgetState();
+}
 
-  final EventProperties drawer;
+class _CalendarWidgetState extends State<CalendarWidget> {
+  DateTime selectedDate = DateTime.now();
+  Map<DateTime, List<CalendarEvent>> events = {};
+  String selectedCategory = '주 관리자'; // 기본 카테고리를 '주 관리자'로 설정
 
+  @override
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 3),
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
-        color: drawer.backgroundColor,
-      ),
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          drawer.name,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Colors.white),
+    return Column(
+      children: <Widget>[
+        _buildHeader(),
+        SizedBox(height: 30),
+        _buildWeekDays(),
+        Expanded(
+          child: _buildCalendar(),
         ),
-      ),
-    );
-  }
-}
-
-class CreateEventDialog extends StatefulWidget {
-  const CreateEventDialog({super.key});
-
-  @override
-  _CreateEventDialogState createState() => _CreateEventDialogState();
-}
-
-class _CreateEventDialogState extends State<CreateEventDialog> {
-  
-  int _selectedColorIndex = 0;
-  final _eventNameController = TextEditingController();
-  File? _selectedImage; // 이미지를 저장할 변수
-
-  String _rangeButtonText = 'Select date';
-
-  DateTime? _beginDate;
-  DateTime? _endDate;
-
-  @override
-  void dispose() {
-    _eventNameController.dispose();
-    super.dispose();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Dialog(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: size.height * 0.7,
-          maxWidth: size.width * 0.8,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Dialog title.
-                const Text(
-                  '내용을 추가하세요',
-                  style: TextStyle(
-                    color: Color(0xff69695D),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-
-                TextField(
-                  cursorColor: Color(0xff69695D),
-                  style:
-                      const TextStyle(color: Color(0xff69695D), fontSize: 16),
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xff69695D).withOpacity(1)),
-                    ),
-                    hintText: 'Enter the event name',
-                    hintStyle: TextStyle(
-                        color: Color(0xff69695D).withOpacity(0.6),
-                        fontSize: 16),
-                  ),
-                  controller: _eventNameController,
-                ),
-                const SizedBox(height: 24),
-
-                // Color selection section.
-                const Text(
-                  'Select event color',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff69695D),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Color selection row.
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...List.generate(
-                        eventColors.length,
-                        (index) => GestureDetector(
-                          onTap: () {
-                            _selectColor(index);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Container(
-                              foregroundDecoration: BoxDecoration(
-                                border: index == _selectedColorIndex
-                                    ? Border.all(
-                                        color: Colors.black.withOpacity(0.3),
-                                        width: 2)
-                                    : null,
-                                shape: BoxShape.circle,
-                                color: eventColors[index],
-                              ),
-                              width: 32,
-                              height: 32,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Image upload button.
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: const Text('Upload Image'),
-                ),
-
-                // Display selected image.
-                if (_selectedImage != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.file(_selectedImage!),
-                  ),
-
-                // Date selection button.
-                TextButton(
-                  onPressed: _showRangePicker,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today_outlined,
-                        color: Color(0xff69695D),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        _rangeButtonText,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff69695D),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    // Cancel button.
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('CANCEL'),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-
-                    // OK button.
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed:
-                            _validateEventData() ? _onEventCreation : null,
-                        child: const Text('OK'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      ],
     );
   }
 
-  // Select color on tap.
-  void _selectColor(int index) {
-    setState(() {
-      _selectedColorIndex = index;
-    });
-  }
-
-  // Set range picker button text.
-  void _setRangeData(DateTime? begin, DateTime? end) {
-    if (begin == null || end == null) {
-      return;
-    }
-    setState(() {
-      _beginDate = begin;
-      _endDate = end;
-      _rangeButtonText = _parseDateRange(begin, end);
-    });
-  }
-
-  // Parse selected date to readable format.
-  String _parseDateRange(DateTime begin, DateTime end) {
-    if (begin.isAtSameMomentAs(end)) {
-      return begin.format(kDateRangeFormat);
-    } else {
-      return '${begin.format(kDateRangeFormat)} - ${end.format(kDateRangeFormat)}';
-    }
-  }
-
-  // Validate event info for enabling "OK" button.
-  bool _validateEventData() {
-    return _eventNameController.text.isNotEmpty &&
-        _beginDate != null &&
-        _endDate != null;
-  }
-
-  // Close dialog and pass CalendarEventModel as arguments.
-  void _onEventCreation() {
-    final beginDate = _beginDate;
-    final endDate = _endDate;
-    if (beginDate == null || endDate == null) {
-      return;
-    }
-    Navigator.of(context).pop(
-      CalendarEventModel(
-        name: _eventNameController.text,
-        begin: beginDate,
-        end: endDate,
-        eventColor: eventColors[_selectedColorIndex],
-        eventImage: _selectedImage, // Add image
-      ),
-    );
-  }
-
-  // Show calendar in pop up dialog for selecting date range for calendar event.
-  void _showRangePicker() {
-    FocusScope.of(context).unfocus();
-    showCrDatePicker(
-      context,
-      properties: DatePickerProperties(
-        onDateRangeSelected: _setRangeData,
-        dayItemBuilder: (properties) =>
-            PickerDayItemWidget(properties: properties),
-        weekDaysBuilder: (day) => WeekDaysWidget(day: day),
-        initialPickerDate: _beginDate ?? DateTime.now(),
-        pickerTitleBuilder: (date) => DatePickerTitle(date: date),
-        yearPickerItemBuilder: (year, isPicked) => Container(
-          height: 24,
-          width: 54,
-          decoration: BoxDecoration(
-            color: isPicked ? Color(0xff69695D) : Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+  Widget _buildHeader() {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month - 1,
+                  selectedDate.day,
+                );
+              });
+            },
           ),
-          child: Center(
-            child: Text(
-              year.toString(),
-              style: TextStyle(
-                  color: isPicked ? Colors.white : Color(0xff69695D),
-                  fontSize: 16),
-            ),
+          Text(
+            DateFormat('yyyy년 MM월').format(selectedDate), // 원하는 형식으로 날짜 포맷
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-        ),
-        controlBarTitleBuilder: (date) => Text(
-          DateFormat(kAppBarDateFormat).format(date),
-          style: const TextStyle(
-            fontSize: 16,
-            color: Color(0xff69695D),
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        okButtonBuilder: (onPress) => ElevatedButton(
-          onPressed: () => onPress?.call(),
-          child: const Text('OK'),
-        ),
-        cancelButtonBuilder: (onPress) => OutlinedButton(
-          onPressed: () => onPress?.call(),
-          child: const Text('CANCEL'),
-        ),
-      ),
-    );
-  }
-
-  // Image picker method
-  Future<void> _pickImage() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
-}
-
-class PickerDayItemWidget extends StatelessWidget {
-  const PickerDayItemWidget({
-    required this.properties,
-    super.key,
-  });
-
-  final DayItemProperties properties;
-
-  @override
-  Widget build(BuildContext context) {
-    /// Lock aspect ratio of items to be rectangle.
-    return AspectRatio(
-      aspectRatio: 1 / 1,
-      child: Stack(
-        children: [
-          /// Semi transparent violet background for days in selected range.
-          if (properties.isInRange)
-
-            /// For first and last days in range background color visible only
-            /// on one side.
-            Row(
-              children: [
-                Expanded(
-                    child: Container(
-                        color: properties.isFirstInRange
-                            ? Colors.transparent
-                            : Color(0xff69695D).withOpacity(0.4))),
-                Expanded(
-                    child: Container(
-                        color: properties.isLastInRange
-                            ? Colors.transparent
-                            : Color(0xff69695D).withOpacity(0.4))),
-              ],
-            ),
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: properties.isFirstInRange ||
-                      properties.isLastInRange ||
-                      properties.isSelected
-                  ? Color(0xff69695D)
-                  : Colors.transparent,
-            ),
-            child: Center(
-              child: Text('${properties.dayNumber}',
-                  style: TextStyle(
-                      color: properties.isInRange || properties.isSelected
-                          ? Colors.white
-                          : Color(0xff69695D)
-                              .withOpacity(properties.isInMonth ? 1 : 0.5))),
-            ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month + 1,
+                  selectedDate.day,
+                );
+              });
+            },
           ),
         ],
       ),
     );
   }
-}
 
-class DatePickerTitle extends StatelessWidget {
-  const DatePickerTitle({
-    required this.date,
-    super.key,
-  });
+  Widget _buildWeekDays() {
+    final List<String> weekDayAbbreviations = ['Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'];
 
-  final DateTime date;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.only(top: 16),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          date.format(kMonthFormatWidthYear),
-          style: const TextStyle(
-            fontSize: 21,
-            color: Color(0xff69695D),
-            fontWeight: FontWeight.w500,
-          ),
-        ));
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: weekDayAbbreviations.map((day) {
+          return Text(
+            day,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        }).toList(),
+      ),
+    );
   }
-}
 
-class DayEventsBottomSheet extends StatelessWidget {
-  const DayEventsBottomSheet({
-    required this.screenHeight,
-    required this.events,
-    required this.day,
-    super.key,
-  });
+  Widget _buildCalendar() {
+    final now = DateTime.now();
+    final daysInMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month + 1,
+      0,
+    ).day;
+    final firstDayOfMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      1,
+    );
+    final weekDayOfFirstDay = firstDayOfMonth.weekday;
 
-  final List<CalendarEventModel> events;
-  final DateTime day;
-  final double screenHeight;
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+      ),
+      itemBuilder: (context, index) {
+        if (index < weekDayOfFirstDay - 1 ||
+            index >= daysInMonth + weekDayOfFirstDay - 1) {
+          return Container();
+        } else {
+          final day = index - (weekDayOfFirstDay - 1) + 1;
+          final isToday = now.year == selectedDate.year &&
+              now.month == selectedDate.month &&
+              now.day == day;
 
-  @override
-  Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, controller) {
-          return events.isEmpty
-              ? const Center(child: Text('No events for this day'))
-              : ListView.builder(
-                  controller: controller,
-                  itemCount: events.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 18,
-                          top: 16,
-                          bottom: 16,
-                        ),
-                        child: Text(day.format('dd/MM/yy')),
-                      );
-                    } else {
-                      final event = events[index - 1];
-                      return Container(
-                          height: 100,
-                          child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 4),
-                              child: Card(
-                                  clipBehavior: Clip.antiAlias,
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        color: event.eventColor,
-                                        width: 6,
-                                      ),
-                                      Expanded(
-                                          child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                event.name,
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                '${event.begin.format(kDateRangeFormat)} - '
-                                                '${event.end.format(kDateRangeFormat)}',
-                                                style: const TextStyle(
-                                                    fontSize: 14),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ))
-                                    ],
-                                  ))));
-                    }
-                  });
-        });
-  }
-}
+          final eventDate = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            day,
+          );
 
-/// Widget of day item cell for calendar
-class DayItemWidget extends StatelessWidget {
-  const DayItemWidget({
-    required this.properties,
-    super.key,
-  });
+          // 해당 날짜의 이벤트 리스트를 가져옴
+          final eventsForDate = events[eventDate];
 
-  final DayItemProperties properties;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: Color(0xff69695D).withOpacity(0.3), width: 0.3)),
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 4),
-            alignment: Alignment.topCenter,
+          return GestureDetector(
+            onTap: () {
+              _showEventsForDate(eventDate);
+            },
             child: Container(
-              height: 18,
-              width: 18,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: properties.isCurrentDay
-                    ? Color(0xff69695D)
-                    : Colors.transparent,
                 shape: BoxShape.circle,
+                color: isToday ? Colors.red : Colors.transparent,
               ),
-              child: Center(
-                child: Text('${properties.dayNumber}',
+              child: Column(
+                children: [
+                  Text(
+                    "$day",
                     style: TextStyle(
-                        color: properties.isCurrentDay
-                            ? Colors.white
-                            : Color(0xff69695D)
-                                .withOpacity(properties.isInMonth ? 1 : 0.5))),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isToday ? Colors.white : Color(0xFF69695D),
+                    ),
+                  ),
+                  if (eventsForDate != null) // 해당 날짜에 이벤트가 있는 경우
+                    ...eventsForDate.map((event) {
+                      return Container(
+                        width: 10, // 이벤트 표시를 위한 작은 원
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: event.color, // 이벤트의 색상 적용
+                        ),
+                      );
+                    }),
+                ],
               ),
+            ),
+          );
+        }
+      },
+      itemCount: 7 * 6,
+    );
+  }
+
+  void _showEventsForDate(DateTime eventDate) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            DateFormat('yyyy년 MM월 dd일').format(eventDate),
+            style: TextStyle(fontSize: 16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (events.containsKey(eventDate) &&
+                  events[eventDate]!.isNotEmpty)
+                ...events[eventDate]!.map((event) {
+                  return ListTile(
+                    title: Text(event.title),
+                    subtitle: Text(event.description),
+                  );
+                }).toList()
+              else
+                Text('일정이 없습니다.'),
+              ElevatedButton(
+                onPressed: () {
+                  _showAddEventDialog(eventDate);
+                },
+                child: Text('일정 추가'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showAddEventDialog(DateTime eventDate) async {
+    final picker = ImagePicker();
+    XFile? image;
+    Color eventColor = Colors.blue; // 이벤트의 기본 색상 설정
+
+    Widget _buildImageWidget() {
+      if (image != null) {
+        // XFile을 File로 변환하여 이미지 표시
+        return Image.file(File(image!.path));
+      } else {
+        return SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
+      }
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            DateFormat('yyyy년 MM월 dd일').format(eventDate),
+            style: TextStyle(fontSize: 16),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    image = await picker.pickImage(source: ImageSource.gallery);
+                    setState(() {}); // 이미지를 업데이트하기 위해 setState 호출
+                  },
+                  child: Text('사진 추가'),
+                ),
+                _buildImageWidget(), // 이미지를 표시하는 위젯 추가
+                TextField(
+                  decoration: InputDecoration(labelText: '일정 제목'),
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: '일정 내용'),
+                ),
+                // 카테고리 선택 버튼
+                ElevatedButton(
+                  onPressed: () {
+                    _showCategoryDialog(); // 카테고리 선택 다이얼로그 표시
+                  },
+                  child: Text('카테고리 선택'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (selectedCategory == '주 관리자'){
+                      eventColor = Color(0xFF0046FF);
+                    }else if(selectedCategory =='부 관리자'){
+                      eventColor = Color(0xFFF90000);
+                    }else{
+                      eventColor = Color(0xFF9E00FF);
+                    }
+                    final event = CalendarEvent(
+                        title: '일정 제목',
+                        description: '일정 내용',
+                        color: eventColor,
+                        startDate: eventDate,
+                        category: selectedCategory, // 선택한 카테고리 저장
+                      );
+
+                      setState(() {
+                        if (events.containsKey(eventDate)) {
+                          events[eventDate]!.add(event);
+                        } else {
+                          events[eventDate] = [event];
+                        }
+                      });
+
+                      Navigator.of(context).pop();
+                      _showEventsForDate(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
+                  },
+                  child: Text('일정 추가'),
+                ),
+              ],
             ),
           ),
-          if (properties.notFittedEventsCount > 0)
-            Container(
-              padding: const EdgeInsets.only(right: 2, top: 2),
-              alignment: Alignment.topRight,
-              child: Text('+${properties.notFittedEventsCount}',
-                  style: TextStyle(
-                      fontSize: 10,
-                      color: Color(0xff69695D)
-                          .withOpacity(properties.isInMonth ? 1 : 0.5))),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('취소'),
             ),
-        ],
+          ],
+        );
+      },
+    );
+  }
+
+  // 카테고리를 선택하는 다이얼로그를 표시하는 메소드
+  void _showCategoryDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("카테고리 선택"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // 주 관리자 버튼
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedCategory = '주 관리자';
+                  });
+                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                },
+                child: Text('주 관리자'),
+              ),
+              // 부 관리자 버튼
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedCategory = '부 관리자';
+                  });
+                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                },
+                child: Text('부 관리자'),
+              ),
+              // 공동 카테고리 버튼
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedCategory = '공동';
+                  });
+                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                },
+                child: Text('공동'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("취소"),
+              onPressed: () {
+                Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class CalendarEvent {
+  final String title;
+  final String description;
+  final Color color;
+  final DateTime startDate;
+  final String category; // 일정 카테고리 추가
+
+  CalendarEvent({
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.startDate,
+    required this.category, // 카테고리 필드 추가
+  });
+}
+
+class DDayPage extends StatefulWidget {
+  final Function(DateTime) onDDaySet;
+
+  DDayPage({required this.onDDaySet});
+
+  @override
+  _DDayPageState createState() => _DDayPageState();
+}
+
+class _DDayPageState extends State<DDayPage> {
+  DateTime selectedDate = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("디데이 설정"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              "디데이 날짜 설정",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: selectedDate,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101),
+                );
+
+                if (pickedDate != null && pickedDate != selectedDate) {
+                  setState(() {
+                    selectedDate = pickedDate;
+                  });
+                }
+              },
+              child: Text(
+                "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                widget.onDDaySet(selectedDate);
+                Navigator.pop(context);
+              },
+              child: Text("설정"),
+            ),
+          ],
+        ),
       ),
     );
   }

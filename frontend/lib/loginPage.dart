@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'authSimplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
 import 'signUpPage.dart'; // 회원가입 페이지 임포트
 import 'homePage.dart'; // 홈페이지 임포트
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,10 +48,9 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    String id = ''; // 아이디를 저장할 변수 초기화
-    String password = ''; // 비밀번호를 저장할 변수 초기화
     return Scaffold(
       body: Stack(
         children: [
@@ -105,9 +105,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
-                              onChanged: (value) {
-                                id = value; // 아이디 입력 변경 감지
-                              },
                             ),
                           ),
                         ),
@@ -138,9 +135,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
-                              onChanged: (value) {
-                                password = value; // 비밀번호 입력 변경 감지
-                              },
                             ),
                           ),
                         ),
@@ -161,7 +155,10 @@ class LoginPage extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      onTapLogin(id, password, context);
+                      // 로그인 버튼을 누를 때 다른 페이지로 이동
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
                     },
                     child: Container(
                       width: 250,
@@ -203,7 +200,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20), // "회원가입" 텍스트와 "간편비밀번호" 텍스트 사이의 간격 조절
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
                       // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동
