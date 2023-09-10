@@ -80,10 +80,10 @@ public class UserController {
         return ResponseResult.successResponse;
     }
 
-    @GetMapping("/account/{id}")
-    public SingleResponseResult<UserResponseDto> setDeposit(@PathVariable String id){
+    @GetMapping("/account/{userId}")
+    public SingleResponseResult<UserResponseDto> setDeposit(@PathVariable Long userId){
         log.info("UserController_Deposit -> 자동 입금 정보 조회");
-        User user = userService.getUserById(id);
+        User user = userService.getUserByUserId(userId);
         return new SingleResponseResult<UserResponseDto>(
                 UserResponseDto.builder()
                         .id(user.getId())
