@@ -1,10 +1,7 @@
 package com.ssafy.lovesol.domain.user.service;
 
 
-import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.PhoneNumberRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
+import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -15,6 +12,7 @@ public interface UserService {
 
     Long createUserAccount(CreateUserAccountRequestDto createUserAccountRequestDto);
     void login(LoginRequestDto loginRequestDto, HttpServletResponse response);
+    boolean simpleLogin(SimpleLoginRequestDto simpleLoginRequestDto);
     void setToken(User user, HttpServletResponse response);
     List<User> getAllUserByDepositAt(int day);
     User getUserByUserId(long userId);

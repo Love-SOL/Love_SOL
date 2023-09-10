@@ -1,10 +1,7 @@
 package com.ssafy.lovesol.domain.user.service;
 
 
-import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.PhoneNumberRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
+import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
 import com.ssafy.lovesol.global.exception.NotExistUserException;
@@ -46,6 +43,15 @@ public class UserServiceImpl implements UserService{
         log.info("UserServiceImpl_login | 사용자 로그인 시도");
         User loginUser = userRepository.findByIdAndPassword(loginRequestDto.getId(), loginRequestDto.getPassword()).orElseThrow(NotExistUserException::new);
         setToken(loginUser , response);
+    }
+
+    @Override
+    public boolean simpleLogin(SimpleLoginRequestDto simpleLoginRequestDto) {
+        log.info("UserServiceImpl_login | 사용자 간편 로그인");
+        User user = userRepository.findByUserId(simpleLoginRequestDto.getUserId()).orElseThrow(NotExistUserException::new);
+        if(user.getSimplePassword().equals(simpleLoginRequestDto.getSimplePassword()))
+            return true;
+        return false;
     }
 
     @Override
