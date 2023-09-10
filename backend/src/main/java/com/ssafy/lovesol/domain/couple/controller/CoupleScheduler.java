@@ -8,6 +8,7 @@ import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.domain.couple.service.PetService;
+import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
 import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -56,11 +58,27 @@ public class CoupleScheduler {
             LocalDateTime current = LocalDateTime.now().minusMinutes(10);
             Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
             List<Transaction> transactionList = transactionService.findTransactionsDetail(current,coupleAccount);
-            LocalDate cur_day = current.toLocalDate();
+            LocalDate curDay = current.toLocalDate();
             //계좌 내역을 가져올때 출금만 가져와야하는데 여깃 출입금 둘다 가져왔음
             //1. query를 수정한다
             //2. 스켘줄러에서 처리해준다.
             if(transactionList == null || transactionList.isEmpty()){continue;}
+            Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
+            DateLog dateLog;
+            if(dateLogFind.isEmpty()){
+                //여기선 데이트로그를 만들어 줘야한다.
+                dateLog = dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(),curDay));
+            }else{
+                dateLog = dateLogFind.get();
+            }
+            for(int j = 0 ; j < transactionList.size();j++){
+                int expAndMileage = (int)(transactionList.get(i).getWithdrawalAmount()*0.01);
+                dateLog.setMileage(dateLog.getMileage()+expAndMileage);
+                couple.getPet().setExp(couple.getPet().getExp()+expAndMileage);
+            }
+
+
+
             //먼저 List가 not Null 인경우 couple의 현재 날짜의 Datelog를 확인한다
             //그 후 없으면 마일리지를 0원으로 생성해준다
             //그리고 transactionList를 통해 사용한 결재 내역의 0.01 배 만큼 마일리지를 업데이트를 진행해준다

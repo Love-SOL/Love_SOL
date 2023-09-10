@@ -26,6 +26,6 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public List<Transaction> findTransactionsDetail(LocalDateTime transactionAt, Account account) {
-        return transactionRepository.findTransactionsByTransactionAtGreaterThanEqualsAndAccountEqualsAndWithdrawalAmountGreaterThan(transactionAt,account,0);
+        return transactionRepository.findByTransactionAtList(transactionAt,account);
     }
 }
