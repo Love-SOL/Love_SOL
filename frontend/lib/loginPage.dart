@@ -15,8 +15,10 @@ class LoginPage extends StatelessWidget {
   }
   onTapLogin(String id, String password, BuildContext context) async {
     try {
+
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
+
+        Uri.parse('http://10.0.2.2:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -56,7 +58,7 @@ class LoginPage extends StatelessWidget {
         children: [
           // 배경 이미지
           Image.asset(
-            'loginbackground.png',
+            'assets/loginbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -78,7 +80,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 20), // "Welcome" 글자와 이미지 박스 사이의 간격 조절
                   Image.asset(
-                    'logincenterbox.png',
+                    'assets/logincenterbox.png',
                     fit: BoxFit.contain,
                     width: 250, // 이미지 크기 조절
                   ),
@@ -90,7 +92,7 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
-                          'loginidinput.png',
+                          'assets/loginidinput.png',
                           width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
@@ -119,7 +121,7 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
-                          'loginpasswordinput.png',
+                          'assets/loginpasswordinput.png',
                           width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
@@ -165,7 +167,7 @@ class LoginPage extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('loginclick.png'),
+                          image: AssetImage('assets/loginclick.png'),
                           fit: BoxFit.cover,
                         ),
                       ),
