@@ -115,7 +115,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 width: double.infinity,
                 height: 400, // CrCalendar Container의 원하는 높이 설정
                 decoration: BoxDecoration(
-                  color: Color(0xFFF7F7F7), // 배경색
+                  color: Color(0xFFE4ECFF), // 배경색
                   borderRadius: BorderRadius.circular(10), // 박스 모양 설정
                   boxShadow: [
                     BoxShadow(
