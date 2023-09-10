@@ -42,6 +42,7 @@ public class InitDb {
                     .personalAccount("111222333")
                     .phoneNumber("01011112222")
                     .simplePassword("123456")
+                    .fcmToken("")
                     .build();
 
             User user2 = User.builder()
@@ -54,6 +55,7 @@ public class InitDb {
                     .personalAccount("123123123")
                     .phoneNumber("01033334444")
                     .simplePassword("123456")
+                    .fcmToken("")
                     .build();
 
             em.persist(user1);
