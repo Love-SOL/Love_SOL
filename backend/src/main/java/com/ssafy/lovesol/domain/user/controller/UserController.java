@@ -4,6 +4,8 @@ import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.dto.response.UserResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
+import com.ssafy.lovesol.global.fcm.Service.FCMNotificationService;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
+    private final FCMNotificationService fcmNotificationService;
     @Operation(summary = "Sign Up", description = "사용자가 회원가입 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공")
@@ -114,7 +116,19 @@ public class UserController {
                         .build()
         );
     }
-
+    @Operation(summary = "fcm test용", description = "사용할 계정에 대해서 fcmToken 넣어놓고 진행해주세요")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Push 알람 발송 성공")
+    })
+    @PostMapping("/fcm/test")
+    public ResponseResult sendTest(@Valid @RequestBody FcmRequestDto fcmRequestDto)
+    {
+        log.info("UserController_sendTest -> FCM 푸쉬 알림 발송");
+        if(fcmNotificationService.sendNotificationByToken(fcmRequestDto)){
+            return ResponseResult.successResponse;
+        }
+        return ResponseResult.failResponse;
+    }
     @Operation(summary = "PhoneNumber Auth", description = "사용자 휴대폰 번호인증을 요청합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "휴대폰번호로 문자메시지 발송 성공")
