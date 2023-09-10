@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "68174194784",
+    "project_id": "shinhan-hackerton",
+    "storage_bucket": "shinhan-hackerton.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68174194784:android:63dd03f71319a8f370bb05",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68174194784-o1n53n2ojeg5d0gf3bsfu9odc6lqn80j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa7_7WTqWrE33VVe04El48dynNYlTJumI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "68174194784-o1n53n2ojeg5d0gf3bsfu9odc6lqn80j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

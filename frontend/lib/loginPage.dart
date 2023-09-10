@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'simplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
+import 'authSimplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
 import 'signUpPage.dart'; // 회원가입 페이지 임포트
 import 'homePage.dart'; // 홈페이지 임포트
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,8 +15,10 @@ class LoginPage extends StatelessWidget {
   }
   onTapLogin(String id, String password, BuildContext context) async {
     try {
+
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
+
+        Uri.parse('http://10.0.2.2:8080/api/user/login'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -47,16 +50,15 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    String id = ''; // 아이디를 저장할 변수 초기화
-    String password = ''; // 비밀번호를 저장할 변수 초기화
     return Scaffold(
       body: Stack(
         children: [
           // 배경 이미지
           Image.asset(
-            'loginbackground.png',
+            'assets/loginbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -78,7 +80,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 20), // "Welcome" 글자와 이미지 박스 사이의 간격 조절
                   Image.asset(
-                    'logincenterbox.png',
+                    'assets/logincenterbox.png',
                     fit: BoxFit.contain,
                     width: 250, // 이미지 크기 조절
                   ),
@@ -90,7 +92,7 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
-                          'loginidinput.png',
+                          'assets/loginidinput.png',
                           width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
@@ -105,9 +107,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
-                              onChanged: (value) {
-                                id = value; // 아이디 입력 변경 감지
-                              },
                             ),
                           ),
                         ),
@@ -122,7 +121,7 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
-                          'loginpasswordinput.png',
+                          'assets/loginpasswordinput.png',
                           width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
@@ -138,9 +137,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 border: InputBorder.none, // 입력 상자의 테두리를 제거하여 투명하게 만듦
                               ),
-                              onChanged: (value) {
-                                password = value; // 비밀번호 입력 변경 감지
-                              },
                             ),
                           ),
                         ),
@@ -161,14 +157,17 @@ class LoginPage extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      onTapLogin(id, password, context);
+                      // 로그인 버튼을 누를 때 다른 페이지로 이동
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
                     },
                     child: Container(
                       width: 250,
                       height: 50,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('loginclick.png'),
+                          image: AssetImage('assets/loginclick.png'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -203,12 +202,12 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20), // "회원가입" 텍스트와 "간편비밀번호" 텍스트 사이의 간격 조절
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
                       // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SimplePasswordPage(),
+                        builder: (context) => AuthSimplePasswordPage(userId: 1),
                       ));
                     },
                     child: Text(
