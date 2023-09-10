@@ -387,3 +387,68 @@ class CalendarEvent {
     required this.category, // 카테고리 필드 추가
   });
 }
+
+class DDayPage extends StatefulWidget {
+  final Function(DateTime) onDDaySet;
+
+  DDayPage({required this.onDDaySet});
+
+  @override
+  _DDayPageState createState() => _DDayPageState();
+}
+
+class _DDayPageState extends State<DDayPage> {
+  DateTime selectedDate = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("디데이 설정"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              "디데이 날짜 설정",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: selectedDate,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101),
+                );
+
+                if (pickedDate != null && pickedDate != selectedDate) {
+                  setState(() {
+                    selectedDate = pickedDate;
+                  });
+                }
+              },
+              child: Text(
+                "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                widget.onDDaySet(selectedDate);
+                Navigator.pop(context);
+              },
+              child: Text("설정"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
