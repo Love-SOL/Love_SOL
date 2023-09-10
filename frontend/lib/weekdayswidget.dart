@@ -86,7 +86,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Widget _buildWeekDays() {
-    final List<String> weekDayAbbreviations = ['일', '월', '화', '수', '목', '금', '토'];
+    final List<String> weekDayAbbreviations = ['Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'];
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
