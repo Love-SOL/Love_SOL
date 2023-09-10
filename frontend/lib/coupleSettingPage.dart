@@ -27,9 +27,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
             SizedBox(height: 20),
             Column(
               children: [
-                buildInputBox('이름', '이름을 입력해주세요'),
-                SizedBox(height: 20),
-                buildInputBox('생년월일', '숫자 6자리 입력'),
+                buildInputBox('상대방 ID', '아이디를 입력해주세요'),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,11 +62,11 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Couplesettingpage2(),
+                          builder: (context) => HomePage2(),
                         ));
                       },
                       child: Text(
-                        '다음',
+                        '확인',
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(

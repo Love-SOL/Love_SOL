@@ -4,6 +4,8 @@ import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.dto.response.UserResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
+import com.ssafy.lovesol.global.fcm.Service.FCMNotificationService;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
+    private final FCMNotificationService fcmNotificationService;
     @Operation(summary = "Sign Up", description = "사용자가 회원가입 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공")
@@ -40,8 +42,9 @@ public class UserController {
     public ResponseResult createUserAccount(
             @Valid @RequestBody CreateUserAccountRequestDto createUserAccountRequestDto) {
         log.info("UserController_createUserAccount -> 사용자의 회원가입");
-        if (userService.createUserAccount(createUserAccountRequestDto) >= 0) {
-            return ResponseResult.successResponse;
+        Long userId = userService.createUserAccount(createUserAccountRequestDto);
+        if (userId >= 0) {
+            return new SingleResponseResult<>(userId);
         }
         return ResponseResult.failResponse;
     }
@@ -56,16 +59,33 @@ public class UserController {
         return new SingleResponseResult<>(userService.login(loginRequestDto, response));
     }
 
+    @Operation(summary = "Set Simple Password ", description = "사용자가 간편 비밀번호를 설정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "간편 비밀번호 설정 성공")
+    })
+    @PostMapping("/simple-password")
+    public ResponseResult setSimplePassword(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
+        log.info("UserController_setSimplePassword -> 간편 비밀번호 설정");
+        userService.setSimplePassword(simpleLoginRequestDto);
+        return ResponseResult.successResponse;
+    }
+
     @Operation(summary = "Simple Password Auth", description = "사용자가 간편 로그인을 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "간편 로그인 성공")
     })
-    @PostMapping("/simple-password")
+    @PostMapping("/simple-password/auth")
     public ResponseResult simpleLogin(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
         log.info("UserController_simpleLogin -> 간편 로그인 시도");
         return new SingleResponseResult<>(userService.simpleLogin(simpleLoginRequestDto));
     }
 
+    @PostMapping("/{token}")
+    @Operation(summary = "FCM", description = "Flutter 사용자가 보내주는 Token값을 확인하고 업데이트를 진행합니다")
+    public ResponseResult checkFcm(@RequestBody @Valid UpdateFCMTokenRequestDto updateFCMTokenRequestDto){
+       userService.setFCMToken(updateFCMTokenRequestDto);
+       return ResponseResult.successResponse;
+    }
 
     @Operation(summary = "Deposit", description = "사용자가 자동 입금 날짜 및 금액을 설정합니다.")
     @ApiResponses(value = {
@@ -96,7 +116,19 @@ public class UserController {
                         .build()
         );
     }
-
+    @Operation(summary = "fcm test용", description = "사용할 계정에 대해서 fcmToken 넣어놓고 진행해주세요")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Push 알람 발송 성공")
+    })
+    @PostMapping("/fcm/test")
+    public ResponseResult sendTest(@Valid @RequestBody FcmRequestDto fcmRequestDto)
+    {
+        log.info("UserController_sendTest -> FCM 푸쉬 알림 발송");
+        if(fcmNotificationService.sendNotificationByToken(fcmRequestDto)){
+            return ResponseResult.successResponse;
+        }
+        return ResponseResult.failResponse;
+    }
     @Operation(summary = "PhoneNumber Auth", description = "사용자 휴대폰 번호인증을 요청합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "휴대폰번호로 문자메시지 발송 성공")

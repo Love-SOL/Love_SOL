@@ -79,6 +79,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
+    public void setFCMToken(UpdateFCMTokenRequestDto updateFCMTokenRequestDto) {
+        User user = userRepository.findById(updateFCMTokenRequestDto.getId()).get();
+        user.setFcmToken(updateFCMTokenRequestDto.getFcmToken());
+    }
+
+    @Override
+    @Transactional
     public void UpdateDepositInfo(UpdateUserAccountInfoDto userDto) {
         Optional<User> user = userRepository.findById(userDto.getId());
         if(!user.isEmpty()) {
@@ -93,6 +100,13 @@ public class UserServiceImpl implements UserService{
     public String sendMessage(PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException {
         log.info("UserServiceImpl_sendMessage | 메시지 발송");
         return smsService.sendAuthKey(phoneNumberRequestDto.getPhoneNumber());
+    }
+
+    @Override
+    @Transactional
+    public void setSimplePassword(SimpleLoginRequestDto simplePassword) {
+        log.info("UserServiceImpl_setSimplePassword | 간편 비밀번호 설정");
+        userRepository.findByUserId(simplePassword.getUserId()).get().setSimplePassword(simplePassword.getSimplePassword());
     }
 
 

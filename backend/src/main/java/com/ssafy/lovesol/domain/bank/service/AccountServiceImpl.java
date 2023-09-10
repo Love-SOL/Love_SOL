@@ -2,8 +2,9 @@ package com.ssafy.lovesol.domain.bank.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
@@ -13,8 +14,10 @@ import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
 import com.ssafy.lovesol.global.exception.NotExistUserException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
+import com.ssafy.lovesol.global.util.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,12 +39,13 @@ public class AccountServiceImpl implements AccountService{
 
     private final UserRepository userRepository;
     private final CommonHttpSend commonHttpSend;
+    private final SmsService smsService;
     @Override
     @Transactional
-    public int transferOneWon(TransferRequestDto transferRequestDto) {
+    public int transferOneWon(TransferRequestDto transferRequestDto) throws CoolsmsException {
         log.info("AccountServiceImpl_transferOneWon | 1원 이체 기능");
 
-        String randomSixNumber = generateSixDigitNumber();
+        String randomSixNumber = smsService.sendAuthKey(transferRequestDto.getPhoneNumber());
         Map<String, String> data = new HashMap<>();
         data.put("입금은행코드","088");
         data.put("입금계좌번호",transferRequestDto.getAccountNumber());
