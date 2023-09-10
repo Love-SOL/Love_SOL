@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Schema(description = "간편 로그인 요청 DTO")
 public class SimpleLoginRequestDto {
 
-    @NotBlank
     @Schema(description = "유저 ID", example = "1")
     private Long userId;
 

@@ -1,10 +1,12 @@
 package com.ssafy.lovesol.domain.user.entity;
 
+import com.ssafy.lovesol.domain.user.dto.response.LoginResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,5 +62,12 @@ public class User {
     public void setAutoDeposit(int depositAt, int amount){
         this.amount = amount;
         this.depositAt = depositAt;
+    }
+
+    public LoginResponseDto toLoginResponseDto(Long coupleId){
+        return LoginResponseDto.builder()
+                .userId(userId)
+                .coupleId(coupleId)
+                .build();
     }
 }
