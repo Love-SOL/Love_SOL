@@ -102,7 +102,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  '+$dDay', // 디데이 계산 결과를 표시
+                                  '$dDay', // 디데이 계산 결과를 표시
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -162,10 +162,10 @@ class _CalendarPageState extends State<CalendarPage> {
           padding: EdgeInsets.all(16),
           child: DDayPage(
             onDDaySet: (date) {
+              Navigator.pop(context); // 모달을 먼저 닫습니다.
               setState(() {
-                dDayDate = date;
+                dDayDate = date; // 디데이 값을 설정합니다.
               });
-              Navigator.pop(context); // 모달을 닫습니다.
             },
           ),
         );
@@ -189,9 +189,6 @@ class _DDayPageState extends State<DDayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("디데이 설정"),
-      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -228,7 +225,7 @@ class _DDayPageState extends State<DDayPage> {
             ElevatedButton(
               onPressed: () {
                 widget.onDDaySet(selectedDate);
-                Navigator.pop(context, selectedDate);
+                //Navigator.pop(context, selectedDate);
               },
               child: Text("설정"),
             ),
