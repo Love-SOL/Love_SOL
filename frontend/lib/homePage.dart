@@ -5,6 +5,7 @@ import 'calendarPage.dart';
 import 'petPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +24,11 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
+// String id = '';
+// Future<void> _loadUserData() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   id = prefs.getString('id') ?? '';
+// }
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   void initState() {
@@ -31,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     fetchAccountData(); // 초기 데이터 로드
   }
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/user/account/shinhan'));
+    final response = await http.get(Uri.parse('http://localhost:8080/api/user/account/' + "shinhan"));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);

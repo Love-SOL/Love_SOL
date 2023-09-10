@@ -37,8 +37,7 @@ dependencies:
   cr_calendar: ^1.2.1
   image_picker: ^1.0.4
   fl_chart: ^0.40.6
-
-
+  shared_preferences: ^2.0.12
 
 dev_dependencies:
   flutter_test:
