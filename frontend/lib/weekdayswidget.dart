@@ -32,6 +32,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   String selectedCategory = '주 관리자'; // 기본 카테고리를 '주 관리자'로 설정
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -51,9 +52,33 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month - 1,
+                  selectedDate.day,
+                );
+              });
+            },
+          ),
           Text(
-            DateFormat('yyyy년 MM월 dd일').format(selectedDate),
+            DateFormat('yyyy년 MM월').format(selectedDate), // 원하는 형식으로 날짜 포맷
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month + 1,
+                  selectedDate.day,
+                );
+              });
+            },
           ),
         ],
       ),
