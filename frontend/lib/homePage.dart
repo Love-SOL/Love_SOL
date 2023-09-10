@@ -1,7 +1,10 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'coupleSettingPage.dart';
 import 'calendarPage.dart';
 import 'petPage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +19,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> accountData = {};
+  void initState() {
+    super.initState();
+    fetchAccountData(); // 초기 데이터 로드
+  }
+  Future<void> fetchAccountData() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/api/user/account/shinhan'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final data = responseData['data'];
+      setState(() {
+        accountData = Map<String, dynamic>.from(data);
+      });
+      print(accountData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -74,7 +101,7 @@ class HomePage extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
+                      MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -115,26 +142,97 @@ class HomePage extends StatelessWidget {
             buildBox(
               screenWidth - 40,
               Color(0xFF0046FF),
-              '개인\n111-111-1111\n여백',
+              accountData,
               70,
             ),
             SizedBox(height: 20),
-            // 추가 박스 2
-            buildBox(screenWidth - 40, Colors.white, '여백', 140),
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '내 소비',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1.3,
+                          child: PieChart(
+                            PieChartData(
+                              sections: [
+                                PieChartSectionData(
+                                  color: Colors.blue,
+                                  value: 25,
+                                  title: '항목1',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.red,
+                                  value: 30,
+                                  title: '항목2',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.green,
+                                  value: 15,
+                                  title: '항목3',
+                                  radius: 50,
+                                ),
+                                PieChartSectionData(
+                                  color: Colors.orange,
+                                  value: 30,
+                                  title: '항목4',
+                                  radius: 50,
+                                ),
+                              ],
+                              sectionsSpace: 0,
+                              centerSpaceRadius: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildBox(double width, Color color, String text, double height) {
+  Widget buildBox(double width, Color color, Map<String, dynamic> accountData, double height) {
     return GestureDetector(
       onTap: () {
         // 각 박스를 누를 때 수행할 작업 추가
       },
       child: Container(
         width: width,
-        height: 50.0,
+        height: height,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),
@@ -146,15 +244,25 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '계좌번호: ${accountData["personalAccount"]}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          ),
+            Text(
+              '잔액: ${accountData["amount"]}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -262,97 +370,135 @@ class _HomePage2State extends State<HomePage2> {
   }
 }
 
-class PersonalPage extends StatelessWidget {
+class PersonalPage extends StatefulWidget {
+  @override
+  _PersonalPageState createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends State<PersonalPage> {
+  List<Map<String, dynamic>> accountData = []; // 서버에서 받아온 계좌 정보를 저장할 리스트
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAccountData(); // 초기 데이터 로드
+  }
+
+  Future<void> fetchAccountData() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/api/account/1'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<dynamic> data = responseData['data'];
+      setState(() {
+        accountData = List<Map<String, dynamic>>.from(data);
+      });
+      print(accountData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    void _showConfirmationDialog() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('커플통장으로 전환하시겠습니까?'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('예'),
-                onPressed: () {
-                  // 커플통장으로 전환하는 작업을 여기에 추가
-                  // 예를 눌렀을 때 실행할 코드를 작성하세요
-                  Navigator.of(context).pop(); // 다이얼로그 닫기
-                  // Couplesettingpage로 이동
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => Couplesettingpage(),
-                    ),
-                  );
-                },
-              ),
-              TextButton(
-                child: Text('아니오'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // 다이얼로그 닫기
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
 
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Container(
-        width: double.infinity,
-        height: 150,
-        margin: EdgeInsets.all(16),
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Color(0xFFF7F7F7), // 배경색
-          borderRadius: BorderRadius.circular(10), // 박스 모양 설정
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // 그림자 색상
-              spreadRadius: 2, // 그림자 확장 정도
-              blurRadius: 5, // 그림자 흐릿한 정도
-              offset: Offset(0, 2), // 그림자 위치 (x, y)
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center, // 수직 정렬을 가운데로 변경
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, // 텍스트를 왼쪽, 버튼을 오른쪽 정렬
-              children: [
-                Text(
-                  '개인통장',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _showConfirmationDialog, // 확인 창을 띄우는 함수 호출
-                  icon: Icon(Icons.arrow_forward), // 아이콘 추가
-                  label: Text(''), // 텍스트 없이 공백으로 설정
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(
-              '100,000원',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('개인통장 정보'),
+      ),
+      body: ListView.builder(
+        itemCount: accountData.length,
+        itemBuilder: (BuildContext context, int index) {
+          return buildAccountCard(accountData[index], context);
+        },
       ),
     );
   }
 }
-
+Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
+  void _showConfirmationDialog(accountInfo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('커플통장으로 전환하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('예'),
+              onPressed: () {
+                // 커플통장으로 전환하는 작업을 여기에 추가
+                // 예를 눌렀을 때 실행할 코드를 작성하세요
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+                // Couplesettingpage로 이동
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Couplesettingpage(),
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: Text('아니오'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  return Container(
+    width: double.infinity,
+    height: 150.0,
+    margin: EdgeInsets.all(16.0),
+    padding: EdgeInsets.all(16.0),
+    decoration: BoxDecoration(
+      color: Color(0xFFF7F7F7),
+      borderRadius: BorderRadius.circular(10.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              accountInfo['accountNumber'], // accountNumber를 표시
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
+              },
+              icon: Icon(Icons.arrow_forward),
+              label: Text(''),
+            ),
+          ],
+        ),
+        SizedBox(height: 16.0),
+        Text(
+          '${accountInfo["balance"]}원', // balance를 표시
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 class CouplePage extends StatelessWidget {
   // 공통으로 사용하는 컨테이너 생성 함수
   Widget buildContainer(String title, Color color, Function()? onPressed) {
@@ -411,7 +557,7 @@ class CouplePage extends StatelessWidget {
           buildContainer(
             'Calender',
             Color(0xFFF7F7F7),
-            () {
+                () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => CalendarPage(), // CalenderPage로 이동
@@ -423,7 +569,7 @@ class CouplePage extends StatelessWidget {
           buildContainer(
             'Pet',
             Color(0xFFF7F7F7),
-            () {
+                () {
               // Calender 페이지로 이동하는 코드
               Navigator.of(context).push(
                 MaterialPageRoute(

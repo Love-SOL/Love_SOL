@@ -1,8 +1,6 @@
 package com.ssafy.lovesol.domain.user.controller;
 
-import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.LoginRequestDto;
-import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
+import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.dto.response.UserResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
@@ -18,9 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -60,6 +57,18 @@ public class UserController {
         return ResponseResult.successResponse;
     }
 
+    @Operation(summary = "Simple Password Auth", description = "사용자가 간편 로그인을 합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "간편 로그인 성공")
+    })
+    @PostMapping("/simple-password")
+    public ResponseResult simpleLogin(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
+        log.info("UserController_simpleLogin -> 간편 로그인 시도");
+        if(userService.simpleLogin(simpleLoginRequestDto))
+            return ResponseResult.successResponse;
+        return ResponseResult.failResponse;
+    }
+
 
     @Operation(summary = "Deposit", description = "사용자가 자동 입금 날짜 및 금액을 설정합니다.")
     @ApiResponses(value = {
@@ -89,6 +98,16 @@ public class UserController {
                         .depositAt(user.getDepositAt())
                         .build()
         );
+    }
+
+    @Operation(summary = "PhoneNumber Auth", description = "사용자 휴대폰 번호인증을 요청합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "휴대폰번호로 문자메시지 발송 성공")
+    })
+    @PostMapping("/phone")
+    public ResponseResult sendMessage(@Valid @RequestBody PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException {
+        log.info("UserController_sendMessage -> 휴대폰 번호로 메시지 발송");
+        return new SingleResponseResult<String>(userService.sendMessage(phoneNumberRequestDto));
     }
 
 }

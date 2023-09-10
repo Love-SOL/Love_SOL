@@ -17,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -120,5 +117,8 @@ public class CoupleServiceImpl implements CoupleService{
         return (int)ChronoUnit.DAYS.between(couple.getAnniversary(), LocalDate.now()) + 1;
     }
 
-
+    @Override
+    public List<Couple> getAllCouple(){
+        return coupleRepository.findAll();
+    }
 }

@@ -66,12 +66,10 @@ class PetPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          '처음만난날',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Image.asset(
+                          'bear1.gif',
+                          width : 100,
+                          height : 100,
                         ),
                         SizedBox(height: 16),
                       ],
@@ -102,40 +100,11 @@ class PetPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '처음만난날',
+                        '펫 이름',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '디데이',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                              Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                '+240',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                       ),
                     ],
                   ),

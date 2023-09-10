@@ -23,10 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -74,7 +71,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public boolean transferOneWonAuth(TransferAuthRequestDto transferAuthRequestDto) {
         log.info("AccountServiceImpl_transferOneWonAuth | 1원 이체 인증번호 인증 기능");
-        Transaction transaction = transactionRepository.findByAccountAndDepositAmount(accountRepository.findByAccountNumber(transferAuthRequestDto.getAccountNumber()).get(), 1).get();
+        Transaction transaction = transactionRepository.findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(accountRepository.findByAccountNumber(transferAuthRequestDto.getAccountNumber()).get(), 1).get();
         if(!transaction.getContent().equals(transferAuthRequestDto.getAuthNumber()))
             return false;
         return true;
@@ -118,4 +115,30 @@ public class AccountServiceImpl implements AccountService{
 
         return sb.toString();
     }
+
+
+    @Override
+    public List<Transaction> findTransactionByAccount(String accountNumber){
+        Optional<Account> result = accountRepository.findByAccountNumber(accountNumber);
+        if(result.isEmpty()){
+            log.info("not found Account");
+            return null;
+        }
+        return result.get().getTransactionList();
+    }
+
+    @Override
+    public List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now) {
+        return null;
+        //쿼리 생성이 후에 구성해야함 너무 어려움 따흑
+    }
+
+    @Override
+    public Account findAccountByAccountNumber(String accountNumber) {
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        if(account.isPresent()) return account.get();
+        return null;
+    }
+
+
 }

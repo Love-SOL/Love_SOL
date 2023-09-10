@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.couple.controller;
 
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.request.SendCoupleAmountRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
@@ -104,6 +105,13 @@ public class CoupleController {
     public ResponseResult getCoupleAnniversary(@PathVariable(value = "coupleId") Long coupleId){
         log.info("CoupleController -> 커플 통장 정보 조회 ");
         return new SingleResponseResult<>(coupleService.getCoupleAnniversary(coupleId));
+    }
+
+    @PostMapping("/wire/{userId}")
+    public ResponseResult sendAmount(@PathVariable int userId, @RequestBody @Valid SendCoupleAmountRequestDto requestDto){
+
+//        return Res
+        return ResponseResult.successResponse;
     }
 
 

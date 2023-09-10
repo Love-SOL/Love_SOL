@@ -123,6 +123,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                     buildBackspaceButton(),
                   ],
                 ),
+                SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -170,8 +171,11 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
         ),
       ),
       style: ElevatedButton.styleFrom(
+        primary : Colors.transparent,
         onPrimary: Colors.transparent,
         minimumSize: Size(80, 80),
+        shadowColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
       ),
     );
   }
@@ -187,8 +191,11 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
         color: Colors.black,
       ),
       style: ElevatedButton.styleFrom(
+        primary : Colors.transparent,
         onPrimary: Colors.transparent,
         minimumSize: Size(80, 80),
+        shadowColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
       ),
     );
   }
