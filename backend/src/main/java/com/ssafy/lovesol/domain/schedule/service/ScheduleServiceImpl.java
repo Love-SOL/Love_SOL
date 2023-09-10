@@ -42,19 +42,18 @@ public class ScheduleServiceImpl implements ScheduleService{
                                ) {
         log.info("ScheduleServiceImpl_CreateSchedule | 일정 작성");
         Couple couple = coupleRepository.findById(coupleId).get();
-        String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
-        User user = userRepository.findById(loginId).get();
-        Schedule schedule = createScheduleRequestDto.toScheduleEntity(couple, getScheduleType(couple, user, createScheduleRequestDto.getScheduleType()));
+//        String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
+//        User user = userRepository.findById(loginId).get();
+        Schedule schedule = createScheduleRequestDto.toScheduleEntity(couple, getScheduleType(couple, createScheduleRequestDto.getScheduleType()));
         return scheduleRepository.save(schedule).getScheduleId();
     }
 
     @Override
-    public ScheduleType getScheduleType(Couple couple, User user , int ScheduleTypeInt) {
+    public ScheduleType getScheduleType(Couple couple, int ScheduleTypeInt) {
         log.info("ScheduleServiceImpl_getScheduleType | 일정 타입 파악");
         if(ScheduleTypeInt == 0)
             return ScheduleType.SHARED_SCHEDULE;
-
-        if(couple.getOwner().getUserId().equals(user.getUserId()))
+        if(ScheduleTypeInt == 1)
             return ScheduleType.MAIN_OWNER_SCHEDULE;
         return ScheduleType.SUB_OWNER_SCHEDULE;
     }
@@ -65,9 +64,9 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         Schedule schedule = scheduleRepository.findById(updateScheduleRequestDto.getScheduleId()).get();
         Couple couple = coupleRepository.findById(coupleId).get();
-        String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
-        User user = userRepository.findById(loginId).get();
-        ScheduleType scheduleType = getScheduleType(couple, user, updateScheduleRequestDto.getScheduleType());
+//        String loginId = jwtService.extractUserLoginIdFromAccessToken(request.getHeader("Authorization").split(" ")[1]);
+//        User user = userRepository.findById(loginId).get();
+        ScheduleType scheduleType = getScheduleType(couple,  updateScheduleRequestDto.getScheduleType());
         schedule.updateSchedule(updateScheduleRequestDto , scheduleType);
     }
 
