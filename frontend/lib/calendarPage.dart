@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'weekdayswidget.dart';
 import 'dart:core';
-import 'calendar_page.dart';
-import 'package:cr_calendar/src/cr_calendar.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -15,7 +9,14 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? dDayDate;
+  String? dDayText;
 
+  @override
+  void initState() {
+    super.initState();
+    dDayText = "디데이 설정 전"; // 초기 텍스트 설정
+  }
+  
   int calculateDDay(DateTime? dDayDate) {
     if (dDayDate == null) {
       return 0; // 디데이 날짜가 설정되지 않은 경우 0을 반환
@@ -113,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           ],
                         ),
                         Text(
-                          '처음만난날',
+                          '$dDayText',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -161,10 +162,11 @@ class _CalendarPageState extends State<CalendarPage> {
         return Container(
           padding: EdgeInsets.all(16),
           child: DDayPage(
-            onDDaySet: (date) {
+            onDDaySet: (date, text) { // 수정된 부분: date와 text 모두 전달
               Navigator.pop(context); // 모달을 먼저 닫습니다.
               setState(() {
                 dDayDate = date; // 디데이 값을 설정합니다.
+                dDayText = text; // 텍스트를 설정합니다.
               });
             },
           ),
@@ -175,7 +177,7 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class DDayPage extends StatefulWidget {
-  final Function(DateTime) onDDaySet;
+  final Function(DateTime, String?) onDDaySet; // 수정된 부분: String?을 추가
 
   DDayPage({required this.onDDaySet});
 
@@ -185,6 +187,7 @@ class DDayPage extends StatefulWidget {
 
 class _DDayPageState extends State<DDayPage> {
   DateTime selectedDate = DateTime.now();
+  TextEditingController textController = TextEditingController(); // 텍스트 입력 컨트롤러 추가
 
   @override
   Widget build(BuildContext context) {
@@ -222,10 +225,17 @@ class _DDayPageState extends State<DDayPage> {
               ),
             ),
             SizedBox(height: 20),
+            TextField(
+              controller: textController, // 텍스트 입력 필드에 컨트롤러 할당
+              decoration: InputDecoration(
+                labelText: '텍스트 입력', // 입력 필드 라벨
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                widget.onDDaySet(selectedDate);
-                //Navigator.pop(context, selectedDate);
+                final text = textController.text; // 입력한 텍스트 가져오기
+                widget.onDDaySet(selectedDate, text); // 날짜와 텍스트 모두 전달
               },
               child: Text("설정"),
             ),
@@ -235,4 +245,3 @@ class _DDayPageState extends State<DDayPage> {
     );
   }
 }
-
