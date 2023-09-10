@@ -26,11 +26,11 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public List<Transaction> findTransactionsDetail(LocalDateTime transactionAt, Account account) {
-        return transactionRepository.findByTransactionAtList(transactionAt,account);
+        return transactionRepository.findByTransactionAtList(transactionAt,account.getAccountNumber());
     }
 
     @Override
     public List<Transaction> findTransactionsDetailOrderBy(LocalDateTime transactionAt, Account account) {
-        return transactionRepository.findTransactionsByTransactionAtGreaterThanEqualOrderByTransactionAtDesc(account,transactionAt);
+        return transactionRepository.findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(transactionAt,account);
     }
 }
