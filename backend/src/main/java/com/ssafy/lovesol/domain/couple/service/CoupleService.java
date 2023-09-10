@@ -16,9 +16,9 @@ public interface CoupleService {
 //    void updateCouple(CoupleUpdateRequestDto coupleDto);
     String getCoupleInfo(long userId);
 
-    Couple getCoupleInfoByCoupleId(String userId);
+    Couple getCoupleInfoByUserId(String userId);
 
-
+    Couple getCoupleInfoByCouplId(long coupleId);
     boolean connectCouple(ConnectCoupleRequestDto coupleDto,long coupleId);
     ResponseAccountInfoDto getAccountTotal(long coupleId);
     int getCoupleAnniversary(Long coupleId);
