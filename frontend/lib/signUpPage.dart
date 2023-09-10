@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'simplePasswordPage.dart';
 import 'homePage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -181,7 +183,7 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController),
+                    buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController, onChanged: (value) {  }),
                   ],
                 ),
               ),
@@ -252,7 +254,7 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget buildInputBox(String label, String hintText, {TextEditingController? controller}) {
+  Widget buildInputBox(String label, String hintText, {TextEditingController? controller, required Null Function(dynamic value) onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -346,6 +348,8 @@ class SignUpPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String id = "";
+    String password = "";
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -407,9 +411,13 @@ class SignUpPage2 extends StatelessWidget {
               child:
               Column(
                 children: [
-                  buildInputBox('아이디', '아이디를 입력하세요'),
+                  buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {
+                    id = value;
+                  }),
                   SizedBox(height: 20),
-                  buildInputBox('비밀번호', '비밀번호를 입력해주세요'),
+                  buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {
+                    password = value;
+                  }),
                   SizedBox(height: 20),
                   Expanded(
                     flex: 1,
@@ -460,7 +468,7 @@ class SignUpPage2 extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller}) {
+      {TextEditingController? controller, required Null Function(dynamic value) onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

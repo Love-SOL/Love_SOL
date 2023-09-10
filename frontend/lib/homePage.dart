@@ -508,7 +508,7 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 }
-Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
+Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
   void _showConfirmationDialog(accountInfo) {
     showDialog(
       context: context,
