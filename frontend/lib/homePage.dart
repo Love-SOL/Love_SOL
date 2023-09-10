@@ -1,10 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'coupleSettingPage.dart';
 import 'calendarPage.dart';
 import 'petPage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:fl_chart/fl_chart.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +21,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -33,12 +32,6 @@ class HomePage extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          IconButton(
-            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
-            onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
-            },
-          ),
           IconButton(
             icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
             onPressed: () {
@@ -83,77 +76,102 @@ class HomePage extends StatelessWidget {
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                // "내 계좌" 박스
-                GestureDetector(
-                  onTap: () {
-                    // "내 계좌"를 누를 때 수행할 작업 추가
-                  },
-                  child: Container(
-                    width: screenWidth - 40, // 화면 가로 크기에서 여백 20을 뺀 크기
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0, 2),
-                          blurRadius: 4.0,
+            Expanded(
+              flex : 1,
+              child:
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 2),
+                        blurRadius: 4.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '내 계좌',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 정렬
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => HomePage2(),
+                            ));
+                          },
                           child: Text(
-                            '내 계좌',
+                            '전체보기 >',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF0046FF),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              flex:2,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF0046FF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '개인',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // "전체보기"를 누를 때 다른 화면으로 이동
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => HomePage2(),
-                              ));
-                            },
-                            child: Text(
-                              '전체보기 >',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xFF0046FF),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 20),
-            // 추가 박스 1
-            buildBox(
-              screenWidth - 40,
-              Color(0xFF0046FF),
-              '개인\n111-111-1111\n여백',
-              70,
-            ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             Expanded(
               flex: 3,
               child: Container(
@@ -400,52 +418,8 @@ class _HomePage2State extends State<HomePage2> {
   }
 }
 
-class PersonalPage extends StatefulWidget {
-  @override
-  _PersonalPageState createState() => _PersonalPageState();
-}
-
-class _PersonalPageState extends State<PersonalPage> {
-  List<Map<String, dynamic>> accountData = []; // 서버에서 받아온 계좌 정보를 저장할 리스트
-
-  @override
-  void initState() {
-    super.initState();
-    fetchAccountData(); // 초기 데이터 로드
-  }
-
-  Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/account/1'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final List<dynamic> data = responseData['data'];
-      setState(() {
-        accountData = List<Map<String, dynamic>>.from(data);
-      });
-      print(accountData);
-    } else {
-      throw Exception('API 요청 실패');
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('개인통장 정보'),
-      ),
-      body: ListView.builder(
-        itemCount: accountData.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildAccountCard(accountData[index], context);
-        },
-      ),
-    );
-  }
-}
-Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
-  void _showConfirmationDialog(accountInfo) {
+class PersonalPage extends StatelessWidget {
+  void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -455,10 +429,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
             TextButton(
               child: Text('예'),
               onPressed: () {
-                // 커플통장으로 전환하는 작업을 여기에 추가
-                // 예를 눌렀을 때 실행할 코드를 작성하세요
-                Navigator.of(context).pop(); // 다이얼로그 닫기
-                // Couplesettingpage로 이동
+                Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) => Couplesettingpage(),
@@ -477,58 +448,95 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
       },
     );
   }
-  return Container(
-    width: double.infinity,
-    height: 150.0,
-    margin: EdgeInsets.all(16.0),
-    padding: EdgeInsets.all(16.0),
-    decoration: BoxDecoration(
-      color: Color(0xFFF7F7F7),
-      borderRadius: BorderRadius.circular(10.0),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              accountInfo['accountNumber'], // accountNumber를 표시
+
+  Widget buildContainer(String title, Color color, Function()? onPressed) {
+    return Container(
+      width: double.infinity,
+      height: 150,
+      margin: EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              title,
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            ElevatedButton.icon(
-              onPressed: () {
-                _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
-              },
-              icon: Icon(Icons.arrow_forward),
-              label: Text(''),
-            ),
-          ],
-        ),
-        SizedBox(height: 16.0),
-        Text(
-          '${accountInfo["balance"]}원', // balance를 표시
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
           ),
-        ),
-      ],
-    ),
-  );
+          SizedBox(height: 5),
+          if (onPressed != null)
+            Align(
+              alignment: Alignment.topRight,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                child: Text('버튼'),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '개인통장',
+              Color(0xFFF7F7F7),
+                  () {
+                _showConfirmationDialog(context);
+              },
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '개인통장',
+              Color(0xFFF7F7F7),
+                  () {
+                _showConfirmationDialog(context);
+              },
+            ),
+          ),
+          SizedBox(height: 3),
+          Expanded(
+            flex: 1,
+            child: buildContainer(
+              '개인통장',
+              Color(0xFFF7F7F7),
+                  () {
+                _showConfirmationDialog(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
 
 class CouplePage extends StatefulWidget {
   @override
