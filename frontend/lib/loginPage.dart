@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'simplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
+import 'authSimplePasswordPage.dart'; // 간편비밀번호 페이지 임포트
 import 'signUpPage.dart'; // 회원가입 페이지 임포트
 import 'homePage.dart'; // 홈페이지 임포트
 import 'package:http/http.dart' as http;
@@ -208,7 +208,7 @@ class LoginPage extends StatelessWidget {
                     onTap: () {
                       // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SimplePasswordPage(),
+                        builder: (context) => AuthSimplePasswordPage(userId: 1),
                       ));
                     },
                     child: Text(

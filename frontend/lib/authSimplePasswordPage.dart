@@ -1,20 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'homePage.dart';
 import 'loginPage.dart';
 import 'package:http/http.dart' as http;
 
-class SimplePasswordPage extends StatefulWidget {
+class AuthSimplePasswordPage extends StatefulWidget {
   final int userId;
 
-  SimplePasswordPage({required this.userId});
+  AuthSimplePasswordPage({required this.userId});
 
   @override
-  _SimplePasswordPageState createState() => _SimplePasswordPageState();
+  _AuthSimplePasswordPageState createState() => _AuthSimplePasswordPageState();
 }
 
-class _SimplePasswordPageState extends State<SimplePasswordPage> {
+class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   String pin = "";
   int maxPinLength = 6;
   List<Color> circleColors = List.generate(6, (index) => Color(0XFFD9D9D9));
@@ -22,12 +21,12 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
   Future<bool> sendToBackend(int userId, String pin) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/simple-password'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://localhost:8080/api/user/simple-password/auth'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
-          'userId': userId,
+          'userId': 1,
           'simplePassword' : pin
         }),
       );
@@ -38,13 +37,13 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
 
       // 필요한 작업 수행
       if (statusCode == 200) {
-        // 간편 비밀번호 설정 성공
+        // 간편 비밀번호 인증 성공
         return true;
 
       } else {
         print(statusCode);
         return false;
-        // 간편 비밀번호 설정 실패
+        // 간편 비밀번호 인증 실패
       }
     }
     catch (e) {
@@ -62,9 +61,8 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
         if (pin.length == maxPinLength) {
           //여기서 API쏴서
           if(await sendToBackend(widget.userId, pin)){
-            print('성공');
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LoginPage(),
+              builder: (context) => HomePage(),
             ));
           }else{
             showDialog(
@@ -72,7 +70,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('알림'),
-                  content: Text('간편 비밀번호 설정에 실패하였습니다.'),
+                  content: Text('간편 비밀번호 인증에 실패하였습니다.'),
                   actions: <Widget>[
                     TextButton(
                       child: Text('확인'),
@@ -148,7 +146,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  '간편비밀번호 등록',
+                  '간편비밀번호 입력',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
