@@ -1,6 +1,8 @@
 package com.ssafy.lovesol.domain.couple.controller;
 
 
+import com.ssafy.lovesol.domain.bank.entity.Account;
+import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +53,18 @@ public class CoupleScheduler {
                 log.info("계좌 내역 조회에 실패했습니다.");
                 continue;
             }
-            log.info("glgl");
+            LocalDateTime current = LocalDateTime.now().minusMinutes(10);
+            Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
+            List<Transaction> transactionList = transactionService.findTransactionsDetail(current,coupleAccount);
+            LocalDate cur_day = current.toLocalDate();
+            //계좌 내역을 가져올때 출금만 가져와야하는데 여깃 출입금 둘다 가져왔음
+            //1. query를 수정한다
+            //2. 스켘줄러에서 처리해준다.
+            if(transactionList == null || transactionList.isEmpty()){continue;}
+            //먼저 List가 not Null 인경우 couple의 현재 날짜의 Datelog를 확인한다
+            //그 후 없으면 마일리지를 0원으로 생성해준다
+            //그리고 transactionList를 통해 사용한 결재 내역의 0.01 배 만큼 마일리지를 업데이트를 진행해준다
+            //그리고 petexp또한 경험치를 증가시켜주는데 증가하는 과정에서 000이 넘으면 경험치를 업데이트 해준다.
         }
 //        LocalDateTime
 //
