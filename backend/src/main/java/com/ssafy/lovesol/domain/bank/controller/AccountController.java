@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.bank.controller;
 
 import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
 import com.ssafy.lovesol.global.response.ResponseResult;
@@ -15,10 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -57,5 +58,9 @@ public class AccountController {
         return ResponseResult.failResponse;
     }
 
+    @GetMapping("/{userId}")
+    public ResponseResult getMyAccounts(@Valid @PathVariable Long userId) throws NoSuchAlgorithmException {
+        return new SingleResponseResult<List<GetUserAccountsResponseDto>>(accountService.getMyAccounts(userId));
+    }
 
 }
