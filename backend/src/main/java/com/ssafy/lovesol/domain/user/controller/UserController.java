@@ -53,8 +53,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseResult login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info("UserController_login -> 로그인 시도");
-        userService.login(loginRequestDto, response);
-        return ResponseResult.successResponse;
+        return new SingleResponseResult<>(userService.login(loginRequestDto, response));
     }
 
     @Operation(summary = "Simple Password Auth", description = "사용자가 간편 로그인을 합니다.")
@@ -64,9 +63,7 @@ public class UserController {
     @PostMapping("/simple-password")
     public ResponseResult simpleLogin(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
         log.info("UserController_simpleLogin -> 간편 로그인 시도");
-        if(userService.simpleLogin(simpleLoginRequestDto))
-            return ResponseResult.successResponse;
-        return ResponseResult.failResponse;
+        return new SingleResponseResult<>(userService.simpleLogin(simpleLoginRequestDto));
     }
 
 

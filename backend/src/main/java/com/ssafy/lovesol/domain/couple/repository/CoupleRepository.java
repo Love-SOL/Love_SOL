@@ -15,6 +15,7 @@ public interface CoupleRepository extends JpaRepository<Couple,Long> {
 
     Optional<Couple> findBySubOwner(User userId);
     Optional<Couple> findByOwner(User userId);
+    Optional<Couple> findByOwnerOrSubOwner(User owner,User subOwner);
 
 
 }

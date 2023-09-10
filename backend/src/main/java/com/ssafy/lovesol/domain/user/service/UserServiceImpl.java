@@ -1,7 +1,9 @@
 package com.ssafy.lovesol.domain.user.service;
 
 
+import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.user.dto.request.*;
+import com.ssafy.lovesol.domain.user.dto.response.LoginResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
 import com.ssafy.lovesol.global.exception.NotExistUserException;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final SmsService smsService;
+    private final CoupleRepository coupleRepository;
 
     @Override
     public List<User> getAllUserByDepositAt (int day) {
@@ -39,19 +42,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info("UserServiceImpl_login | 사용자 로그인 시도");
         User loginUser = userRepository.findByIdAndPassword(loginRequestDto.getId(), loginRequestDto.getPassword()).orElseThrow(NotExistUserException::new);
         setToken(loginUser , response);
+        return loginUser.toLoginResponseDto(coupleRepository.findByOwnerOrSubOwner(loginUser,loginUser).get().getCoupleId());
     }
 
     @Override
-    public boolean simpleLogin(SimpleLoginRequestDto simpleLoginRequestDto) {
+    public LoginResponseDto simpleLogin(SimpleLoginRequestDto simpleLoginRequestDto) {
         log.info("UserServiceImpl_login | 사용자 간편 로그인");
         User user = userRepository.findByUserId(simpleLoginRequestDto.getUserId()).orElseThrow(NotExistUserException::new);
-        if(user.getSimplePassword().equals(simpleLoginRequestDto.getSimplePassword()))
-            return true;
-        return false;
+        if(!user.getSimplePassword().equals(simpleLoginRequestDto.getSimplePassword()))
+            throw new NotExistUserException();
+        return user.toLoginResponseDto(coupleRepository.findByOwnerOrSubOwner(user,user).get().getCoupleId());
     }
 
     @Override
