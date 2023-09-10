@@ -6,7 +6,6 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
-import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
