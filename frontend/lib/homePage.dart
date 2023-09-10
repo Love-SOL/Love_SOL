@@ -24,19 +24,25 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-// String id = '';
-// Future<void> _loadUserData() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   id = prefs.getString('id') ?? '';
-// }
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   void initState() {
     super.initState();
-    fetchAccountData(); // 초기 데이터 로드
+    _loadUserDataAndFetchData();
+  }
+  String id = '';
+  Future<void> _loadUserDataAndFetchData() async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
+  }
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    id = prefs.getString('id') ?? '';
+
   }
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/user/account/' + "shinhan"));
+    print(id);
+    final response = await http.get(Uri.parse("http://localhost:8080/api/user/account/$id"));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
