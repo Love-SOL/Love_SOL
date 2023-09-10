@@ -39,7 +39,9 @@ dependencies:
   fl_chart: ^0.40.6
   shared_preferences: ^2.0.12
   firebase_core:
+  firebase_messaging:
   flutter_local_notifications: ^15.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -65,8 +67,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
-
+    - assets/simplepasswordbackground.png
+    - assets/loginbackground.png
+    - assets/loginclick.png
+    - assets/loginidinput.png
+    - assets/logincenterbox.png
+    - assets/loginpasswordinput.png
+    - assets/personicon.png
+    - assets/purple1.gif
+    - assets/purple2.png
+    - assets/bear1.gif
+    - assets/bear2.png
+    - assets/bear3.png
+    - assets/bellicon.png
+    - assets/personicon.png
+    -
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
