@@ -1,4 +1,4 @@
-package com.ssafy.lovesol.domain.bank.dto;
+package com.ssafy.lovesol.domain.bank.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -14,4 +14,8 @@ public class TransferRequestDto {
     @NotBlank
     @Schema(description = "계좌 번호", example = "110222999999")
     private String accountNumber;
+
+    @NotBlank
+    @Schema(description = "휴대폰 번호", example = "01099509587")
+    private String phoneNumber;
 }

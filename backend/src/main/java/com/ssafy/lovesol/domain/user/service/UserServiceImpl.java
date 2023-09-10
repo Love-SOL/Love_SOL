@@ -95,6 +95,13 @@ public class UserServiceImpl implements UserService{
         return smsService.sendAuthKey(phoneNumberRequestDto.getPhoneNumber());
     }
 
+    @Override
+    @Transactional
+    public void setSimplePassword(SimpleLoginRequestDto simplePassword) {
+        log.info("UserServiceImpl_setSimplePassword | 간편 비밀번호 설정");
+        userRepository.findByUserId(simplePassword.getUserId()).get().setSimplePassword(simplePassword.getSimplePassword());
+    }
+
 
     @Override
     public User getUserByUserId(long userId){

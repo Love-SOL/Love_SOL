@@ -1,7 +1,8 @@
 package com.ssafy.lovesol.domain.bank.controller;
 
-import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -40,7 +42,7 @@ public class AccountController {
     })
     @PostMapping
     public ResponseResult transferOneWon(
-            @Valid @RequestBody TransferRequestDto transferRequestDto) {
+            @Valid @RequestBody TransferRequestDto transferRequestDto) throws CoolsmsException {
         log.info("AccountController_transferOneWon");
         return new SingleResponseResult<>(accountService.transferOneWon(transferRequestDto));
     }

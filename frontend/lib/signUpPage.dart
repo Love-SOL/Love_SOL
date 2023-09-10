@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'simplePasswordPage.dart';
 import 'homePage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController birthdateController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController verificationCodeController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
   bool isAuth = false;
 
-  onTap1WonTransfer(String accountNumber, BuildContext context) async {
+  onTap1WonTransfer(String accountNumber,String phoneNumber, BuildContext context) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/account'), // 스키마를 추가하세요 (http 또는 https)
@@ -19,6 +21,7 @@ class SignUpPage extends StatelessWidget {
         },
         body: jsonEncode(<String, String>{
           'accountNumber': accountNumber,
+          'phoneNumber' : phoneNumber
         }),
       );
       // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
@@ -29,7 +32,23 @@ class SignUpPage extends StatelessWidget {
       // 필요한 작업 수행
       if (statusCode == 200) {
           //1원 이체 성공
-
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('알림'),
+              content: Text('성공적으로 인증번호를 발송하였습니다.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Alert 창 닫기
+                  },
+                ),
+              ],
+            );
+          },
+        );
 
       } else {
         print(statusCode);
@@ -63,9 +82,42 @@ class SignUpPage extends StatelessWidget {
       if (statusCode == 200) {
         // 인증 성공
         isAuth = true;
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('성공'),
+              content: Text('인증에 성공하셨습니다.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Alert 창 닫기
+                  },
+                ),
+              ],
+            );
+          },
+        );
       } else {
         print(statusCode);
-        // 인증 실패
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('실패'),
+              content: Text('인증에 실패하셨습니다. 다시 한번 확인해주세요.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Alert 창 닫기
+                  },
+                ),
+              ],
+            );
+          },
+        );
 
       }
     }
@@ -78,6 +130,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String name = '';
     String birthAt = '';
+    String phoneNumber ='';
     String personalAccount = '';
     String authNumber ='';
     return Scaffold(
@@ -105,28 +158,12 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 20),
             buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
             SizedBox(height: 20),
+            buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {phoneNumber = value;}),
+            SizedBox(height: 20),
             buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
                     GestureDetector(
                       onTap: () {
-                        onTap1WonTransfer(personalAccount,context);
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return AlertDialog(
-                        //       title: Text('인증번호 보내기'),
-                        //       content: Text('여기에 인증번호 보내기 내용을 입력하세요.'),
-                        //       actions: [
-                        //         TextButton(
-                        //           onPressed: () {
-                        //             Navigator.of(context).pop();
-                        //           },
-                        //           child:
-                        //           Text('닫기'), // TextButton에 child 매개변수를 추가
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // );
+                        onTap1WonTransfer(personalAccount,phoneNumber,context);
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -182,9 +219,9 @@ class SignUpPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (name.isNotEmpty && birthAt.isNotEmpty && personalAccount.isNotEmpty && isAuth){
+                    if (name.isNotEmpty && birthAt.isNotEmpty && phoneNumber.isNotEmpty && personalAccount.isNotEmpty && isAuth){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage2(name: name, birthAt: birthAt, persnalAccount: personalAccount,),
+                        builder: (context) => SignUpPage2(name: name, birthAt: birthAt,phoneNumber : phoneNumber, persnalAccount: personalAccount,),
                       ));
                     }else{
                       showDialog(
@@ -192,7 +229,7 @@ class SignUpPage extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('알림'),
-                            content: Text('이름 , 생년월일 , 계좌번호 , 인증을 모두 마치셔야합니다.'),
+                            content: Text('이름 , 생년월일 , 휴대폰번호 , 계좌번호 입력과 인증을 모두 마치셔야합니다.'),
                             actions: <Widget>[
                               TextButton(
                                 child: Text('확인'),
@@ -276,7 +313,7 @@ class SignUpPage extends StatelessWidget {
 
 class SignUpPage2 extends StatelessWidget {
 
-  onTapSignUp(String id, String password, String name, String birthAt, String persnalAccount, BuildContext context) async {
+  onTapSignUp(String id, String password, String name, String birthAt,String phoneNumber, String persnalAccount, BuildContext context) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
@@ -288,7 +325,7 @@ class SignUpPage2 extends StatelessWidget {
           "password": password,
           "simplePassword": "123456",
           "name": name,
-          "phoneNumber": "01012341234",
+          "phoneNumber": phoneNumber ,
           "birthAt": '${birthAt.substring(0, 4)}-${birthAt.substring(4, 6)}-${birthAt.substring(6, 8)}',
           "personalAccount": persnalAccount
         }),
@@ -297,11 +334,13 @@ class SignUpPage2 extends StatelessWidget {
       Map<String, dynamic> responseData = json.decode(response.body);
       // 파싱한 데이터에서 필드에 접근
       int statusCode = responseData['statusCode'];
+      int userId = responseData['data'];
       // 필요한 작업 수행
       if (statusCode == 200) {
-        // 회원가입 성공 후 페이지 이동
+        print("성공");
+        // 아이디 비밀번호 입력 후 간편 비밀번호 설정 페이지로 이동
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => SimplePasswordPage(userId: userId),
         ));
 
       } else {
@@ -317,7 +356,8 @@ class SignUpPage2 extends StatelessWidget {
   final String name;
   final String birthAt;
   final String persnalAccount;
-  SignUpPage2({required this.name, required this.birthAt, required this.persnalAccount});
+  final String phoneNumber;
+  SignUpPage2({required this.name, required this.birthAt,required this.phoneNumber, required this.persnalAccount});
 
   @override
   Widget build(BuildContext context) {
@@ -411,7 +451,7 @@ class SignUpPage2 extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        onTapSignUp(id, password, name, birthAt, persnalAccount, context);
+                        onTapSignUp(id, password, name, birthAt, phoneNumber , persnalAccount, context);
                       },
                       child: Text(
                         '확인',

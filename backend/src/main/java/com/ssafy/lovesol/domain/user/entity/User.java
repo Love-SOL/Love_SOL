@@ -70,4 +70,8 @@ public class User {
                 .coupleId(coupleId)
                 .build();
     }
+
+    public void setSimplePassword(String simplePassword){
+        this.simplePassword = simplePassword;
+    }
 }
