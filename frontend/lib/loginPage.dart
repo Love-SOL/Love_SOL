@@ -4,10 +4,14 @@ import 'signUpPage.dart'; // 회원가입 페이지 임포트
 import 'homePage.dart'; // 홈페이지 임포트
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
+  Future<void> _saveUserData(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', id);
+  }
   onTapLogin(String id, String password, BuildContext context) async {
     try {
       final response = await http.post(
@@ -26,6 +30,7 @@ class LoginPage extends StatelessWidget {
       int statusCode = responseData['statusCode'];
       // 필요한 작업 수행
       if (statusCode == 200) {
+        _saveUserData(id);
         // 로그인 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),
