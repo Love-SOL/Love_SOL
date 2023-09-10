@@ -93,6 +93,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       'Fri',
       'Sat',
       'Sun'];
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -164,7 +165,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isToday ? Colors.white : Colors.black,
+                      color: isToday ? Colors.white : Color(0xFF69695D),
                     ),
                   ),
                   if (eventsForDate != null) // 해당 날짜에 이벤트가 있는 경우
