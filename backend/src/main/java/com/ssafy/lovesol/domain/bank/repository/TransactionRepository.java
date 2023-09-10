@@ -12,12 +12,12 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     Optional<Transaction> findByAccountAndDepositAmount(Account account,int depositAmount);
 
-    @Query(value = "SELECT t,a FROM Transaction t INNER JOIN Account a ON t.account.accountNumber = a.accountNumber WHERE t.account.accountNumber = :accountId" +
+    @Query(value = "SELECT t,a FROM Transaction t INNER JOIN Account a ON t.account.accountNumber = a.accountNumber WHERE t.account.accountNumber = :account" +
             "  AND DATETIME(t.transactionAt) >= :transactionAt" +
             "  AND t.withdrawalAmount != 0" +
             "ORDER BY t.transactionAt")
-    List<Transaction> findByTransactionAtList(LocalDateTime transactionAt,Account account);
+    List<Transaction> findByTransactionAtList(LocalDateTime transactionAt,String account);
     Optional<Transaction> findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(Account account,int depositAmount);
 
-    List<Transaction> findTransactionsByTransactionAtGreaterThanEqualOrderByTransactionAtDesc(Account account,LocalDateTime transactionAt);
+    List<Transaction> findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(LocalDateTime transactionAt,Account account);
 }
