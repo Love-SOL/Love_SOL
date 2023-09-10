@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 public class FcmRequestDto {
     private Long targetId;
