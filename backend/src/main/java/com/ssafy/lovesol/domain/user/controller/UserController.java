@@ -72,7 +72,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "간편 로그인 성공")
     })
-    @PostMapping("/simple-password")
+    @PostMapping("/simple-password/auth")
     public ResponseResult simpleLogin(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
         log.info("UserController_simpleLogin -> 간편 로그인 시도");
         return new SingleResponseResult<>(userService.simpleLogin(simpleLoginRequestDto));

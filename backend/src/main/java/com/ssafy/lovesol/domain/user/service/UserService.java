@@ -21,4 +21,5 @@ public interface UserService {
 
     void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
     String sendMessage(PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException;
+    void setSimplePassword(SimpleLoginRequestDto simplePassword);
 }
