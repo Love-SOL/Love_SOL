@@ -2,23 +2,32 @@ package com.ssafy.lovesol.domain.bank.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
 import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
+import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.domain.user.repository.UserRepository;
+import com.ssafy.lovesol.global.exception.NotExistUserException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
+import com.ssafy.lovesol.global.util.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,13 +36,16 @@ public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+
+    private final UserRepository userRepository;
     private final CommonHttpSend commonHttpSend;
+    private final SmsService smsService;
     @Override
     @Transactional
-    public int transferOneWon(TransferRequestDto transferRequestDto) {
+    public int transferOneWon(TransferRequestDto transferRequestDto) throws CoolsmsException {
         log.info("AccountServiceImpl_transferOneWon | 1원 이체 기능");
 
-        String randomSixNumber = generateSixDigitNumber();
+        String randomSixNumber = smsService.sendAuthKey(transferRequestDto.getPhoneNumber());
         Map<String, String> data = new HashMap<>();
         data.put("입금은행코드","088");
         data.put("입금계좌번호",transferRequestDto.getAccountNumber());
@@ -69,6 +81,33 @@ public class AccountServiceImpl implements AccountService{
         return true;
     }
 
+    public String HashEncrypt(String hashData) throws NoSuchAlgorithmException {
+        // SHA-256 해시 생성
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashedBytes = digest.digest(hashData.getBytes(StandardCharsets.UTF_8));
+
+        // 바이트 배열을 16진수 문자열로 변환
+        StringBuilder builder = new StringBuilder();
+        for (byte b : hashedBytes) {
+            builder.append(String.format("%02x", b));
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    public List<GetUserAccountsResponseDto> getMyAccounts(Long userId) throws NoSuchAlgorithmException {
+        User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
+        // 입력 데이터
+        String dataToHash = user.getName() + user.getPhoneNumber();
+        String HashedData = HashEncrypt(dataToHash);
+
+        List<Account> accounts = accountRepository.findByUserId(HashedData);
+        List<GetUserAccountsResponseDto> res = accounts.stream().map(account -> account.toGetUserAccountsResponseDto()).collect(Collectors.toList());
+
+        return res;
+    }
+
     private String generateSixDigitNumber() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -80,4 +119,30 @@ public class AccountServiceImpl implements AccountService{
 
         return sb.toString();
     }
+
+
+    @Override
+    public List<Transaction> findTransactionByAccount(String accountNumber){
+        Optional<Account> result = accountRepository.findByAccountNumber(accountNumber);
+        if(result.isEmpty()){
+            log.info("not found Account");
+            return null;
+        }
+        return result.get().getTransactionList();
+    }
+
+    @Override
+    public List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now) {
+        return null;
+        //쿼리 생성이 후에 구성해야함 너무 어려움 따흑
+    }
+
+    @Override
+    public Account findAccountByAccountNumber(String accountNumber) {
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        if(account.isPresent()) return account.get();
+        return null;
+    }
+
+
 }

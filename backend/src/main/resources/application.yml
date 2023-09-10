@@ -5,7 +5,7 @@ spring:
   # jpa설정
   jpa:
     hibernate:
-      ddl-auto: none #create update none
+      ddl-auto: create #create update none
     properties: # property 사용 설정
       hibernate: # hibernate property 설정
         format_sql: true # 보여지는 쿼리를 예쁘게 포맷팅 -> 사용하지않으면 긴 줄 형태로 출력됌
@@ -59,3 +59,9 @@ cloud:
       secret-key: ${SECRET_KEY}
       stack:
         auto: false
+
+# Cool SMS API
+cool:
+  api_key: ${SMS_KEY}
+  api_secret_key: ${SMS_SECRET_KEY}
+  sender_number: ${SENDER}

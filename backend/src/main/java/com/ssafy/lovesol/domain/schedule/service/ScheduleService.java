@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public interface ScheduleService {
     Long createSchedule(Long coupleId , CreateScheduleRequestDto createScheduleRequestDto, HttpServletRequest request);
-    ScheduleType getScheduleType(Couple couple , User user , int ScheduleType);
+    ScheduleType getScheduleType(Couple couple , int ScheduleType);
     void updateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request);
     void deleteSchedule(Long scheduleId);
     CalenderResponseDto getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);

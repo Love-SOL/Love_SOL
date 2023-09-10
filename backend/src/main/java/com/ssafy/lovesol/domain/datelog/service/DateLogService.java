@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.datelog.service;
 
+import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
@@ -15,6 +16,8 @@ public interface DateLogService {
     Long createDateLog(Long coupleId, LocalDate dateAt);
 
     DateLogResponseDto getDateLog(Long dateLogId);
-
+    Optional<DateLog> getDateLogforScheduler(Couple couple,LocalDate curDay);
     void insertImage(Long dateLogId, MultipartFile insertImage, String content) throws IOException;
+
+    DateLog getDateLogForupdate(Long dateLogId);
 }
