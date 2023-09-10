@@ -49,7 +49,7 @@ class _CalendarPageState extends State<CalendarPage> {
           Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE4ECFF), // 배경색
+                  color: Color(0xFFF7F7F7), // 배경색
                   borderRadius: BorderRadius.circular(10), // 박스 모양 설정
                   boxShadow: [
                     BoxShadow(
@@ -101,7 +101,6 @@ class _CalendarPageState extends State<CalendarPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -109,7 +108,7 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
               SizedBox(height: 16),
               Expanded(
-                  flex: 4,
+                  flex: 5,
                   child:
               Container(
                 width: double.infinity,
