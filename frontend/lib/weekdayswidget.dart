@@ -15,14 +15,12 @@ extension DateTimeExt on DateTime {
   String format(String formatPattern) => DateFormat(formatPattern).format(this);
 }
 
-/// Widget that represents week days in row above calendar month view.
 class WeekDaysWidget extends StatelessWidget {
   const WeekDaysWidget({
     required this.day,
     super.key,
   });
 
-  /// [WeekDay] value from [WeekDaysBuilder].
   final WeekDay day;
 
   @override
@@ -41,7 +39,6 @@ class WeekDaysWidget extends StatelessWidget {
   }
 }
 
-/// Custom event widget with rounded borders
 class EventWidget extends StatelessWidget {
   const EventWidget({
     required this.drawer,
@@ -80,6 +77,7 @@ class CreateEventDialog extends StatefulWidget {
 }
 
 class _CreateEventDialogState extends State<CreateEventDialog> {
+  
   int _selectedColorIndex = 0;
   final _eventNameController = TextEditingController();
   File? _selectedImage; // 이미지를 저장할 변수
@@ -94,6 +92,7 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
     _eventNameController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +112,7 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
               children: [
                 // Dialog title.
                 const Text(
-                  'Event creating',
+                  '내용을 추가하세요',
                   style: TextStyle(
                     color: Color(0xff69695D),
                     fontWeight: FontWeight.bold,
@@ -121,7 +120,6 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
                   ),
                 ),
 
-                // Event name input field.
                 TextField(
                   cursorColor: Color(0xff69695D),
                   style:

@@ -59,3 +59,9 @@ cloud:
       secret-key: ${SECRET_KEY}
       stack:
         auto: false
+
+# Cool SMS API
+cool:
+  api_key: ${SMS_KEY}
+  api_secret_key: ${SMS_SECRET_KEY}
+  sender_number: ${SENDER}
