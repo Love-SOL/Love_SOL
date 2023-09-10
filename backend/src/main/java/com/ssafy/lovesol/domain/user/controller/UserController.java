@@ -78,6 +78,12 @@ public class UserController {
         return new SingleResponseResult<>(userService.simpleLogin(simpleLoginRequestDto));
     }
 
+    @PostMapping("/{token}")
+    @Operation(summary = "FCM", description = "Flutter 사용자가 보내주는 Token값을 확인하고 업데이트를 진행합니다")
+    public ResponseResult checkFcm(@RequestBody @Valid UpdateFCMTokenRequestDto updateFCMTokenRequestDto){
+       userService.setFCMToken(updateFCMTokenRequestDto);
+       return ResponseResult.successResponse;
+    }
 
     @Operation(summary = "Deposit", description = "사용자가 자동 입금 날짜 및 금액을 설정합니다.")
     @ApiResponses(value = {

@@ -19,6 +19,8 @@ public interface UserService {
     User getUserByUserId(long userId);
     User getUserById(String userId);
 
+    void setFCMToken(UpdateFCMTokenRequestDto updateFCMTokenRequestDto);
+
     void UpdateDepositInfo(UpdateUserAccountInfoDto userDto);
     String sendMessage(PhoneNumberRequestDto phoneNumberRequestDto) throws CoolsmsException;
     void setSimplePassword(SimpleLoginRequestDto simplePassword);
