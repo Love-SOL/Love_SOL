@@ -18,4 +18,6 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             "ORDER BY t.transactionAt")
     List<Transaction> findByTransactionAtList(LocalDateTime transactionAt,Account account);
     Optional<Transaction> findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(Account account,int depositAmount);
+
+    List<Transaction> findTransactionsByTransactionAtGreaterThanEqualOrderByTransactionAtDesc(Account account,LocalDateTime transactionAt);
 }

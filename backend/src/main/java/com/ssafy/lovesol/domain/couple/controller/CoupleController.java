@@ -1,5 +1,9 @@
 package com.ssafy.lovesol.domain.couple.controller;
 
+import com.ssafy.lovesol.domain.bank.entity.Account;
+import com.ssafy.lovesol.domain.bank.entity.Transaction;
+import com.ssafy.lovesol.domain.bank.service.AccountService;
+import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.SendCoupleAmountRequestDto;
@@ -25,7 +29,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ApiResponses({
@@ -40,6 +47,8 @@ import java.util.Map;
 public class CoupleController {
     private final CoupleService coupleService;
     private final CommonHttpSend commonHttpSend;
+    private final TransactionService transactionService;
+    private final AccountService accountService;
     @Operation(summary = "Couple info", description = "사용자의 커플 정보를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커플 테이블 조회 성공")
@@ -47,7 +56,7 @@ public class CoupleController {
     @GetMapping("/{userId}")
     public SingleResponseResult<Couple> getCoupleInfo(@PathVariable String userId){
         log.info("CoupleController -> 커플 통장 정보 조회 ");
-        Couple couple = coupleService.getCoupleInfoByCoupleId(userId);
+        Couple couple = coupleService.getCoupleInfoByUserId(userId);
         return new SingleResponseResult<Couple>(couple);
     }
 
@@ -89,9 +98,18 @@ public class CoupleController {
         ResponseAccountInfoDto dto = coupleService.getAccountTotal(coupleId);
         return new SingleResponseResult<ResponseAccountInfoDto>(dto);
     }
-    @GetMapping("/{coupleId}/detail")
-    public ListResponseResult<Object> accountDetail(@PathVariable long coupleId){
-        return null;
+    //
+    @GetMapping("/{coupleId}/detail/{date}")
+    public ListResponseResult<Transaction> accountDetail(@PathVariable long coupleId , @PathVariable LocalDate date){
+        Couple couple = coupleService.getCoupleInfoByCouplId(coupleId);
+        Account account = accountService.findAccountByAccountNumber(couple.getCommonAccount());
+        LocalDateTime infoAt = date.atStartOfDay();
+        List<Transaction> transactionList = transactionService.findTransactionsDetailOrderBy(infoAt,account);
+        //여기서는 couple아이디를 기반으로 커플이 원하는 날짜에 있는 date날짜에 맞는 transaction 리스트를 뽑아와야한다.
+        //
+//        List<Transaction> transactionList = transactionService.findTransactionsDetail(date, accountService.findAccountByAccountNumber(couple.getCommonAccount()));
+        //여기서는 커플id값을 기반으로
+        return new ListResponseResult<Transaction>(transactionList);
 
 
     }

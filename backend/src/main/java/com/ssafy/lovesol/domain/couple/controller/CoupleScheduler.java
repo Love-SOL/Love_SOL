@@ -65,12 +65,8 @@ public class CoupleScheduler {
             if(transactionList == null || transactionList.isEmpty()){continue;}
             Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
             DateLog dateLog;
-            if(dateLogFind.isEmpty()){
-                //여기선 데이트로그를 만들어 줘야한다.
-                dateLog = dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(),curDay));
-            }else{
-                dateLog = dateLogFind.get();
-            }
+            //여기선 데이트로그를 만들어 줘야한다.
+            dateLog = dateLogFind.orElseGet(() -> dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(), curDay)));
             for(int j = 0 ; j < transactionList.size();j++){
                 int expAndMileage = (int)(transactionList.get(i).getWithdrawalAmount()*0.01);
                 dateLog.setMileage(dateLog.getMileage()+expAndMileage);

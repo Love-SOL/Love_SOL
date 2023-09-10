@@ -56,7 +56,7 @@ public class CoupleServiceImpl implements CoupleService{
     }
 
     @Override
-    public Couple getCoupleInfoByCoupleId(String userId) {
+    public Couple getCoupleInfoByUserId(String userId) {
         log.info("getCoupleInfo : 커플 정보 return");
         User user = userService.getUserById(userId);
         Optional<Couple> couple = coupleRepository.findBySubOwner(user);
@@ -68,6 +68,11 @@ public class CoupleServiceImpl implements CoupleService{
             return couple.get();
         }
         return null;
+    }
+
+    @Override
+    public Couple getCoupleInfoByCouplId(long coupleId) {
+        return coupleRepository.findById(coupleId).orElseGet(null);
     }
 
     @Override

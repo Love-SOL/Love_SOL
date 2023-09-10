@@ -11,4 +11,7 @@ public interface TransactionService {
     void registTransactionInfo(Transaction transaction);
 
     List<Transaction>  findTransactionsDetail(LocalDateTime transactionAt, Account account);
+
+    List<Transaction> findTransactionsDetailOrderBy(LocalDateTime transactionAt, Account account);
+
 }
