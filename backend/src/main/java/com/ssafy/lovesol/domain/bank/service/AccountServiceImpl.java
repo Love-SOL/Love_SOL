@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -80,4 +78,30 @@ public class AccountServiceImpl implements AccountService{
 
         return sb.toString();
     }
+
+
+    @Override
+    public List<Transaction> findTransactionByAccount(String accountNumber){
+        Optional<Account> result = accountRepository.findByAccountNumber(accountNumber);
+        if(result.isEmpty()){
+            log.info("not found Account");
+            return null;
+        }
+        return result.get().getTransactionList();
+    }
+
+    @Override
+    public List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now) {
+        return null;
+        //쿼리 생성이 후에 구성해야함 너무 어려움 따흑
+    }
+
+    @Override
+    public Account findAccountByAccountNumber(String accountNumber) {
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        if(account.isPresent()) return account.get();
+        return null;
+    }
+
+
 }
