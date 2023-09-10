@@ -193,32 +193,20 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            '개인',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                          buildBox(
+                            screenWidth - 40,
+                            Color(0xFF0046FF),
+                            accountData,
+                            70,
+                          )
                         ],
                       ),
                       SizedBox(height: 16),
                     ],
                   ),
                 ),
-              ],
             ),
-            SizedBox(height: 20),
-            // 추가 박스 1
-            buildBox(
-              screenWidth - 40,
-              Color(0xFF0046FF),
-              accountData,
-              70,
-
             ),
-            SizedBox(height: 16),
             Expanded(
               flex: 3,
               child: Container(

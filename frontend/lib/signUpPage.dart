@@ -12,7 +12,7 @@ class SignUpPage extends StatelessWidget {
 
   bool isAuth = false;
 
-  onTap1WonTransfer(String accountNumber,String phoneNumber, BuildContext context) async {
+  onTap1WonTransfer(String accountNumber, String phoneNumber, BuildContext context) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/account'), // 스키마를 추가하세요 (http 또는 https)
@@ -21,7 +21,7 @@ class SignUpPage extends StatelessWidget {
         },
         body: jsonEncode(<String, String>{
           'accountNumber': accountNumber,
-          'phoneNumber' : phoneNumber
+          'phoneNumber': phoneNumber,
         }),
       );
       // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
@@ -31,7 +31,7 @@ class SignUpPage extends StatelessWidget {
 
       // 필요한 작업 수행
       if (statusCode == 200) {
-          //1원 이체 성공
+        // 1원 이체 성공
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -49,19 +49,17 @@ class SignUpPage extends StatelessWidget {
             );
           },
         );
-
       } else {
         print(statusCode);
         // 1원 이체 실패
         // 1원 이체 실패 실패 시의 처리를 수행
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("에러발생 $e");
     }
   }
 
-  onTapAuth1WonTransfer(String accountNumber,String authNumber ,BuildContext context) async {
+  onTapAuth1WonTransfer(String accountNumber, String authNumber, BuildContext context) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
@@ -118,10 +116,8 @@ class SignUpPage extends StatelessWidget {
             );
           },
         );
-
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("에러발생 $e");
     }
   }
@@ -130,10 +126,10 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String name = '';
     String birthAt = '';
-    String phoneNumber ='';
+    String phoneNumber = '';
     String personalAccount = '';
-    String authNumber ='';
-    
+    String authNumber = '';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
@@ -155,17 +151,24 @@ class SignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {name = value;}),
-            SizedBox(height: 20),
-            buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {birthAt = value;}),
-            SizedBox(height: 20),
-            buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {phoneNumber = value;}),
-            SizedBox(height: 20),
-            buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {personalAccount = value;}),
+                    buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {
+                      name = value;
+                    }),
+                    SizedBox(height: 20),
+                    buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {
+                      birthAt = value;
+                    }),
+                    SizedBox(height: 20),
+                    buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {
+                      phoneNumber = value;
+                    }),
+                    SizedBox(height: 20),
+                    buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {
+                      personalAccount = value;
+                    }),
                     GestureDetector(
                       onTap: () {
-                        onTap1WonTransfer(personalAccount,phoneNumber,context);
-
+                        onTap1WonTransfer(personalAccount, phoneNumber, context);
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -185,8 +188,7 @@ class SignUpPage extends StatelessWidget {
             ),
             Expanded(
               flex: 4,
-              child:
-              Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
@@ -205,53 +207,52 @@ class SignUpPage extends StatelessWidget {
                       minimumSize: Size(120, 48),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (name.isNotEmpty && birthAt.isNotEmpty && phoneNumber.isNotEmpty && personalAccount.isNotEmpty && isAuth){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage2(name: name, birthAt: birthAt,phoneNumber : phoneNumber, persnalAccount: personalAccount,),
-                      ));
-                    }else{
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('알림'),
-                            content: Text('이름 , 생년월일 , 휴대폰번호 , 계좌번호 입력과 인증을 모두 마치셔야합니다.'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('확인'),
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // Alert 창 닫기
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                  child: Text(
-                    '확인',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (name.isNotEmpty && birthAt.isNotEmpty && phoneNumber.isNotEmpty && personalAccount.isNotEmpty && isAuth) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SignUpPage2(name: name, birthAt: birthAt, phoneNumber: phoneNumber, persnalAccount: personalAccount,),
+                        ));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('알림'),
+                              content: Text('이름, 생년월일, 휴대폰번호, 계좌번호 입력과 인증을 모두 마치셔야합니다.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('확인'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Alert 창 닫기
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Text(
+                      '확인',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller}) {
+  Widget buildInputBox(String label, String hintText, {TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -432,20 +433,19 @@ class SignUpPage2 extends StatelessWidget {
                             minimumSize: Size(120, 48),
                           ),
                         ),
-                        minimumSize: Size(120, 48),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        onTapSignUp(id, password, name, birthAt, phoneNumber , persnalAccount, context);
-                      },
-                      child: Text(
-                        '확인',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            onTapSignUp(id, password, name, birthAt, phoneNumber , persnalAccount, context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                         ),
                       ],
                     ),
