@@ -40,8 +40,9 @@ public class UserController {
     public ResponseResult createUserAccount(
             @Valid @RequestBody CreateUserAccountRequestDto createUserAccountRequestDto) {
         log.info("UserController_createUserAccount -> 사용자의 회원가입");
-        if (userService.createUserAccount(createUserAccountRequestDto) >= 0) {
-            return ResponseResult.successResponse;
+        Long userId = userService.createUserAccount(createUserAccountRequestDto);
+        if (userId >= 0) {
+            return new SingleResponseResult<>(userId);
         }
         return ResponseResult.failResponse;
     }
@@ -54,6 +55,17 @@ public class UserController {
     public ResponseResult login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info("UserController_login -> 로그인 시도");
         return new SingleResponseResult<>(userService.login(loginRequestDto, response));
+    }
+
+    @Operation(summary = "Set Simple Password ", description = "사용자가 간편 비밀번호를 설정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "간편 비밀번호 설정 성공")
+    })
+    @PostMapping("/simple-password")
+    public ResponseResult setSimplePassword(@Valid @RequestBody SimpleLoginRequestDto simpleLoginRequestDto) {
+        log.info("UserController_setSimplePassword -> 간편 비밀번호 설정");
+        userService.setSimplePassword(simpleLoginRequestDto);
+        return ResponseResult.successResponse;
     }
 
     @Operation(summary = "Simple Password Auth", description = "사용자가 간편 로그인을 합니다.")
