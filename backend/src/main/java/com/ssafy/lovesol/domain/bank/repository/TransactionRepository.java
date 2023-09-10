@@ -14,6 +14,6 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
 //    @Query(value = "select a from ")
 //    List<Transaction> findAccountLocalDate(Long AccountId, LocalDateTime date);
-    List<Transaction> findTransactionsByTransactionAtGreaterThanEqualAAndAccountEqualsAndWithdrawalAmountGreaterThan(LocalDateTime transactionAt,Account account,int Amount);
+    List<Transaction> findTransactionsByTransactionAtGreaterThanEqualsAndAccountEqualsAndWithdrawalAmountGreaterThan(LocalDateTime transactionAt,Account account,int Amount);
 //    List<Transaction> findTransactionsByAccountOrderBy
 }

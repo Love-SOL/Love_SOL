@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -52,6 +53,11 @@ public class DateLogServiceImpl implements DateLogService{
         // 데이트 로그에 속하는 날짜, 적립된 마일리지와 이미지 객체들을 조회한다.
         DateLog dateLog = dateLogRepository.findById(dateLogId).orElseThrow(NotExistDateLogException::new);
         return dateLog.toDateLogResponseDto();
+    }
+
+    @Override
+    public Optional<DateLog> getDateLogforScheduler(Couple couple,LocalDate curDay) {
+        return dateLogRepository.findByCoupleAndDateAt(couple,curDay);
     }
 
     @Override
@@ -87,5 +93,10 @@ public class DateLogServiceImpl implements DateLogService{
         dateLog.accumulateMileage(10);
         // TODO: 펫에게 마일리지를 적립한다.
 
+    }
+
+    @Override
+    public DateLog getDateLogForupdate(Long dateLogId) {
+        return dateLogRepository.findById(dateLogId).get();
     }
 }
