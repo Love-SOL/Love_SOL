@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   }
   Future<void> fetchAccountData() async {
     print(id);
-    final response = await http.get(Uri.parse("http://localhost:8080/api/user/account/$id"));
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$id"));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -69,13 +69,13 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
+            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
           ),
           IconButton(
-            icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
@@ -306,13 +306,13 @@ class _HomePage2State extends State<HomePage2> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
+            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
           ),
           IconButton(
-            icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
@@ -396,7 +396,7 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/account/1'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/account/1'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
