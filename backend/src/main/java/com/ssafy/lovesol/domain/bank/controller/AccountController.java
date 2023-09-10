@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.bank.controller;
 
 import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.request.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.user.dto.request.CreateUserAccountRequestDto;
