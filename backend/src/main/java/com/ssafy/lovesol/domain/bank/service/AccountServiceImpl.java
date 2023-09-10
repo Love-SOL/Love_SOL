@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.lovesol.domain.bank.dto.TransferRequestDto;
 import com.ssafy.lovesol.domain.bank.dto.request.TransferAuthRequestDto;
+import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
 import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
+import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.domain.user.repository.UserRepository;
+import com.ssafy.lovesol.global.exception.NotExistUserException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +33,8 @@ public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+
+    private final UserRepository userRepository;
     private final CommonHttpSend commonHttpSend;
     @Override
     @Transactional
@@ -65,6 +75,33 @@ public class AccountServiceImpl implements AccountService{
         if(!transaction.getContent().equals(transferAuthRequestDto.getAuthNumber()))
             return false;
         return true;
+    }
+
+    public String HashEncrypt(String hashData) throws NoSuchAlgorithmException {
+        // SHA-256 해시 생성
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashedBytes = digest.digest(hashData.getBytes(StandardCharsets.UTF_8));
+
+        // 바이트 배열을 16진수 문자열로 변환
+        StringBuilder builder = new StringBuilder();
+        for (byte b : hashedBytes) {
+            builder.append(String.format("%02x", b));
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    public List<GetUserAccountsResponseDto> getMyAccounts(Long userId) throws NoSuchAlgorithmException {
+        User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
+        // 입력 데이터
+        String dataToHash = user.getName() + user.getPhoneNumber();
+        String HashedData = HashEncrypt(dataToHash);
+
+        List<Account> accounts = accountRepository.findByUserId(HashedData);
+        List<GetUserAccountsResponseDto> res = accounts.stream().map(account -> account.toGetUserAccountsResponseDto()).collect(Collectors.toList());
+
+        return res;
     }
 
     private String generateSixDigitNumber() {

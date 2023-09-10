@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.bank.entity;
 
 
+import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.user.entity.Notice;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,4 +32,12 @@ public class Account {
 
     @OneToMany(mappedBy = "account" , cascade = CascadeType.ALL)
     private List<Transaction> transactionList;
+
+    public GetUserAccountsResponseDto toGetUserAccountsResponseDto(){
+        return GetUserAccountsResponseDto.builder()
+                .accountNumber(accountNumber)
+                .name(name)
+                .balance(balance)
+                .build();
+    }
 }
