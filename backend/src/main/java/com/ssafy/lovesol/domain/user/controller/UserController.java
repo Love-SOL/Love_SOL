@@ -80,7 +80,7 @@ public class UserController {
         return new SingleResponseResult<>(userService.simpleLogin(simpleLoginRequestDto));
     }
 
-    @PostMapping("/{token}")
+    @PostMapping("/token")
     @Operation(summary = "FCM", description = "Flutter 사용자가 보내주는 Token값을 확인하고 업데이트를 진행합니다")
     public ResponseResult checkFcm(@RequestBody @Valid UpdateFCMTokenRequestDto updateFCMTokenRequestDto){
        userService.setFCMToken(updateFCMTokenRequestDto);
