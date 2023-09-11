@@ -8,10 +8,12 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
+
   const LoginPage({super.key});
-  Future<void> _saveUserData(String id) async {
+  Future<void> _saveUserData(int userId, int coupleId) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('id', id);
+    await prefs.setInt('userId', userId);
+    await prefs.setInt('coupleId', coupleId);
   }
   onTapLogin(String id, String password, BuildContext context) async {
     try {
@@ -33,7 +35,8 @@ class LoginPage extends StatelessWidget {
       int statusCode = responseData['statusCode'];
       // 필요한 작업 수행
       if (statusCode == 200) {
-        _saveUserData(id);
+        Map<String, dynamic> userData = responseData["data"];
+        _saveUserData(userData["userId"], userData["coupleId"]);
         // 로그인 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),
@@ -53,6 +56,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String id = "";
+    String password = "";
     return Scaffold(
       body: Stack(
         children: [
@@ -100,6 +105,10 @@ class LoginPage extends StatelessWidget {
                           child: SizedBox(
                             width: 250, // 입력 상자의 너비 조절
                             child: TextField(
+                              onChanged: (value) {
+                                // 사용자가 입력한 값을 id 변수에 저장
+                                id = value;
+                              },
                               decoration: InputDecoration(
                                 hintText: '아이디',
                                 hintStyle: TextStyle(
@@ -129,6 +138,10 @@ class LoginPage extends StatelessWidget {
                           child: SizedBox(
                             width: 250, // 입력 상자의 너비 조절
                             child: TextField(
+                              onChanged: (value) {
+                                // 사용자가 입력한 값을 id 변수에 저장
+                                password = value;
+                              },
                               obscureText: true, // 비밀번호 필드로 설정
                               decoration: InputDecoration(
                                 hintText: '영문자,숫자,특수문자 혼용(8~15자)',
@@ -158,9 +171,7 @@ class LoginPage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // 로그인 버튼을 누를 때 다른 페이지로 이동
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ));
+                      onTapLogin(id, password, context);
                     },
                     child: Container(
                       width: 250,
