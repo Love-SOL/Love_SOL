@@ -70,7 +70,9 @@ public class CoupleScheduler {
             for(int j = 0 ; j < transactionList.size();j++) {
                 int expAndMileage = (int) (transactionList.get(i).getWithdrawalAmount() * 0.01);
                 dateLog.setMileage(dateLog.getMileage() + expAndMileage);
+                dateLogService.updateDateLog(dateLog);
                 couple.getPet().setExp(couple.getPet().getExp() + expAndMileage);
+                petService.updatePet(couple.getPet());
             }
 
 
