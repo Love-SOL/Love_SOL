@@ -18,6 +18,6 @@ public interface DateLogService {
     DateLogResponseDto getDateLog(Long dateLogId);
     Optional<DateLog> getDateLogforScheduler(Couple couple,LocalDate curDay);
     void insertImage(Long dateLogId, MultipartFile insertImage, String content) throws IOException;
-
+    void updateDateLog(DateLog dateLog);
     DateLog getDateLogForupdate(Long dateLogId);
 }

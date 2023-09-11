@@ -11,4 +11,6 @@ public interface PetService {
     void createPet(String petName, Long coupleId);
     void gainExp(Long coupleId, int exp);
     void deletePet(Pet pet);
+
+    void updatePet(Pet pet);
 }

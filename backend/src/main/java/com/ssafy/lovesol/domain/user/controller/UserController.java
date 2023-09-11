@@ -91,8 +91,6 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description ="자동 입금 설정 성공")
     })
-
-
     @PutMapping("/account")
     public ResponseResult setDeposit(@Valid @RequestBody UpdateUserAccountInfoDto updateUserAccountInfoDto){
         log.info("UserController_Deposit -> 자동 입금 정보 설정");

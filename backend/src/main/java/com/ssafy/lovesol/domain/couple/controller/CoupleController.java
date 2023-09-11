@@ -10,6 +10,8 @@ import com.ssafy.lovesol.domain.couple.dto.request.SendCoupleAmountRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
+import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
@@ -49,6 +51,7 @@ public class CoupleController {
     private final CommonHttpSend commonHttpSend;
     private final TransactionService transactionService;
     private final AccountService accountService;
+    private final UserService userService;
     @Operation(summary = "Couple info", description = "사용자의 커플 정보를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커플 테이블 조회 성공")
@@ -126,8 +129,10 @@ public class CoupleController {
     }
 
     @PostMapping("/wire/{userId}")
-    public ResponseResult sendAmount(@PathVariable int userId, @RequestBody @Valid SendCoupleAmountRequestDto requestDto){
-
+    public ResponseResult sendAmount(@PathVariable long userId, @RequestBody @Valid SendCoupleAmountRequestDto requestDto){
+        User user = userService.getUserByUserId(userId);
+        Couple couple = coupleService.getCoupleInfoByCouplId(requestDto.getCouplId());
+        
 //        return Res
         return ResponseResult.successResponse;
     }
