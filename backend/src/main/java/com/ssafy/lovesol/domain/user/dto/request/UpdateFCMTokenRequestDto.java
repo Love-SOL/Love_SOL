@@ -14,7 +14,7 @@ public class UpdateFCMTokenRequestDto {
 
     @NotBlank
     @Schema(description = "사용자 로그인 ID", example = "shinhan")
-    private String id;
+    private long userId;
 
 
     @NotBlank
