@@ -31,19 +31,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadUserDataAndFetchData();
   }
-  String id = '';
+  String userId = '';
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
   }
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
+    userId = (prefs.getInt('userId') ?? '').toString();
 
   }
   Future<void> fetchAccountData() async {
-    print(id);
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$id"));
+    print(userId);
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$userId"));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
