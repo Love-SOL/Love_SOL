@@ -144,5 +144,11 @@ public class AccountServiceImpl implements AccountService{
         return null;
     }
 
+    @Override
+    @Transactional
+    public void accountSave(Account account) {
+        accountRepository.save(account);
+    }
+
 
 }

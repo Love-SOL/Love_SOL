@@ -26,4 +26,6 @@ public interface AccountService {
     List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now);
 
     Account findAccountByAccountNumber(String accountNumber);
+
+    void accountSave(Account account);
 }

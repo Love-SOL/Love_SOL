@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.user.controller;
 
 
+import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.TransactionService;
@@ -24,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -74,20 +76,28 @@ public class UserScheduler {
                     .depositAmount(0)
                     .withdrawalAmount(user.getAmount())
                     .content("LoveSol")
-                    .branchName("LoveSol 자동이체")
+                    .branchName("LoveSol 자동이체 출금")
                     .account(accountService.findAccountByAccountNumber(personalAccount))
                     .build();
             transactionService.registTransactionInfo(withdrawal);
+
+            Account account = accountService.findAccountByAccountNumber(user.getPersonalAccount());
+            account.setBalance(account.getBalance()-user.getAmount());
+            accountService.accountSave(account);
 
             Transaction deposit = Transaction.builder()
                     .transactionAt(now)
                     .depositAmount(user.getAmount())
                     .withdrawalAmount(0)
                     .content("LoveSol")
-                    .branchName("LoveSol 자동이체")
+                    .branchName("LoveSol 정기 입금")
                     .account(accountService.findAccountByAccountNumber(coupleAccount))
                     .build();
             transactionService.registTransactionInfo(deposit);
+            Account couple = accountService.findAccountByAccountNumber(coupleAccount);
+            couple.setBalance(couple.getBalance()+user.getAmount());
+
+            accountService.accountSave(couple);
 
 
 //            ResponseEntity<String> response =  CommonHttpSend.CommonHttpSend();
