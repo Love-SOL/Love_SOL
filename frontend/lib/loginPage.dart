@@ -17,10 +17,10 @@ class LoginPage extends StatelessWidget {
     return fcmToken;
   }
 
-  sendFcmToken(String userId) async {
+  sendFcmToken(int userId) async {
     try {
       final fcmToken = await _loadFcmData();
-
+      print(fcmToken);
       if (fcmToken != null) {
         final response = await http.post(
           Uri.parse('http://10.0.2.2:8080/api/user/token'),
@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
             'Content-Type': 'application/json',
           },
           body: jsonEncode(<String, String>{
-            'userId': userId,
+            'userId': userId.toString(),
             'fcmToken': fcmToken,
           }),
         );
@@ -66,6 +66,7 @@ class LoginPage extends StatelessWidget {
       // 필요한 작업 수행
       if (statusCode == 200) {
         Map<String, dynamic> userData = responseData["data"];
+        print(userData);
         _saveUserData(userData["userId"], userData["coupleId"]);
         sendFcmToken(userData["userId"]);
         // 로그인 성공 후 페이지 이동

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> _saveFcmData(String fcmToken) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('fcmToken', fcmToken);
+  print(fcmToken);
 }
 
 // Firebase 메시지 백그라운드 핸들러
