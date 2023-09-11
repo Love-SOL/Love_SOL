@@ -96,6 +96,12 @@ public class DateLogServiceImpl implements DateLogService{
     }
 
     @Override
+    public void updateDateLog(DateLog dateLog) {
+        dateLogRepository.save(dateLog);
+    }
+
+
+    @Override
     public DateLog getDateLogForupdate(Long dateLogId) {
         return dateLogRepository.findById(dateLogId).get();
     }
