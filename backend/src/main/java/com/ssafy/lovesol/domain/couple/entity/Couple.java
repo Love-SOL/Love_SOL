@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.couple.entity;
 
 
+import com.ssafy.lovesol.domain.couple.dto.response.DDayResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,10 @@ public class Couple {
     @Column(nullable = false)
     private double subOwnerTotal;
 
+    private String dDayTitle;
+
+    private LocalDate dDay;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -44,4 +49,16 @@ public class Couple {
     @JoinColumn(name = "couple_id")
     private Pet pet;
 
+    public void updateDDay(String dDayTitle , LocalDate dDay){
+        this.dDayTitle = dDayTitle;
+        this. dDay = dDay;
+    }
+
+    public DDayResponseDto toDDayResponseDto(int dDay){
+        return DDayResponseDto.builder()
+                .title(dDayTitle)
+                .coupleId(coupleId)
+                .remainingDay(dDay)
+                .build();
+    }
 }

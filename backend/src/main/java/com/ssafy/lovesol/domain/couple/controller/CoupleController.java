@@ -6,6 +6,7 @@ import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.request.DDayRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.SendCoupleAmountRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
@@ -130,6 +131,16 @@ public class CoupleController {
 
 //        return Res
         return ResponseResult.successResponse;
+    }
+
+    @Operation(summary = "커플 D-DAY 설정", description = "사용자의 커플 D-DAY 설정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "커플 D-DAY 조회 조회 성공")
+    })
+    @PostMapping("/dday")
+    public ResponseResult registDDAY(@Valid @RequestBody DDayRequestDto dDayRequestDto){
+        log.info("CoupleController_registDDAY -> 커플 D-DAY 설정");
+        return new SingleResponseResult<>(coupleService.registDDay(dDayRequestDto));
     }
 
 
