@@ -26,6 +26,7 @@ public interface CoupleService {
     int getCoupleAnniversary(Long coupleId);
     List<Couple> getAllCouple();
     DDayResponseDto registDDay(DDayRequestDto dDayRequestDto);
+    DDayResponseDto getDDay(Long coupleId);
 
 }
 

@@ -116,9 +116,9 @@ public class CoupleController {
     }
 //    @PostMapping("")
 
-    @Operation(summary = "커플 D-DAY 조회", description = "사용자의 커플 D-DAY 조회 조회합니다.")
+    @Operation(summary = "커플 D-DAY 조회", description = "사용자의 커플 D-DAY 조회합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "커플 D-DAY 조회 조회 성공")
+            @ApiResponse(responseCode = "200", description = "커플 D-DAY 조회 성공")
     })
     @GetMapping("/anniversary/{coupleId}")
     public ResponseResult getCoupleAnniversary(@PathVariable(value = "coupleId") Long coupleId){
@@ -135,12 +135,22 @@ public class CoupleController {
 
     @Operation(summary = "커플 D-DAY 설정", description = "사용자의 커플 D-DAY 설정합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "커플 D-DAY 조회 조회 성공")
+            @ApiResponse(responseCode = "200", description = "커플 D-DAY 설정 성공")
     })
     @PostMapping("/dday")
     public ResponseResult registDDAY(@Valid @RequestBody DDayRequestDto dDayRequestDto){
         log.info("CoupleController_registDDAY -> 커플 D-DAY 설정");
         return new SingleResponseResult<>(coupleService.registDDay(dDayRequestDto));
+    }
+
+    @Operation(summary = "커플 커스텀 설정 D-DAY 조회", description = "사용자의 커플 커스텀 설정 D-DAY 조회 합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "커플 커스텀 설정 D-DAY 조회 성공")
+    })
+    @PostMapping("/dday/{coupleId}")
+    public ResponseResult getDDay(@PathVariable(value = "coupleId") Long coupleId){
+        log.info("CoupleController_getDDay -> 커플 커스텀 설정 D-DAY 조회");
+        return new SingleResponseResult<>(coupleService.getDDay(coupleId));
     }
 
 
