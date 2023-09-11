@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void setFCMToken(UpdateFCMTokenRequestDto updateFCMTokenRequestDto) {
-        User user = userRepository.findById(updateFCMTokenRequestDto.getId()).get();
+        User user = userRepository.findById(updateFCMTokenRequestDto.getUserId()).get();
         user.setFcmToken(updateFCMTokenRequestDto.getFcmToken());
     }
 

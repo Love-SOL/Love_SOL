@@ -2,6 +2,8 @@ package com.ssafy.lovesol.domain.couple.service;
 
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.request.DDayRequestDto;
+import com.ssafy.lovesol.domain.couple.dto.response.DDayResponseDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
@@ -125,5 +127,21 @@ public class CoupleServiceImpl implements CoupleService{
     @Override
     public List<Couple> getAllCouple(){
         return coupleRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public DDayResponseDto registDDay(DDayRequestDto dDayRequestDto) {
+        log.info("CoupleServiceImpl_registDDay | 커플의 D-DAY 설정");
+        Couple couple = coupleRepository.findById(dDayRequestDto.getCoupleId()).get();
+        couple.updateDDay(dDayRequestDto.getTitle(), dDayRequestDto.getDDay());
+        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), dDayRequestDto.getDDay()));
+    }
+
+    @Override
+    public DDayResponseDto getDDay(Long coupleId) {
+        log.info("CoupleServiceImpl_getDDay | 커플의 커스텀 설정 D-DAY 조회");
+        Couple couple = coupleRepository.findById(coupleId).get();
+        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), couple.getDDay()));
     }
 }
