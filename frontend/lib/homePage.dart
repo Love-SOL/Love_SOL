@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     userId = (prefs.getInt('userId') ?? '').toString();
-
   }
   Future<void> fetchAccountData() async {
     print(userId);
