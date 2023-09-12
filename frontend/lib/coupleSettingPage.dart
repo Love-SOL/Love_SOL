@@ -28,7 +28,9 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
             Column(
               children: [
                 buildInputBox('상대방 ID', '아이디를 입력해주세요'),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
+                buildInputBox('기념일', '기념일을 입력해주세요'),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
