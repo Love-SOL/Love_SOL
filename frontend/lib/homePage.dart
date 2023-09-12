@@ -595,9 +595,6 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('개인통장 정보'),
-      ),
       body: ListView.builder(
         itemCount: accountData.length,
         itemBuilder: (BuildContext context, int index) {
@@ -637,6 +634,59 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
       },
     );
   }
+  return Container(
+    width: double.infinity,
+    height: 150.0,
+    margin: EdgeInsets.all(16.0),
+    padding: EdgeInsets.all(16.0),
+    decoration: BoxDecoration(
+      color: Color(0xFFF7F7F7),
+      borderRadius: BorderRadius.circular(10.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              accountInfo['accountNumber'], // accountNumber를 표시
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
+              },
+              icon: Icon(Icons.arrow_forward),
+              label: Text(''),
+            ),
+          ],
+        ),
+        SizedBox(height: 16.0),
+        Text(
+          '${accountInfo["balance"]}원', // balance를 표시
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+
+
 
   Widget buildContainer(String title, Color color, Function()? onPressed) {
     return Container(
