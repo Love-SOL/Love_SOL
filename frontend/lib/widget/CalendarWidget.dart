@@ -21,6 +21,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         _buildHeader(),
         SizedBox(height: 30),
         _buildWeekDays(),
+        SizedBox(height: 20),
         Expanded(
           child: _buildCalendar(),
         ),
