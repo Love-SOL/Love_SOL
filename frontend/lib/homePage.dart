@@ -6,6 +6,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'myConsumePage.dart';
+import 'myAccountPage.dart';
 
 
 void main() {
@@ -810,37 +812,3 @@ class _CouplePageState extends State<CouplePage> {
 }
 
 
-class MyAccountPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('내 소비'),
-      ),
-      body: Center(
-        child: Text(
-          '내 소비 페이지 내용',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
-  }
-}
-
-
-class MyConsumePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('내 소비'),
-      ),
-      body: Center(
-        child: Text(
-          '내 소비 페이지 내용',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
-  }
-}
