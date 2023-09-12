@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'weekdayswidget.dart';
 import 'dart:core';
-
+import './widget/DiaryWidget.dart';
+import './widget/CalendarWidget.dart';
+import './widget/DdayWidget.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -63,24 +65,61 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "캘린더",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
-            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
-            onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
-            },
+            icon: Image.asset('assets/personicon.png'),
+            onPressed: () {},
           ),
           IconButton(
-            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'),
             onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림'),
+                    content: Container(
+                      width: double.maxFinite,
+                      height: 300,
+                      child: ListView(
+                        children: [
+                          ListTile(
+                            title: Text('알림 1'),
+                            subtitle: Text('알림 내용 1'),
+                          ),
+                          ListTile(
+                            title: Text('알림 2'),
+                            subtitle: Text('알림 내용 2'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('닫기'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
+        title: Text(
+          "캘린더",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Center(
         child: Padding(
@@ -107,7 +146,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(18.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,7 +192,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -180,6 +219,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ],
               ),
+              SizedBox(height: 8),
               Expanded(
                 flex: 5,
                 child: Stack(
@@ -234,11 +274,11 @@ class _CalendarPageState extends State<CalendarPage> {
         return Container(
           padding: EdgeInsets.all(16),
           child: DDayPage(
-            onDDaySet: (date, text) { // 수정된 부분: date와 text 모두 전달
-              Navigator.pop(context); // 모달을 먼저 닫습니다.
+            onDDaySet: (date, text) {
+              Navigator.pop(context);
               setState(() {
-                dDayDate = date; // 디데이 값을 설정합니다.
-                dDayText = text; // 텍스트를 설정합니다.
+                dDayDate = date;
+                dDayText = text;
               });
             },
           ),
@@ -248,72 +288,4 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 }
 
-class DDayPage extends StatefulWidget {
-  final Function(DateTime, String?) onDDaySet; // 수정된 부분: String?을 추가
 
-  DDayPage({required this.onDDaySet});
-
-  @override
-  _DDayPageState createState() => _DDayPageState();
-}
-
-class _DDayPageState extends State<DDayPage> {
-  DateTime selectedDate = DateTime.now();
-  TextEditingController textController = TextEditingController(); // 텍스트 입력 컨트롤러 추가
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              "디데이 날짜 설정",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                final pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2101),
-                );
-
-                if (pickedDate != null && pickedDate != selectedDate) {
-                  setState(() {
-                    selectedDate = pickedDate;
-                  });
-                }
-              },
-              child: Text(
-                "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: textController, // 텍스트 입력 필드에 컨트롤러 할당
-              decoration: InputDecoration(
-                labelText: '텍스트 입력', // 입력 필드 라벨
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final text = textController.text; // 입력한 텍스트 가져오기
-                widget.onDDaySet(selectedDate, text); // 날짜와 텍스트 모두 전달
-              },
-              child: Text("설정"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

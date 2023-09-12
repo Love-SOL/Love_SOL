@@ -29,8 +29,6 @@ class HomePage extends StatefulWidget {
 }
 
 
-
-
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   void initState() {
@@ -70,9 +68,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "홈",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
@@ -89,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -117,6 +114,15 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
@@ -439,15 +445,13 @@ class _HomePage2State extends State<HomePage2> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "홈",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
@@ -459,7 +463,7 @@ class _HomePage2State extends State<HomePage2> {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -470,7 +474,6 @@ class _HomePage2State extends State<HomePage2> {
                             title: Text('알림 2'),
                             subtitle: Text('알림 내용 2'),
                           ),
-
                         ],
                       ),
                     ),
@@ -488,11 +491,20 @@ class _HomePage2State extends State<HomePage2> {
             },
           ),
         ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+            margin: EdgeInsets.all(24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
