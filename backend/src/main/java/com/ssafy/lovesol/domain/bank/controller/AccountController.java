@@ -62,7 +62,7 @@ public class AccountController {
 
     @GetMapping("/{userId}")
     public ResponseResult getMyAccounts(@Valid @PathVariable Long userId) throws NoSuchAlgorithmException {
-        return new SingleResponseResult<List<GetUserAccountsResponseDto>>(accountService.getMyAccounts(userId));
+        return new SingleResponseResult<>(accountService.getMyAccounts(userId));
     }
 
 }
