@@ -575,7 +575,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
 
           return GestureDetector(
             onTap: () {
-              _showEventsForDate(eventDate);
+              _showEventsForDiary(eventDate);
             },
             child: Container(
               alignment: Alignment.center,
@@ -614,7 +614,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
     );
   }
 
-  void _showEventsForDate(DateTime eventDate) {
+  void _showEventsForDiary(DateTime eventDate) {
     showDialog(
       context: context,
       builder: (context) {
@@ -688,13 +688,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                 // 카테고리 선택 버튼
                 ElevatedButton(
                   onPressed: () {
-                    if (selectedCategory == '주 관리자'){
-                      eventColor = Color(0xFF0046FF);
-                    }else if(selectedCategory =='부 관리자'){
-                      eventColor = Color(0xFFF90000);
-                    }else{
-                      eventColor = Color(0xFF9E00FF);
-                    }
+
                     final event = CalendarEvent(
                       title: '일정 제목',
                       description: '일정 내용',
@@ -712,7 +706,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                     });
 
                     Navigator.of(context).pop();
-                    _showEventsForDate(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
+                    _showEventsForDiary(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
                   },
                   child: Text('일정 추가'),
                 ),
@@ -731,59 +725,5 @@ class _DiaryWidgetState extends State<DiaryWidget> {
       },
     );
   }
-
-  // 카테고리를 선택하는 다이얼로그를 표시하는 메소드
-  void _showCategoryDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("카테고리 선택"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // 주 관리자 버튼
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedCategory = '주 관리자';
-                  });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
-                },
-                child: Text('주 관리자'),
-              ),
-              // 부 관리자 버튼
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedCategory = '부 관리자';
-                  });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
-                },
-                child: Text('부 관리자'),
-              ),
-              // 공동 카테고리 버튼
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedCategory = '공동';
-                  });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
-                },
-                child: Text('공동'),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("취소"),
-              onPressed: () {
-                Navigator.of(context).pop(); // 모달 다이얼로그 닫기
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
+

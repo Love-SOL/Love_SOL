@@ -71,8 +71,13 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
+            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
+            onPressed: () {
+              // 아이콘을 눌렀을 때 수행할 작업 추가
+            },
+          ),
+          IconButton(
             icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
-
             onPressed: () {
               showDialog(
                 context: context,
