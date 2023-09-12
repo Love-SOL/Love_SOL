@@ -139,7 +139,7 @@ public class DateLogController {
         @ApiResponse(responseCode = "200", description = "캘린더 조회시 데이트 로그 조회 성공"),
         @ApiResponse(responseCode = "400", description = "캘린더 조회시 데이트 로그 조회 실패")
     })
-    @GetMapping("/calendar/{coupleId}}")
+    @GetMapping("/calendar/{coupleId}")
     public ResponseResult getDateLogList(
         @PathVariable(value = "coupleId") Long coupleId , @RequestParam(value = "year") int year , @RequestParam(value = "month") int month) {
         log.info("UserController_getDateLogList");
