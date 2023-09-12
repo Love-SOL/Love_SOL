@@ -142,13 +142,8 @@ class SignUpPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            // Expanded(
-            //   flex: 1,
-            //   child: SizedBox(),
-            // ),
             Expanded(
               flex: 10,
-              // child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,9 +182,8 @@ class SignUpPage extends StatelessWidget {
                   ],
                 ),
               ),
-            // ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -206,7 +200,7 @@ class SignUpPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      minimumSize: Size(120, 48),
+                      minimumSize: Size(100, 48),
                     ),
                   ),
                   ElevatedButton(
@@ -244,7 +238,7 @@ class SignUpPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      minimumSize: Size(120, 48),
+                      minimumSize: Size(100, 48),
                     ),
                   ),
                 ],

@@ -110,7 +110,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
       body: Stack(
         children: [
           Image.asset(
-            'simplepasswordbackground.png',
+            'assets/simplepasswordbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'weekdayswidget.dart';
 import 'dart:core';
 
+
 class CalendarPage extends StatefulWidget {
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -10,13 +11,16 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? dDayDate;
   String? dDayText;
+  bool showCalendar = true;
+  bool showDiary = false;
+  bool showAlbum = false;
 
   @override
   void initState() {
     super.initState();
     dDayText = "디데이 설정 전"; // 초기 텍스트 설정
   }
-  
+
   int calculateDDay(DateTime? dDayDate) {
     if (dDayDate == null) {
       return 0; // 디데이 날짜가 설정되지 않은 경우 0을 반환
@@ -25,6 +29,30 @@ class _CalendarPageState extends State<CalendarPage> {
     final now = DateTime.now();
     final difference = dDayDate.difference(now);
     return difference.inDays; // 현재 날짜와 디데이 날짜의 차이를 일수로 반환
+  }
+
+  void _showCalendar() {
+    setState(() {
+      showCalendar = true;
+      showDiary = false;
+      showAlbum = false;
+    });
+  }
+
+  void _showDiary() {
+    setState(() {
+      showCalendar = false;
+      showDiary = true;
+      showAlbum = false;
+    });
+  }
+
+  void _showAlbum() {
+    setState(() {
+      showCalendar = false;
+      showDiary = false;
+      showAlbum = true;
+    });
   }
 
   @override
@@ -126,26 +154,57 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
               SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: _showCalendar,
+                    style: ElevatedButton.styleFrom(
+                      primary: showCalendar ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                    ),
+                    child: Text("일정"),
+                  ),
+                  ElevatedButton(
+                    onPressed: _showDiary,
+                    style: ElevatedButton.styleFrom(
+                      primary: showDiary ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                    ),
+                    child: Text("일기"),
+                  ),
+                  ElevatedButton(
+                    onPressed: _showAlbum,
+                    style: ElevatedButton.styleFrom(
+                      primary: showAlbum ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                    ),
+                    child: Text("앨범"),
+                  ),
+                ],
+              ),
               Expanded(
                 flex: 5,
-                child: Container(
-                  width: double.infinity,
-                  height: 400, // CrCalendar Container의 원하는 높이 설정
-                  decoration: BoxDecoration(
-                    color: Color(0xFFE4ECFF), // 배경색
-                    borderRadius: BorderRadius.circular(10), // 박스 모양 설정
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // 그림자 색상
-                        spreadRadius: 2, // 그림자 확장 정도
-                        blurRadius: 5, // 그림자 흐릿한 정도
-                        offset: Offset(0, 2), // 그림자 위치 (x, y)
+                child: Stack(
+                  children: [
+                    if (showCalendar)
+                      Container(
+                        width: double.infinity,
+                        decoration: commonBoxDecoration, // 공통 스타일 적용
+                        child: CalendarWidget(),
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: CalendarWidget(),
-                  ),
+
+                    // DiaryWidget를 표시하거나 숨깁니다.
+                    if (showDiary)
+                      Container(
+                        width: double.infinity,
+                        decoration: commonBoxDecoration, // 공통 스타일 적용
+                        child: DiaryWidget(),
+                      ),
+
+                    if (showAlbum)
+                      Container(
+                        width: double.infinity,
+                        decoration: commonBoxDecoration, // 공통 스타일 적용
+                      ),
+                  ],
                 ),
               )
             ],
@@ -154,6 +213,19 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
+  BoxDecoration commonBoxDecoration = BoxDecoration(
+    color: Color(0xFFE4ECFF), // 배경색
+    borderRadius: BorderRadius.circular(10), // 박스 모양 설정
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5), // 그림자 색상
+        spreadRadius: 2, // 그림자 확장 정도
+        blurRadius: 5, // 그림자 흐릿한 정도
+        offset: Offset(0, 2), // 그림자 위치 (x, y)
+      ),
+    ],
+  );
 
   void _openDDayPage() {
     showModalBottomSheet(
