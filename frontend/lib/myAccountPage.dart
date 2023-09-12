@@ -7,19 +7,16 @@ class MyAccountPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "내 계좌",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
-
             onPressed: () {
               showDialog(
                 context: context,
@@ -28,7 +25,7 @@ class MyAccountPage extends StatelessWidget {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -56,6 +53,15 @@ class MyAccountPage extends StatelessWidget {
             },
           ),
         ],
+        title: Text(
+          "거래내역조회",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Center(
         child: Text(

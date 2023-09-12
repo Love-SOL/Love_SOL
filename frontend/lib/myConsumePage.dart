@@ -4,10 +4,17 @@ import 'package:fl_chart/fl_chart.dart';
 class MyConsumePage extends StatelessWidget {
 
   final Map<String, int> expenditureData = {
-  '식비': 150000,
-  '쇼핑': 50000,
-  '여가': 20000,
-  '생활': 100000,
+    '식비': 150000,
+    '쇼핑': 50000,
+    '여가': 20000,
+    '생활': 100000,
+  };
+
+  final Map<String, IconData> categoryIcons = {
+    '식비': Icons.restaurant,   // 식비 아이콘
+    '쇼핑': Icons.shopping_cart, // 쇼핑 아이콘
+    '여가': Icons.beach_access,  // 여가 아이콘
+    '생활': Icons.home,         // 생활 아이콘
   };
 
   @override
@@ -16,19 +23,16 @@ class MyConsumePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "내 소비",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
-
             onPressed: () {
               showDialog(
                 context: context,
@@ -37,7 +41,7 @@ class MyConsumePage extends StatelessWidget {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -65,10 +69,19 @@ class MyConsumePage extends StatelessWidget {
             },
           ),
         ],
+        title: Text(
+          "내 소비",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(21),
         child: Column(
           children: [
             Expanded(
@@ -89,10 +102,10 @@ class MyConsumePage extends StatelessWidget {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           '내 소비',
@@ -104,38 +117,41 @@ class MyConsumePage extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1.3,
-                            child: PieChart(
-                              PieChartData(
-                                sections: [
-                                  PieChartSectionData(
-                                    color: Colors.blue,
-                                    value: 25,
-                                    title: '항목1',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.red,
-                                    value: 30,
-                                    title: '항목2',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.green,
-                                    value: 15,
-                                    title: '항목3',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.orange,
-                                    value: 30,
-                                    title: '항목4',
-                                    radius: 50,
-                                  ),
-                                ],
-                                sectionsSpace: 0,
-                                centerSpaceRadius: 40,
+                          child: Align(
+                            alignment: Alignment.center, // 가운데 정렬
+                            child: AspectRatio(
+                              aspectRatio: 1.3,
+                              child: PieChart(
+                                PieChartData(
+                                  sections: [
+                                    PieChartSectionData(
+                                      color: Colors.blue,
+                                      value: 25,
+                                      title: '항목1',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.red,
+                                      value: 30,
+                                      title: '항목2',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.green,
+                                      value: 15,
+                                      title: '항목3',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.orange,
+                                      value: 30,
+                                      title: '항목4',
+                                      radius: 50,
+                                    ),
+                                  ],
+                                  sectionsSpace: 0,
+                                  centerSpaceRadius: 40,
+                                ),
                               ),
                             ),
                           ),
@@ -164,7 +180,7 @@ class MyConsumePage extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,27 +200,45 @@ class MyConsumePage extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             final category = expenditureData.keys.elementAt(index);
                             final amount = expenditureData.values.elementAt(index);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    category,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          categoryIcons[category],
+                                          size: 24,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          category,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Text(
-                                    '$amount 원',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
+                                    Text(
+                                      '$amount 원',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                                Divider(
+                                  color: Colors.grey,
+                                  thickness: 1,
+                                ),
+                                SizedBox(height:16),
+                              ],
                             );
                           },
                         ),

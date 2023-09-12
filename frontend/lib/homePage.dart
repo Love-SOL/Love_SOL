@@ -27,6 +27,8 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+
+
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   void initState() {
@@ -66,19 +68,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "홈",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
-
             onPressed: () {
               showDialog(
                 context: context,
@@ -87,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -115,6 +114,15 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
@@ -122,9 +130,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Expanded(
-              flex : 1,
-              child:
-              GestureDetector(
+              flex: 1,
+              child: GestureDetector(
                 onTap: () {},
                 child: Container(
                   decoration: BoxDecoration(
@@ -142,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 16.0),
                         child: Text(
                           '내 계좌',
                           style: TextStyle(
@@ -152,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(right: 16.0),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -175,7 +182,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
@@ -198,28 +205,86 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '계좌번호: ${accountData["personalAccount"]}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    padding: const EdgeInsets.all(24.0),
+                    child:
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.asset(
+                                  'assets/purple2.png',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                                children: [
+                                  Text(
+                                    "accountType", // Display account type here
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Opacity(
+                                    opacity: 0.7, // Adjust the opacity as needed
+                                    child: Text(
+                                      '${accountData["personalAccount"]}', // Your smaller text here
+                                      style: TextStyle(
+                                        fontSize: 12, // Adjust the font size as needed
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          '잔액: ${accountData["amount"]}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '잔액: ${accountData["amount"]} 원',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ]
                           ),
-                        ),
-                        SizedBox(height: 16),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFFE4ECFF),
+                                ),
+                                child: Text('이체'),
+                              ),
+                              SizedBox(width: 16), // Add spacing between buttons
+                              ElevatedButton(
+                                onPressed: () {
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFFE4ECFF),
+                                ),
+                                child: Text('결제'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -227,7 +292,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
@@ -236,77 +301,80 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '내 소비',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 1.3,
-                          child: PieChart(
-                            PieChartData(
-                              sections: [
-                                PieChartSectionData(
-                                  color: Colors.blue,
-                                  value: 25,
-                                  title: '항목1',
-                                  radius: 50,
-                                ),
-                                PieChartSectionData(
-                                  color: Colors.red,
-                                  value: 30,
-                                  title: '항목2',
-                                  radius: 50,
-                                ),
-                                PieChartSectionData(
-                                  color: Colors.green,
-                                  value: 15,
-                                  title: '항목3',
-                                  radius: 50,
-                                ),
-                                PieChartSectionData(
-                                  color: Colors.orange,
-                                  value: 30,
-                                  title: '항목4',
-                                  radius: 50,
-                                ),
-                              ],
-                              sectionsSpace: 0,
-                              centerSpaceRadius: 40,
-                            ),
-                          ),
-                        ),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
                       ),
                     ],
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '내 소비',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.center, // 가운데 정렬
+                            child: AspectRatio(
+                              aspectRatio: 1.3,
+                              child: PieChart(
+                                PieChartData(
+                                  sections: [
+                                    PieChartSectionData(
+                                      color: Colors.blue,
+                                      value: 25,
+                                      title: '항목1',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.red,
+                                      value: 30,
+                                      title: '항목2',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.green,
+                                      value: 15,
+                                      title: '항목3',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.orange,
+                                      value: 30,
+                                      title: '항목4',
+                                      radius: 50,
+                                    ),
+                                  ],
+                                  sectionsSpace: 0,
+                                  centerSpaceRadius: 40,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
             ),
           ],
         ),
@@ -318,41 +386,41 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
       },
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              offset: Offset(0, 2),
-              blurRadius: 4.0,
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '계좌번호: ${accountData["personalAccount"]}',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            Text(
-              '잔액: ${accountData["amount"]}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
+      // child: Container(
+      //   width: width,
+      //   height: height,
+      //   decoration: BoxDecoration(
+      //     color: color,
+      //     borderRadius: BorderRadius.circular(20.0),
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.grey,
+      //         offset: Offset(0, 2),
+      //         blurRadius: 4.0,
+      //       ),
+      //     ],
+      //   ),
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       Text(
+      //         '계좌번호: ${accountData["personalAccount"]}',
+      //         style: TextStyle(
+      //           fontSize: 18,
+      //           fontWeight: FontWeight.bold,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //       Text(
+      //         '잔액: ${accountData["amount"]}',
+      //         style: TextStyle(
+      //           fontSize: 16,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
@@ -377,15 +445,13 @@ class _HomePage2State extends State<HomePage2> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
-        title: Text(
-          "홈",
-          style: TextStyle(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
         ),
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
@@ -397,7 +463,7 @@ class _HomePage2State extends State<HomePage2> {
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
-                      height: 300, // 알림 목록의 높이 조절
+                      height: 300,
                       child: ListView(
                         children: [
                           ListTile(
@@ -408,7 +474,6 @@ class _HomePage2State extends State<HomePage2> {
                             title: Text('알림 2'),
                             subtitle: Text('알림 내용 2'),
                           ),
-
                         ],
                       ),
                     ),
@@ -426,11 +491,20 @@ class _HomePage2State extends State<HomePage2> {
             },
           ),
         ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+            margin: EdgeInsets.all(24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -572,7 +646,7 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -669,7 +743,7 @@ class _CouplePageState extends State<CouplePage> {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
