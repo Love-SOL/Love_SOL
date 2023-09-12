@@ -81,7 +81,7 @@ class MyConsumePage extends StatelessWidget {
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
-        padding: EdgeInsets.all(21),
+        padding: EdgeInsets.all(15),
         child: Column(
           children: [
             Expanded(
@@ -102,7 +102,7 @@ class MyConsumePage extends StatelessWidget {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -162,7 +162,7 @@ class MyConsumePage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height:10),
+            SizedBox(height:15),
             Expanded(
               flex : 4,
               child: Container(
@@ -180,7 +180,7 @@ class MyConsumePage extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(30.0),
+                  padding: const EdgeInsets.all(25),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

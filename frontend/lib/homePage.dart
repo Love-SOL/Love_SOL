@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(15),
         child: Column(
           children: [
             Expanded(
