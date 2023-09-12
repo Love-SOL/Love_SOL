@@ -969,29 +969,18 @@ class _CouplePageState extends State<CouplePage> {
           if(petData.isNotEmpty)
             Expanded(
               flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        petData["name"],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Image.asset(
-                    'assets/bear1.gif',
-                    width : 100,
-                    height : 100,
-                  ),
-                  SizedBox(height: 16),
-                ],
+              child: buildContainer(
+                petData["name"],
+                Color(0xFFF7F7F7),
+                () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PetPage(),
+                    ),
+                  );
+                },
+                null,
+                null
               ),
             ),
         ],
