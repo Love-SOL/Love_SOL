@@ -19,11 +19,16 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long noticeId;
 
+    @Column(nullable= false)
+    private String title;
     @Column(nullable = false)
-    private String content;
+    private String body;
 
     @Column(nullable = false)
     private LocalDateTime createAt;
+
+    @Column(nullable= false)
+    private int kind;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id" , nullable = false)

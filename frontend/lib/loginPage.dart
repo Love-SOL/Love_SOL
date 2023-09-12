@@ -10,6 +10,36 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginPage extends StatelessWidget {
 
   const LoginPage({super.key});
+
+  Future<String?> _loadFcmData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? fcmToken = prefs.getString('fcmToken');
+    return fcmToken;
+  }
+
+  sendFcmToken(int userId) async {
+    try {
+      final fcmToken = await _loadFcmData();
+      print(fcmToken);
+      if (fcmToken != null) {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:8080/api/user/token'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'userId': userId.toString(),
+            'fcmToken': fcmToken,
+          }),
+        );
+      } else {
+        print("fcmToken이 널입니다.");
+      }
+    } catch (e) {
+      print("fcmToken 전송 실패");
+    }
+  }
+
   Future<void> _saveUserData(int userId, int coupleId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('userId', userId);
@@ -36,7 +66,9 @@ class LoginPage extends StatelessWidget {
       // 필요한 작업 수행
       if (statusCode == 200) {
         Map<String, dynamic> userData = responseData["data"];
+        print(userData);
         _saveUserData(userData["userId"], userData["coupleId"]);
+        sendFcmToken(userData["userId"]);
         // 로그인 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),

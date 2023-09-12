@@ -4,6 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 import 'notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> _saveFcmData(String fcmToken) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('fcmToken', fcmToken);
+  print(fcmToken);
+}
 
 // Firebase 메시지 백그라운드 핸들러
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -55,7 +62,6 @@ void main() async {
   }catch(e){
     print(e);
   }
-
 }
 
 class MyApp extends StatelessWidget {

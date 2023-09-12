@@ -47,8 +47,14 @@ public class PetServiceImpl implements PetService{
         }
     }
 
+
     @Override
     public void deletePet(Pet pet) {
         petRepository.delete(pet);
+    }
+
+    @Override
+    public void updatePet(Pet pet) {
+        petRepository.save(pet);
     }
 }

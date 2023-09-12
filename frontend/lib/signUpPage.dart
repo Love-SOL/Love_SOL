@@ -132,7 +132,7 @@ class SignUpPage extends StatelessWidget {
     String personalAccount = '';
     String authNumber = '';
 
-    return Scaffold(
+      return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
         elevation: 0,
@@ -151,15 +151,15 @@ class SignUpPage extends StatelessWidget {
                     buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {
                       name = value;
                     }),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {
                       birthAt = value;
                     }),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {
                       phoneNumber = value;
                     }),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {
                       personalAccount = value;
                     }),
