@@ -71,13 +71,13 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
+            icon: Image.asset('assets/personicon.png'),
             onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
             },
           ),
           IconButton(
-            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'),
+
             onPressed: () {
               showDialog(
                 context: context,
@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
                             title: Text('알림 2'),
                             subtitle: Text('알림 내용 2'),
                           ),
-                          // 여기에 추가적인 알림 항목을 추가하세요
                         ],
                       ),
                     ),
@@ -175,46 +174,67 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             Expanded(
-              flex:2,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFF0046FF),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
+              flex: 2,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MyAccountPage(),
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          buildBox(
-                            screenWidth - 40,
-                            Color(0xFF0046FF),
-                            accountData,
-                            70,
-                          )
-                        ],
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF0046FF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 2),
+                        blurRadius: 4.0,
                       ),
-                      SizedBox(height: 16),
                     ],
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '계좌번호: ${accountData["personalAccount"]}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '잔액: ${accountData["amount"]}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
                 ),
+              ),
             ),
-            ),
+            SizedBox(height: 16),
             Expanded(
               flex: 3,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MyConsumePage(),
+                    ),
+                  );
+                },
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -286,6 +306,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            ),
           ],
         ),
       ),
@@ -295,7 +316,6 @@ class _HomePageState extends State<HomePage> {
   Widget buildBox(double width, Color color, Map<String, dynamic> accountData, double height) {
     return GestureDetector(
       onTap: () {
-        // 각 박스를 누를 때 수행할 작업 추가
       },
       child: Container(
         width: width,
@@ -362,13 +382,12 @@ class _HomePage2State extends State<HomePage2> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
+            icon: Image.asset('assets/personicon.png'),
             onPressed: () {
-              // 아이콘을 눌렀을 때 수행할 작업 추가
             },
           ),
           IconButton(
-            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'),
             onPressed: () {
               showDialog(
                 context: context,
@@ -388,7 +407,7 @@ class _HomePage2State extends State<HomePage2> {
                             title: Text('알림 2'),
                             subtitle: Text('알림 내용 2'),
                           ),
-                          // 여기에 추가적인 알림 항목을 추가하세요
+
                         ],
                       ),
                     ),
@@ -421,16 +440,16 @@ class _HomePage2State extends State<HomePage2> {
                     style: ElevatedButton.styleFrom(
                       elevation: 5, // 그림자 크기
                       primary: _selectedPageIndex == 0
-                          ? Colors.grey // 선택된 상태의 색상 (GREY)
-                          : Color(0xFF0046FF), // 선택되지 않은 상태의 색상 (0046FF)
+                          ? Colors.grey
+                          : Color(0xFF0046FF),
                     ),
                     child: Text(
                       '개인',
                       style: TextStyle(
                         fontSize: 14,
                         color: _selectedPageIndex == 0
-                            ? Colors.white // 선택된 상태의 텍스트 색상
-                            : Colors.white, // 선택되지 않은 상태의 텍스트 색상
+                            ? Colors.white
+                            : Colors.white,
                       ),
                     ),
                   ),
@@ -443,16 +462,16 @@ class _HomePage2State extends State<HomePage2> {
                     style: ElevatedButton.styleFrom(
                       elevation: 5, // 그림자 크기
                       primary: _selectedPageIndex == 1
-                          ? Colors.grey // 선택된 상태의 색상 (GREY)
-                          : Color(0xFF0046FF), // 선택되지 않은 상태의 색상 (0046FF)
+                          ? Colors.grey
+                          : Color(0xFF0046FF),
                     ),
                     child: Text(
                       '커플',
                       style: TextStyle(
                         fontSize: 14,
                         color: _selectedPageIndex == 1
-                            ? Colors.white // 선택된 상태의 텍스트 색상
-                            : Colors.white, // 선택되지 않은 상태의 텍스트 색상
+                            ? Colors.white
+                            : Colors.white,
                       ),
                     ),
                   ),
@@ -639,9 +658,8 @@ class CouplePage extends StatefulWidget {
 }
 
 class _CouplePageState extends State<CouplePage> {
-  String petName = ''; // 펫 이름을 저장하는 변수
+  String petName = '';
 
-  // 공통으로 사용하는 컨테이너 생성 함수
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed) {
     return Container(
       width: double.infinity,
@@ -681,7 +699,7 @@ class _CouplePageState extends State<CouplePage> {
                   centerText,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black, // 텍스트 색상을 원하는 색상으로 설정하세요.
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -700,7 +718,6 @@ class _CouplePageState extends State<CouplePage> {
     );
   }
 
-  // 다이얼로그 창을 열어서 펫 이름을 설정하는 함수
   void _setPetName(BuildContext context) {
     showDialog(
       context: context,
@@ -725,7 +742,6 @@ class _CouplePageState extends State<CouplePage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // 여기서 필요한 작업을 수행하고 펫 이름을 저장할 수 있습니다.
               },
               child: Text('확인'),
             ),
@@ -788,6 +804,42 @@ class _CouplePageState extends State<CouplePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+class MyAccountPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('내 소비'),
+      ),
+      body: Center(
+        child: Text(
+          '내 소비 페이지 내용',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
+}
+
+
+class MyConsumePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('내 소비'),
+      ),
+      body: Center(
+        child: Text(
+          '내 소비 페이지 내용',
+          style: TextStyle(fontSize: 20),
+        ),
       ),
     );
   }
