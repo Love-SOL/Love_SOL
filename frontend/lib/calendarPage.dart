@@ -69,13 +69,13 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('personicon.png'), // 사람 모양 아이콘
+            icon: Image.asset('assets/personicon.png'), // 사람 모양 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
           ),
           IconButton(
-            icon: Image.asset('bellicon.png'), // 알림(종 모양) 아이콘
+            icon: Image.asset('assets/bellicon.png'), // 알림(종 모양) 아이콘
             onPressed: () {
               // 아이콘을 눌렀을 때 수행할 작업 추가
             },
@@ -184,7 +184,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 flex: 5,
                 child: Stack(
                   children: [
-                    // CalendarWidget를 표시하거나 숨깁니다.
                     if (showCalendar)
                       Container(
                         width: double.infinity,
@@ -204,7 +203,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       Container(
                         width: double.infinity,
                         decoration: commonBoxDecoration, // 공통 스타일 적용
-                        child: CalendarWidget(),
                       ),
                   ],
                 ),
