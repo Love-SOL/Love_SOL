@@ -8,8 +8,11 @@ import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
 import com.ssafy.lovesol.domain.datelog.service.ImageService;
+import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -129,5 +132,17 @@ public class DateLogController {
         // 이미지 객체를 삭제한다.
         imageService.deleteImage(Long.parseLong(imageId));
         return ResponseResult.successResponse;
+    }
+
+    @Operation(summary = "Get DateLog", description = "캘린더 조회시 데이트 로그 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "캘린더 조회시 데이트 로그 조회 성공"),
+        @ApiResponse(responseCode = "400", description = "캘린더 조회시 데이트 로그 조회 실패")
+    })
+    @GetMapping("/calendar/{coupleId}}")
+    public ResponseResult getDateLogList(
+        @PathVariable(value = "coupleId") Long coupleId , @RequestParam(value = "year") int year , @RequestParam(value = "month") int month) {
+        log.info("UserController_getDateLogList");
+        return new ListResponseResult<>(dateLogService.getDateLogList(coupleId,year,month));
     }
 }
