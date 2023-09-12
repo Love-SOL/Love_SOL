@@ -16,14 +16,10 @@ public class CalenderResponseDto {
     @Schema(description = "일정 리스트")
     List<ScheduleResponseDto> scheduleResponseDtoList;
 
-    @Schema(description = "데이트 한 날짜 리스트")
-    List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoList;
-
     public static CalenderResponseDto createCalenderResponseDto(List<ScheduleResponseDto> scheduleResponseDtoList ,List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoList ){
 
         return CalenderResponseDto.builder()
                 .scheduleResponseDtoList(scheduleResponseDtoList)
-                .dateLogForCalenderResponseDtoList(dateLogForCalenderResponseDtoList)
                 .build();
     }
 }
