@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0046FF),
+                    color: Color(0xFFE4ECFF),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.only(top: 24, bottom: 24, left: 10, right: 10),
                     child:
                     Expanded(
                       flex: 1,
@@ -217,11 +217,11 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(0),
                                 child: Image.asset(
-                                  'assets/purple2.png',
-                                  width: 30,
-                                  height: 30,
+                                  'assets/shinhanlogo.png',
+                                  width: 50,
+                                  height: 50,
                                 ),
                               ),
                               Column(
@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                   ),
                                   Opacity(
@@ -240,8 +240,8 @@ class _HomePageState extends State<HomePage> {
                                     child: Text(
                                       '${accountData["personalAccount"]}', // Your smaller text here
                                       style: TextStyle(
-                                        fontSize: 12, // Adjust the font size as needed
-                                        color: Colors.white,
+                                        fontSize: 16, // Adjust the font size as needed
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -255,8 +255,9 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   '잔액: ${accountData["amount"]} 원',
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ]
@@ -268,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('이체'),
                               ),
@@ -277,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('결제'),
                               ),

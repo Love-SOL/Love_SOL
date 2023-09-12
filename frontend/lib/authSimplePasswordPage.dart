@@ -108,7 +108,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
       body: Stack(
         children: [
           Image.asset(
-            'simplepasswordbackground.png',
+            'spbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
