@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -51,7 +50,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       // 필요한 작업 수행
       if (statusCode == 200) {
         // 성공
-        print(responseBody['data']);
         List<dynamic> data = responseBody['data'];
         List<ScheduleResponseDto> scheduleList =  data.map((data) => ScheduleResponseDto.fromJson(data as Map<String, dynamic>)).toList();
 
@@ -103,7 +101,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     int scheduleType = 0;
     if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
       scheduleType = 1;
-    }else if(selectedCategory =='부 관리자'){
+    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
       scheduleType = 2;
     }else{
       scheduleType = 0;
@@ -382,7 +380,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   onPressed: () async {
                     if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
                       eventColor = Color(0xFF0046FF);
-                    }else if(selectedCategory =='부 관리자'){
+                    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
                       eventColor = Color(0xFFF90000);
                     }else{
                       eventColor = Color(0xFF9E00FF);
@@ -447,11 +445,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 },
                 child: Text('주 관리자'),
               ),
-              // 부 관리자 버튼
+              // SUB_OWNER_SCHEDULE 버튼
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    selectedCategory = '부 관리자';
+                    selectedCategory = 'SUB_OWNER_SCHEDULE';
                   });
                   Navigator.of(context).pop(); // 모달 다이얼로그 닫기
                 },
