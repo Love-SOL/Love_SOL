@@ -12,7 +12,7 @@ class DiaryWidget extends StatefulWidget {
 class _DiaryWidgetState extends State<DiaryWidget> {
   DateTime selectedDate = DateTime.now();
   Map<DateTime, List<DiaryEvent>> events = {};
-  String selectedCategory = '주 관리자'; // 기본 카테고리를 '주 관리자'로 설정
+  String selectedCategory = 'MAIN_OWNER_SCHEDULE'; // 기본 카테고리를 'MAIN_OWNER_SCHEDULE'로 설정
 
   @override
   @override
