@@ -310,10 +310,10 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           '내 소비',
@@ -325,38 +325,41 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 16),
                         Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1.3,
-                            child: PieChart(
-                              PieChartData(
-                                sections: [
-                                  PieChartSectionData(
-                                    color: Colors.blue,
-                                    value: 25,
-                                    title: '항목1',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.red,
-                                    value: 30,
-                                    title: '항목2',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.green,
-                                    value: 15,
-                                    title: '항목3',
-                                    radius: 50,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.orange,
-                                    value: 30,
-                                    title: '항목4',
-                                    radius: 50,
-                                  ),
-                                ],
-                                sectionsSpace: 0,
-                                centerSpaceRadius: 40,
+                          child: Align(
+                            alignment: Alignment.center, // 가운데 정렬
+                            child: AspectRatio(
+                              aspectRatio: 1.3,
+                              child: PieChart(
+                                PieChartData(
+                                  sections: [
+                                    PieChartSectionData(
+                                      color: Colors.blue,
+                                      value: 25,
+                                      title: '항목1',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.red,
+                                      value: 30,
+                                      title: '항목2',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.green,
+                                      value: 15,
+                                      title: '항목3',
+                                      radius: 50,
+                                    ),
+                                    PieChartSectionData(
+                                      color: Colors.orange,
+                                      value: 30,
+                                      title: '항목4',
+                                      radius: 50,
+                                    ),
+                                  ],
+                                  sectionsSpace: 0,
+                                  centerSpaceRadius: 40,
+                                ),
                               ),
                             ),
                           ),
