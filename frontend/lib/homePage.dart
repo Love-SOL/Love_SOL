@@ -31,12 +31,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
-  void initState() {
+  void initState(){
     super.initState();
     _loadUserDataAndFetchData();
   }
   String userId = '';
+  Future<void> _sendFcmToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString('fcmToken');
+    final userId = prefs.getInt("userId");
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/user/token'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'userId': userId.toString(),
+          'fcmToken': fcmToken.toString(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // 성공적인 응답 처리
+        print('API 요청 성공');
+        print('응답 데이터: ${response.body}');
+      } else {
+        // 실패한 경우 오류 처리
+        print('API 요청 실패');
+        print('상태 코드: ${response.statusCode}');
+        print('오류 메시지: ${response.body}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('API 요청 중 오류 발생: $e');
+    }
+  }
+
   Future<void> _loadUserDataAndFetchData() async {
+    _sendFcmToken();
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
   }
