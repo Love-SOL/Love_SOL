@@ -54,7 +54,7 @@ class MyAccountPage extends StatelessWidget {
           ),
         ],
         title: Text(
-          "내 계좌",
+          "거래내역조회",
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,

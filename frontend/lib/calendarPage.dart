@@ -4,6 +4,7 @@ import 'dart:core';
 import './widget/DiaryWidget.dart';
 import './widget/CalendarWidget.dart';
 import './widget/DdayWidget.dart';
+import './widget/AlbumWidget.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -231,18 +232,18 @@ class _CalendarPageState extends State<CalendarPage> {
                         child: CalendarWidget(),
                       ),
 
-                    // DiaryWidget를 표시하거나 숨깁니다.
                     if (showDiary)
                       Container(
                         width: double.infinity,
-                        decoration: commonBoxDecoration, // 공통 스타일 적용
+                        decoration: commonBoxDecoration,
                         child: DiaryWidget(),
                       ),
 
                     if (showAlbum)
                       Container(
                         width: double.infinity,
-                        decoration: commonBoxDecoration, // 공통 스타일 적용
+                        decoration: commonBoxDecoration,
+                        child: AlbumWidget(),
                       ),
                   ],
                 ),

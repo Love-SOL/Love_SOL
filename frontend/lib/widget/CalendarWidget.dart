@@ -136,7 +136,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               _showEventsForDate(eventDate);
             },
             child: Container(
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isToday ? Colors.red : Colors.transparent,
