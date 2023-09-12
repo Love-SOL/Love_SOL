@@ -58,8 +58,8 @@ Future<void> initializeFirebase() async {
 void main() async {
   try{
     WidgetsFlutterBinding.ensureInitialized();
-    // await initializeFirebase();
-    // FlutterLocalNotification.init();
+    await initializeFirebase();
+    FlutterLocalNotification.init();
     runApp(MyApp());
   }catch(e){
     print(e);
