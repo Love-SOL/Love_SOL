@@ -25,8 +25,8 @@ class _AlbumWidgetState extends State<AlbumWidget> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        shrinkWrap: true, // Add this to make the ListView take only the space it needs
         children: [
           AspectRatio(
             aspectRatio: 4 / 1,
@@ -57,7 +57,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
               ),
             ),
           ),
-          // 첫 번째 댓글 표시
           ListTile(
             title: Text(
               comments.isEmpty ? '첫 번째 댓글이 없습니다.' : comments.first,
@@ -66,12 +65,12 @@ class _AlbumWidgetState extends State<AlbumWidget> {
               _showCommentsModal(context);
             },
           ),
+          // Add other non-scrollable widgets here
         ],
       ),
     );
   }
 
-  // 댓글 모달 다이얼로그 표시
   Future<void> _showCommentsModal(BuildContext context) async {
     final newComment = await showModalBottomSheet<String>(
       context: context,
@@ -80,7 +79,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
           builder: (context, setState) {
             return Column(
               children: [
-                // 댓글 목록
                 Expanded(
                   child: ListView.builder(
                     itemCount: comments.length,
@@ -91,7 +89,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                     },
                   ),
                 ),
-                // 댓글 입력 필드
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -125,10 +122,20 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     );
 
     if (newComment != null) {
-      // 모달에서 새로운 댓글이 추가된 경우
       setState(() {
         comments.add(newComment);
       });
     }
+  }
+}
+
+class YourScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        AlbumWidget(), // Add AlbumWidget here
+      ],
+    );
   }
 }
