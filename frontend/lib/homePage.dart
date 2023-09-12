@@ -570,7 +570,7 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
-  List<Map<String, dynamic>> accountData = []; // 서버에서 받아온 계좌 정보를 저장할 리스트
+  List<Map<String, dynamic>> accountData = [];
 
   @override
   void initState() {
@@ -605,7 +605,7 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 }
-Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
+Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
   void _showConfirmationDialog(accountInfo) {
     showDialog(
       context: context,
@@ -635,14 +635,15 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
       },
     );
   }
+
   return Container(
     width: double.infinity,
-    height: 150.0,
-    margin: EdgeInsets.all(16.0),
+    // height: 150.0,
+    margin: EdgeInsets.all(10),
     padding: EdgeInsets.all(16.0),
     decoration: BoxDecoration(
       color: Color(0xFFF7F7F7),
-      borderRadius: BorderRadius.circular(10.0),
+      borderRadius: BorderRadius.circular(10),
       boxShadow: [
         BoxShadow(
           color: Colors.grey.withOpacity(0.5),
@@ -659,122 +660,70 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              accountInfo['accountNumber'], // accountNumber를 표시
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/shinhanlogo.png', // 이미지 파일 경로
+                  width: 30.0, // 이미지의 너비
+                  height: 30.0, // 이미지의 높이
+                ),
+                SizedBox(width: 8.0), // 이미지와 텍스트 사이의 간격 조절
+                Text(
+                  accountInfo['accountNumber'], // accountNumber를 표시
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            ElevatedButton.icon(
+            IconButton(
               onPressed: () {
                 _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
               },
-              icon: Icon(Icons.arrow_forward),
-              label: Text(''),
+              icon: Icon(
+                Icons.list,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
-        SizedBox(height: 16.0),
-        Text(
-          '${accountInfo["balance"]}원', // balance를 표시
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
+        Center(
+          child: Text(
+            '${accountInfo["balance"]}원', // balance를 표시
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
+              child: Text('이체'),
+            ),
+            SizedBox(width: 16), // Add spacing between buttons
+            ElevatedButton(
+              onPressed: () {
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
+              child: Text('결제'),
+            ),
+          ],
         ),
       ],
     ),
   );
-
-
-
-  Widget buildContainer(String title, Color color, Function()? onPressed) {
-    return Container(
-      width: double.infinity,
-      height: 150,
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SizedBox(height: 5),
-          if (onPressed != null)
-            Align(
-              alignment: Alignment.topRight,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                child: Text('버튼'),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
-              },
-            ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
-              },
-            ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 
