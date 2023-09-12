@@ -134,14 +134,15 @@ public class CoupleServiceImpl implements CoupleService{
     public DDayResponseDto registDDay(DDayRequestDto dDayRequestDto) {
         log.info("CoupleServiceImpl_registDDay | 커플의 D-DAY 설정");
         Couple couple = coupleRepository.findById(dDayRequestDto.getCoupleId()).get();
-        couple.updateDDay(dDayRequestDto.getTitle(), dDayRequestDto.getDDay());
-        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), dDayRequestDto.getDDay()));
+        System.out.println(dDayRequestDto.getTargetDay());
+        couple.updateDDay(dDayRequestDto.getTitle(), LocalDate.parse(dDayRequestDto.getTargetDay()));
+        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), LocalDate.parse(dDayRequestDto.getTargetDay())));
     }
 
     @Override
     public DDayResponseDto getDDay(Long coupleId) {
         log.info("CoupleServiceImpl_getDDay | 커플의 커스텀 설정 D-DAY 조회");
         Couple couple = coupleRepository.findById(coupleId).get();
-        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), couple.getDDay()));
+        return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), couple.getDDay() == null ? LocalDate.now() : couple.getDDay()));
     }
 }

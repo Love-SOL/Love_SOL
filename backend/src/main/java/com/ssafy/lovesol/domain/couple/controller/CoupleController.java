@@ -152,7 +152,7 @@ public class CoupleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커플 커스텀 설정 D-DAY 조회 성공")
     })
-    @PostMapping("/dday/{coupleId}")
+    @GetMapping("/dday/{coupleId}")
     public ResponseResult getDDay(@PathVariable(value = "coupleId") Long coupleId){
         log.info("CoupleController_getDDay -> 커플 커스텀 설정 D-DAY 조회");
         return new SingleResponseResult<>(coupleService.getDDay(coupleId));

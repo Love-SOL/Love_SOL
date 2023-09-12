@@ -77,18 +77,12 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public CalenderResponseDto getAllScheduleByYearAndMonth(Long coupleId, int year, int month) {
+    public List<ScheduleResponseDto> getAllScheduleByYearAndMonth(Long coupleId, int year, int month) {
         log.info("ScheduleServiceImpl_getAllScheduleByYearAndMonth | 전체 일정 조회");
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
+        return scheduleRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
                 .stream().map(schedule -> schedule.toScheduleResponseDto())
                 .collect(Collectors.toList());
-
-        List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoList = dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
-                .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
-                .collect(Collectors.toList());
-
-        return CalenderResponseDto.createCalenderResponseDto(scheduleResponseDtoList , dateLogForCalenderResponseDtoList);
     }
 
     @Override

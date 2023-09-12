@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'weekdayswidget.dart';
 import 'dart:core';
@@ -5,6 +7,8 @@ import './widget/DiaryWidget.dart';
 import './widget/CalendarWidget.dart';
 import './widget/DdayWidget.dart';
 import './widget/AlbumWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -14,14 +18,64 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? dDayDate;
   String? dDayText;
+  int? dDay;
   bool showCalendar = true;
   bool showDiary = false;
   bool showAlbum = false;
+  String userId = '';
+  String coupleId = '';
 
   @override
   void initState() {
     super.initState();
-    dDayText = "디데이 설정 전"; // 초기 텍스트 설정
+    _loadUserDataAndFetchData();
+  }
+
+  Future<void> _loadUserDataAndFetchData() async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchDDayData();
+    print(dDayText);
+    print(dDay);
+
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  Future<void> fetchDDayData() async{
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/couple/dday/' + coupleId), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      print(decode);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        Map<String, dynamic> json = responseBody['data'];
+
+        setState(() {
+          dDay = json['remainingDay'];
+          dDayText = json['title'];
+        });
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
   }
 
   int calculateDDay(DateTime? dDayDate) {
@@ -60,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dDay = calculateDDay(dDayDate); // 디데이 계산
+    // final dDay = calculateDDay(dDayDate); // 디데이 계산
 
     return Scaffold(
       appBar: AppBar(
@@ -278,7 +332,7 @@ class _CalendarPageState extends State<CalendarPage> {
             onDDaySet: (date, text) {
               Navigator.pop(context);
               setState(() {
-                dDayDate = date;
+                dDay = date;
                 dDayText = text;
               });
             },

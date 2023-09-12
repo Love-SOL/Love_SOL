@@ -16,7 +16,7 @@ public interface ScheduleService {
     ScheduleType getScheduleType(Couple couple , int ScheduleType);
     void updateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request);
     void deleteSchedule(Long scheduleId);
-    CalenderResponseDto getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);
+    List<ScheduleResponseDto> getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);
     List<ScheduleResponseDto> getScheduleByDate(Long scheduleId , LocalDate dateAt);
     List<ScheduleResponseDto> getRecentCoupleSchedule(Long coupleId);
 }
