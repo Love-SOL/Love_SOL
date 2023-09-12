@@ -22,6 +22,5 @@ public class DDayRequestDto {
     @NotBlank
     private String title;
 
-    @NotNull
-    private LocalDate dDay;
+    private String targetDay;
 }
