@@ -48,7 +48,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> fetchDDayData() async{
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/couple/dday/' + coupleId), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/couple/dday/' + coupleId), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
