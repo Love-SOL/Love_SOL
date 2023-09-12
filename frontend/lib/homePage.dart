@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left:16.0),
                         child: Text(
                           '내 계좌',
                           style: TextStyle(
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(right:16.0),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
@@ -219,6 +219,22 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                              },
+                              child: Text('이체'),
+                            ),
+                            SizedBox(width: 16), // Add spacing between buttons
+                            ElevatedButton(
+                              onPressed: () {
+                              },
+                              child: Text('결제'),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -227,7 +243,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
@@ -323,7 +339,7 @@ class _HomePageState extends State<HomePage> {
         height: height,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -350,6 +366,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
             ),
+
           ],
         ),
       ),
@@ -572,7 +589,7 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -669,7 +686,7 @@ class _CouplePageState extends State<CouplePage> {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
