@@ -1,7 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class MyConsumePage extends StatelessWidget {
+class MyConsumePage extends StatefulWidget {
+  final String accountNumber;
+
+  MyConsumePage({required this.accountNumber});
+
+  @override
+  _MyConsumePage createState() => _MyConsumePage();
+}
+
+
+class _MyConsumePage extends State<MyConsumePage> {
+  String coupleId = '';
+  String accountNumber = '';
 
   final Map<String, int> expenditureData = {
     '식비': 150000,
@@ -16,6 +32,58 @@ class MyConsumePage extends StatelessWidget {
     '여가': Icons.beach_access,  // 여가 아이콘
     '생활': Icons.home,         // 생활 아이콘
   };
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserDataAndFetchData(widget.accountNumber);
+  }
+
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  Future<void> _loadUserDataAndFetchData(String accountNumber) async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchTransactionData(accountNumber);
+  }
+
+  Future<void> fetchTransactionData(String accountNumber) async{
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' + accountNumber + '?year=2023&&month=9'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+
+        for(var data in dataList){
+          print(data.category);
+          print(data.amount);
+          print(data.rate);
+        }
+
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -251,6 +319,26 @@ class MyConsumePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class GetTransactionByCategoryResponseDto {
+  final String category;
+  final int amount;
+  final double rate;
+
+  GetTransactionByCategoryResponseDto({
+    required this.category,
+    required this.amount,
+    required this.rate,
+  });
+
+  factory GetTransactionByCategoryResponseDto.fromJson(Map<String, dynamic> json) {
+    return GetTransactionByCategoryResponseDto(
+      category: json['category'],
+      amount: json['amount'],
+      rate: json['rate'].toDouble(),
     );
   }
 }
