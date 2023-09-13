@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.bank.service;
 
 
+import com.ssafy.lovesol.domain.bank.dto.response.GetTransactionResponseDto;
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
@@ -16,6 +17,11 @@ import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +68,13 @@ public class TransactionServiceImpl  implements TransactionService{
             if (branchName.equals("온라인")) category = 10;
         }
         return category;
+    }
+
+    @Override
+    public List<GetTransactionResponseDto> getTransactionList(String accountNumber , int idx) {
+        log.info("계좌의 거래내역 조회 (6건씩)");
+        Pageable pageable = PageRequest.of(idx, 6, Sort.by(Sort.Order.desc("transactionAt")));
+        Page<Transaction> transactions = transactionRepository.findByAccount_AccountNumberOrderByTransactionAtDesc(accountNumber, pageable);
+        return transactions.getContent().stream().map(transaction -> transaction.toGetTransactionResponseDto()).toList();
     }
 }
