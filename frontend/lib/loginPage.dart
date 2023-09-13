@@ -102,7 +102,7 @@ class LoginPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 100,
+            top: 130,
             left: 0,
             right: 0,
             child: Center(
@@ -113,8 +113,7 @@ class LoginPage extends StatelessWidget {
                     'assets/logincenterbox.png',
                     fit: BoxFit.contain,
                   ),
-                  SizedBox(height: 20), // 이미지 박스와 입력 상자 사이의 간격 조절
-                  // 첫 번째 입력 상자 (ID 입력)
+                  SizedBox(height: 40), // 이미지 박스와 입력 상자 사이의 간격 조절
                   Container(
                     child: Stack(
                       alignment: Alignment.centerLeft,
@@ -176,9 +175,9 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-              SizedBox(height:10),
+              SizedBox(height:40),
               Positioned(
-                  bottom: 30, // 버튼의 수직 위치 조절
+                  bottom: 50, // 버튼의 수직 위치 조절
                   left: 0,
                   right: 0,
                   child: Center(
