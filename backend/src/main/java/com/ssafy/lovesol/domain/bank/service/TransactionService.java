@@ -14,4 +14,6 @@ public interface TransactionService {
     List<Transaction>  findTransactionsDetail(LocalDateTime transactionAt, Account account);
 
     List<Transaction> findTransactionsDetailOrderBy(LocalDateTime transactionAt, Account account);
+
+    int findTransactionOne(Long coupleId);
 }
