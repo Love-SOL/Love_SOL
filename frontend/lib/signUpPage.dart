@@ -153,7 +153,7 @@ class SignUpPage extends StatelessWidget {
                       name = value;
                     }),
                     SizedBox(height: 10),
-                    buildInputBox('생년월일', '숫자 6자리 입력', controller: birthdateController, onChanged: (value) {
+                    buildInputBox('생년월일', '숫자 8자리 입력', controller: birthdateController, onChanged: (value) {
                       birthAt = value;
                     }),
                     SizedBox(height: 10),
@@ -166,7 +166,7 @@ class SignUpPage extends StatelessWidget {
                     }),
                     GestureDetector(
                       onTap: () {
-                        onTap1WonTransfer(personalAccount, phoneNumber, context);
+                        onTap1WonTransfer(accountNumberController.text, phoneNumberController.text, context);
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -180,6 +180,21 @@ class SignUpPage extends StatelessWidget {
                       ),
                     ),
                     buildInputBox('인증번호', '숫자 6자리 입력', controller: verificationCodeController, onChanged: (value) {  }),
+                    GestureDetector(
+                      onTap: () {
+                        onTapAuth1WonTransfer(accountNumberController.text, verificationCodeController.text, context);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '인증번호 인증',
+                          style: TextStyle(
+                            color: Color(0xFF777777),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -283,9 +298,10 @@ class SignUpPage extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            onChanged: onChanged,
             inputFormatters: [
               LengthLimitingTextInputFormatter(
-                label == '계좌번호' ? 12 : (label == '휴대폰 번호' ? 11 : 6),
+                label == '계좌번호' ? 12 : (label == '휴대폰 번호' ? 11 : (label == '생년월일' ? 8 : 6)),
               ),
             ],
             keyboardType: keyboardType, // 위에서 설정한 키보드 타입 적용
@@ -303,6 +319,8 @@ class SignUpPage extends StatelessWidget {
 }
 
 class SignUpPage2 extends StatelessWidget {
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   onTapSignUp(String id, String password, String name, String birthAt,String phoneNumber, String persnalAccount, BuildContext context) async {
     try {
@@ -415,11 +433,11 @@ class SignUpPage2 extends StatelessWidget {
               child:
               Column(
                 children: [
-                  buildInputBox('아이디', '아이디를 입력하세요', onChanged: (value) {
+                  buildInputBox('아이디', '아이디를 입력하세요',controller: idController, onChanged: (value) {
                     id = value;
                   }),
                   SizedBox(height: 20),
-                  buildInputBox('비밀번호', '비밀번호를 입력해주세요', onChanged: (value) {
+                  buildInputBox('비밀번호', '비밀번호를 입력해주세요',controller: passwordController, onChanged: (value) {
                     password = value;
                   }),
                   SizedBox(height: 20),
@@ -498,6 +516,7 @@ class SignUpPage2 extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            onChanged: onChanged,
             keyboardType: keyboardType, // keyboardType 설정 추가
             decoration: InputDecoration(
               border: InputBorder.none,
