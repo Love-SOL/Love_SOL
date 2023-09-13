@@ -52,7 +52,7 @@ public class TransactionServiceImpl  implements TransactionService{
         log.info("커플 조회");
         Account account = accountRepository.findByAccountNumber(couple.getCommonAccount()).orElseThrow(NotExistAccountException::new);
         log.info("계좌 조회");
-        Transaction transaction = transactionRepository.findByAccount(account);
+        Transaction transaction = transactionRepository.findFirstByAccount(account);
         int category = 0;
         if (transaction != null) {
             String branchName = transaction.getBranchName();
