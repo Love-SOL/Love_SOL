@@ -29,9 +29,10 @@ public class PetServiceImpl implements PetService{
     }
 
     @Override
-    public void createPet(String petName, Long coupleId) {
+    public ResponsePetDto createPet(String petName, Long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         petRepository.save(Pet.create(petName, couple));
+        return couple.getPet().toResponsePetDto();
     }
 
     @Override
