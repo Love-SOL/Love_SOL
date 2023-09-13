@@ -31,12 +31,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
-  void initState() {
+  void initState(){
     super.initState();
     _loadUserDataAndFetchData();
   }
   String userId = '';
+  Future<void> _sendFcmToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString('fcmToken');
+    final userId = prefs.getInt("userId");
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/user/token'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'userId': userId.toString(),
+          'fcmToken': fcmToken.toString(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // 성공적인 응답 처리
+        print('API 요청 성공');
+        print('응답 데이터: ${response.body}');
+      } else {
+        // 실패한 경우 오류 처리
+        print('API 요청 실패');
+        print('상태 코드: ${response.statusCode}');
+        print('오류 메시지: ${response.body}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('API 요청 중 오류 발생: $e');
+    }
+  }
+
   Future<void> _loadUserDataAndFetchData() async {
+    _sendFcmToken();
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
   }
@@ -734,7 +768,28 @@ class CouplePage extends StatefulWidget {
 
 class _CouplePageState extends State<CouplePage> {
   String petName = '';
+  Map<String, dynamic> petData = {};
 
+  void initState(){
+    super.initState();
+    _loadPetData();
+  }
+  Future<void> _loadPetData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final data = responseData['data'];
+      setState(() {
+        petData = Map<String, dynamic>.from(data);
+      });
+      print(petData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed) {
     return Container(
       width: double.infinity,
@@ -794,6 +849,37 @@ class _CouplePageState extends State<CouplePage> {
   }
 
   void _setPetName(BuildContext context) {
+    Future<void> _registPet() async {
+      final prefs = await SharedPreferences.getInstance();
+      final coupleId = prefs.getInt("coupleId");
+      try {
+        print("펫을 등록합니다.");
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:8080/api/pet/$coupleId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'name': petName,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          // 성공적인 응답 처리
+          print('펫 생성 API 요청 성공');
+          print('응답 데이터: ${response.body}');
+        } else {
+          // 실패한 경우 오류 처리
+          print('펫 생성 API 요청 실패');
+          print('상태 코드: ${response.statusCode}');
+          print('오류 메시지: ${response.body}');
+        }
+      } catch (e) {
+        // 예외 처리
+        print('API 요청 중 오류 발생: $e');
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -816,6 +902,7 @@ class _CouplePageState extends State<CouplePage> {
             ),
             TextButton(
               onPressed: () {
+                _registPet();
                 Navigator.of(context).pop();
               },
               child: Text('확인'),
@@ -860,24 +947,42 @@ class _CouplePageState extends State<CouplePage> {
             ),
           ),
           SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              'Pet',
-              Color(0xFFF7F7F7),
-                  () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PetPage(),
-                  ),
-                );
-              },
-              '펫 이름을 설정해주세요',
-                  () {
-                _setPetName(context);
-              },
+          if (petData.isEmpty)
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                'Pet',
+                Color(0xFFF7F7F7),
+                    () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PetPage(),
+                    ),
+                  );
+                },
+                '펫 이름을 설정해주세요',
+                    () {
+                  _setPetName(context);
+                },
+              ),
             ),
-          ),
+          if(petData.isNotEmpty)
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                petData["name"],
+                Color(0xFFF7F7F7),
+                () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PetPage(),
+                    ),
+                  );
+                },
+                null,
+                null
+              ),
+            ),
         ],
       ),
     );

@@ -21,7 +21,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   Future<bool> sendToBackend(int userId, String pin) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/simple-password/auth'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/user/simple-password/auth'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },

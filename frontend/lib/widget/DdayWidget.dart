@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DDayPage extends StatefulWidget {
-  final Function(DateTime, String?) onDDaySet; // 수정된 부분: String?을 추가
+  final Function(int, String?) onDDaySet; // 수정된 부분: String?을 추가
 
   DDayPage({required this.onDDaySet});
 
@@ -15,6 +19,56 @@ class DDayPage extends StatefulWidget {
 class _DDayPageState extends State<DDayPage> {
   DateTime selectedDate = DateTime.now();
   TextEditingController textController = TextEditingController(); // 텍스트 입력 컨트롤러 추가
+  String userId = '';
+  String coupleId = '';
+
+  void initState() {
+    super.initState();
+    _loadUserDataAndFetchData();
+  }
+
+  Future<void> _loadUserDataAndFetchData() async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  void registCustomDDay(String title) async {
+    print('registCustomDDay');
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/couple/dday'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'coupleId': coupleId,
+          'title': title,
+          'targetDay': "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"
+        }),
+      );
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+      int statusCode = responseBody['statusCode'];
+
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        DDayResponseDto dday = DDayResponseDto.fromJson(responseBody['data']);
+        widget.onDDaySet(dday.remainingDay,dday.title);
+      } else {
+        print(statusCode);
+        // 실패
+
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +116,31 @@ class _DDayPageState extends State<DDayPage> {
             ElevatedButton(
               onPressed: () {
                 final text = textController.text; // 입력한 텍스트 가져오기
-                widget.onDDaySet(selectedDate, text); // 날짜와 텍스트 모두 전달
+                registCustomDDay(text);
+                // widget.onDDaySet(selectedDate, text); // 날짜와 텍스트 모두 전달
               },
               child: Text("설정"),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class DDayResponseDto {
+  final int coupleId;
+  final String title;
+  final int remainingDay;
+
+  DDayResponseDto({required this.coupleId, required this.title, required this.remainingDay});
+
+  // JSON -> DDayResponseDto
+  factory DDayResponseDto.fromJson(Map<String, dynamic> json) {
+    return DDayResponseDto(
+      coupleId: json['coupleId'],
+      title: json['title'],
+      remainingDay: json['remainingDay'],
     );
   }
 }

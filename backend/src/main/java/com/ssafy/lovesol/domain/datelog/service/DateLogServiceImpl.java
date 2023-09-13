@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
@@ -24,9 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,5 +106,13 @@ public class DateLogServiceImpl implements DateLogService{
     @Override
     public DateLog getDateLogForupdate(Long dateLogId) {
         return dateLogRepository.findById(dateLogId).get();
+    }
+
+    @Override
+    public List<DateLogForCalenderResponseDto> getDateLogList(Long coupleId, int year, int month) {
+        log.info("DateLogServiceImpl_getDateLogList || 데이트 일기 조회");
+        return dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
+            .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
+            .collect(Collectors.toList());
     }
 }

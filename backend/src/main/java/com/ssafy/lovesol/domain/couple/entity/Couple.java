@@ -51,12 +51,12 @@ public class Couple {
 
     public void updateDDay(String dDayTitle , LocalDate dDay){
         this.dDayTitle = dDayTitle;
-        this. dDay = dDay;
+        this.dDay = dDay;
     }
 
     public DDayResponseDto toDDayResponseDto(int dDay){
         return DDayResponseDto.builder()
-                .title(dDayTitle)
+                .title(dDayTitle == null ? "일정없음" : dDayTitle)
                 .coupleId(coupleId)
                 .remainingDay(dDay)
                 .build();

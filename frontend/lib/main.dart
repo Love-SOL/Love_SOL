@@ -39,7 +39,6 @@ Future<void> initializeFirebase() async {
 
   // 앱이 실행 중일 때 FCM 메시지 처리 핸들러 등록
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print(message.notification?.body);
     // FCM 메시지를 푸시 알림으로 표시
     FlutterLocalNotification.showNotification(
         message.notification?.title ?? 'Notification Title',
@@ -60,7 +59,7 @@ void main() async {
   try{
     WidgetsFlutterBinding.ensureInitialized();
     await initializeFirebase();
-    await FlutterLocalNotification.init();
+    FlutterLocalNotification.init();
     runApp(MyApp());
   }catch(e){
     print(e);
