@@ -55,8 +55,9 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   void onKeyboardTap(String value) {
     setState(() async {
       if (pin.length < maxPinLength) {
+        setState((){
         pin += value;
-        circleColors[pin.length - 1] = Colors.grey;
+        circleColors[pin.length - 1] = Colors.grey;});
 
         if (pin.length == maxPinLength) {
           //여기서 API쏴서
@@ -108,7 +109,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
       body: Stack(
         children: [
           Image.asset(
-            'spbackground.png',
+            'assets/spbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -210,8 +211,8 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
 
   Widget buildCircle(Color color) {
     return Container(
-      width: 16,
-      height: 16,
+      width: 32,
+      height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
