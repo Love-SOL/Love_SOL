@@ -19,7 +19,7 @@ public interface AccountService {
     boolean transferOneWonAuth(TransferAuthRequestDto transferAuthRequestDto);
 
 
-    List<GetUserAccountsResponseDto> getMyAccounts(Long userId) throws NoSuchAlgorithmException;
+    List<GetUserAccountsResponseDto> getMyAccounts(Long userId,int type) throws NoSuchAlgorithmException;
 
     List<Transaction> findTransactionByAccount(String accountNumber);
 
