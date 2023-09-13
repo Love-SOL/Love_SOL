@@ -19,6 +19,8 @@ public class CreatePetRequestDto {
     @Schema(description = "펫 이름", example = "쏠이")
     private String name;
 
+    @Schema(description = "펫의 종류", example = "1")
+    private int kind;
     public Pet toEntity(String name){
         return Pet.builder()
                 .name(name)

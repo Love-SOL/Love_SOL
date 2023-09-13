@@ -67,7 +67,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/simplepasswordbackground.png
+
     - assets/loginbackground.png
     - assets/loginclick.png
     - assets/loginidinput.png
@@ -81,7 +81,8 @@ flutter:
     - assets/bear3.png
     - assets/bellicon.png
     - assets/personicon.png
-    -
+    - assets/spbackground.png
+    - assets/shinhanlogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

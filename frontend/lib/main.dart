@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'loginPage.dart'; // 로그인 페이지 임포트
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,6 +18,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('FCM 메시지 (백그라운드) 받음: ${message.notification?.title}');
   print('FCM 메시지 (백그라운드) 내용: ${message.notification?.body}');
 }
+
 
 // Firebase 및 FCM 초기화 함수
 Future<void> initializeFirebase() async {

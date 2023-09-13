@@ -55,8 +55,9 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   void onKeyboardTap(String value) {
     setState(() async {
       if (pin.length < maxPinLength) {
+        setState((){
         pin += value;
-        circleColors[pin.length - 1] = Colors.grey;
+        circleColors[pin.length - 1] = Colors.grey;});
 
         if (pin.length == maxPinLength) {
           //여기서 API쏴서
@@ -108,99 +109,103 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
       body: Stack(
         children: [
           Image.asset(
-            'simplepasswordbackground.png',
+            'assets/spbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '간편비밀번호',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '비밀번호를 입력해주세요',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildCircle(circleColors[0]),
-                    buildCircle(circleColors[1]),
-                    buildCircle(circleColors[2]),
-                    buildCircle(circleColors[3]),
-                    buildCircle(circleColors[4]),
-                    buildCircle(circleColors[5]),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  '간편비밀번호 입력',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("1"),
-                    buildKeyboardButton("2"),
-                    buildKeyboardButton("3"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("4"),
-                    buildKeyboardButton("5"),
-                    buildKeyboardButton("6"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("7"),
-                    buildKeyboardButton("8"),
-                    buildKeyboardButton("9"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton(""),
-                    buildKeyboardButton("0"),
-                    buildBackspaceButton(),
-                  ],
-                ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ));
-                  },
-                  child: Text(
-                    '다른 방법으로 로그인 >',
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.1, // 위아래 여백을 화면 높이의 10%로 설정// 좌우 여백을 화면 너비의 15%로 설정
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    '간편비밀번호',
                     style: TextStyle(
-                      color: Color(0xFF777777),
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01), // 이 부분은 이전 답변에서 제거하세요.
+                  Text(
+                    '비밀번호를 입력해주세요',
+                    style: TextStyle(
+                      color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildCircle(circleColors[0]),
+                      buildCircle(circleColors[1]),
+                      buildCircle(circleColors[2]),
+                      buildCircle(circleColors[3]),
+                      buildCircle(circleColors[4]),
+                      buildCircle(circleColors[5]),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    '간편비밀번호 입력',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildKeyboardButton("1"),
+                      buildKeyboardButton("2"),
+                      buildKeyboardButton("3"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildKeyboardButton("4"),
+                      buildKeyboardButton("5"),
+                      buildKeyboardButton("6"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildKeyboardButton("7"),
+                      buildKeyboardButton("8"),
+                      buildKeyboardButton("9"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildKeyboardButton(""),
+                      buildKeyboardButton("0"),
+                      buildBackspaceButton(),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ));
+                    },
+                    child: Text(
+                      '다른 방법으로 로그인 >',
+                      style: TextStyle(
+                        color: Color(0xFF777777),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -210,8 +215,8 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
 
   Widget buildCircle(Color color) {
     return Container(
-      width: 16,
-      height: 16,
+      width: 32,
+      height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
