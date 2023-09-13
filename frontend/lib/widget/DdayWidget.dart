@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DDayPage extends StatefulWidget {
-  final Function(int, String?) onDDaySet; // 수정된 부분: String?을 추가
+  final Function(int, String? , DateTime?) onDDaySet; // 수정된 부분: String?을 추가
 
   DDayPage({required this.onDDaySet});
 
@@ -59,7 +59,7 @@ class _DDayPageState extends State<DDayPage> {
       if (statusCode == 200) {
         // 성공
         DDayResponseDto dday = DDayResponseDto.fromJson(responseBody['data']);
-        widget.onDDaySet(dday.remainingDay,dday.title);
+        widget.onDDaySet(dday.remainingDay,dday.title,dday.date);
       } else {
         print(statusCode);
         // 실패
@@ -117,7 +117,6 @@ class _DDayPageState extends State<DDayPage> {
               onPressed: () {
                 final text = textController.text; // 입력한 텍스트 가져오기
                 registCustomDDay(text);
-                // widget.onDDaySet(selectedDate, text); // 날짜와 텍스트 모두 전달
               },
               child: Text("설정"),
             ),
@@ -132,8 +131,9 @@ class DDayResponseDto {
   final int coupleId;
   final String title;
   final int remainingDay;
+  final DateTime date;
 
-  DDayResponseDto({required this.coupleId, required this.title, required this.remainingDay});
+  DDayResponseDto({required this.coupleId, required this.title, required this.remainingDay , required this.date});
 
   // JSON -> DDayResponseDto
   factory DDayResponseDto.fromJson(Map<String, dynamic> json) {
@@ -141,6 +141,7 @@ class DDayResponseDto {
       coupleId: json['coupleId'],
       title: json['title'],
       remainingDay: json['remainingDay'],
+      date : DateTime.parse(json['date'])
     );
   }
 }

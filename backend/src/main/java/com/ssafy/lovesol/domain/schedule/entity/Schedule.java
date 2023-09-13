@@ -2,6 +2,7 @@ package com.ssafy.lovesol.domain.schedule.entity;
 
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
+import com.ssafy.lovesol.domain.schedule.dto.response.RecentCoupleScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.dto.response.ScheduleResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Builder
 @Getter
@@ -59,5 +61,12 @@ public class Schedule {
                 .endAt(endAt)
                 .scheduleType(scheduleType)
                 .build();
+    }
+
+    public RecentCoupleScheduleResponseDto toRecentCoupleScheduleResponseDto(){
+        return RecentCoupleScheduleResponseDto.builder()
+            .content(content)
+            .remainingDay((int)ChronoUnit.DAYS.between(LocalDate.now(),endAt))
+            .build();
     }
 }

@@ -54,10 +54,11 @@ public class Couple {
         this.dDay = dDay;
     }
 
-    public DDayResponseDto toDDayResponseDto(int dDay){
+    public DDayResponseDto toDDayResponseDto(int dDay , LocalDate date){
         return DDayResponseDto.builder()
                 .title(dDayTitle == null ? "일정없음" : dDayTitle)
                 .coupleId(coupleId)
+                .date(date)
                 .remainingDay(dDay)
                 .build();
     }

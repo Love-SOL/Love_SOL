@@ -1067,75 +1067,71 @@ class _CouplePageState extends State<CouplePage> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '커플통장',
-              Color(0xFFF7F7F7),
-              null,
-              '가운데에 표시할 텍스트',
-              null,
-              false,
-              false
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                  '커플통장',
+                  Color(0xFFF7F7F7),
+                  null,
+                  '가운데에 표시할 텍스트',
+                  null,
+                  false,
+                  false
+              ),
             ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              'Calendar',
-              Color(0xFFF7F7F7),
-                  () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CalendarPage(),
-                  ),
-                );
-              },
-              null,
-              null,
-              true,
-              false,
+            SizedBox(height: 3),
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                'Calendar',
+                Color(0xFFF7F7F7),
+                    () {
+                  _navigateToCalendarPage();
+                },
+                null,
+                null,
+                true,
+                false,
+              ),
             ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: Column(
-              children: [
-                petData.isEmpty
-                  ? (isPaid
+            SizedBox(height: 3),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  petData.isEmpty
+                      ? (isPaid
                       ? buildContainer(
-                    'Pet',
-                    Color(0xFFF7F7F7),
-                        () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PetPage(),
-                        ),
-                      );
-                    },
-                    '펫 이름을 설정해주세요',
-                        () {
-                      _setPetName(context);
-                    },
-                    false,
-                    false// true로 변경
+                      'Pet',
+                      Color(0xFFF7F7F7),
+                          () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PetPage(),
+                          ),
+                        );
+                      },
+                      '펫 이름을 설정해주세요',
+                          () {
+                        _setPetName(context);
+                      },
+                      false,
+                      false// true로 변경
                   )
                       : buildContainer(
-                    'Pet',
-                    Color(0xFFF7F7F7),
-                    null,
-                    '무엇이 태어날까요?',
-                    null,
-                    false,
-                    false
+                      'Pet',
+                      Color(0xFFF7F7F7),
+                      null,
+                      '무엇이 태어날까요?',
+                      null,
+                      false,
+                      false
                   )
-                )
-                :
+                  )
+                      :
                   buildContainer(
                     "Pet",
                     Color(0xFFF7F7F7),
@@ -1151,11 +1147,11 @@ class _CouplePageState extends State<CouplePage> {
                     false,
                     true,
                   ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
     );
   }
 }

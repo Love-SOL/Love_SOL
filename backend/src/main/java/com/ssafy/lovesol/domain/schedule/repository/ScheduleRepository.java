@@ -24,4 +24,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     @Query("SELECT s FROM Schedule s WHERE s.startAt = :closestDate AND s.couple.coupleId = :coupleId")
     List<Schedule> findAllSchedulesOnClosestDate(@Param("closestDate") LocalDate closestDate, @Param("coupleId") Long coupleId);
+
 }
