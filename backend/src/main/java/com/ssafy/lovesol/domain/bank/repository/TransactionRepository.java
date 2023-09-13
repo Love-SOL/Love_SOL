@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,9 +23,18 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     List<Transaction> findByTransactionAtList(LocalDateTime transactionAt,String account);
     Optional<Transaction> findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(Account account,int depositAmount);
 
+
     List<Transaction> findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(LocalDateTime transactionAt,Account account);
     Page<Transaction> findByAccount_AccountNumberOrderByTransactionAtDesc(String accountNumber, Pageable pageable);
     Transaction findFirstByAccount(Account account);
+
+    @Query("SELECT t " +
+        "FROM Transaction t " +
+        "WHERE t.account.accountNumber = :accountNumber " +
+        "AND t.transactionType = 0" +
+        "AND YEAR(t.transactionAt) = :year " +
+        "AND MONTH(t.transactionAt) = :month")
+    List<Transaction> findByAccountNumberAndYearAndMonth(@Param(value = "accountNumber") String accountNumber,@Param(value = "year") int year,@Param(value = "month") int month);
 }
 
 
