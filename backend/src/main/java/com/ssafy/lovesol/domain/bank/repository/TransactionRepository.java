@@ -23,8 +23,8 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     Optional<Transaction> findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(Account account,int depositAmount);
 
     List<Transaction> findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(LocalDateTime transactionAt,Account account);
-    Transaction findByAccount(Account account);
     Page<Transaction> findByAccount_AccountNumberOrderByTransactionAtDesc(String accountNumber, Pageable pageable);
+    Transaction findFirstByAccount(Account account);
 }
 
 

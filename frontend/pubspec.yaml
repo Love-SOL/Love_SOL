@@ -83,6 +83,18 @@ flutter:
     - assets/personicon.png
     - assets/spbackground.png
     - assets/shinhanlogo.png
+    - assets/pet1.gif
+    - assets/pet2.gif
+    - assets/pet3.gif
+    - assets/pet4.gif
+    - assets/pet5.gif
+    - assets/pet6.gif
+    - assets/pet7.gif
+    - assets/pet8.gif
+    - assets/pet9.gif
+    - assets/pet10.gif
+    - assets/pet11.gif
+    - assets/pet12.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

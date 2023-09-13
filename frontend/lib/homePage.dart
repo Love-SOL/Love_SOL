@@ -957,7 +957,7 @@ class _CouplePageState extends State<CouplePage> {
                   Row(
                     children: [
                       Image.asset(
-                        "assets/bear1.gif",
+                        "assets/pet${petData["kind"]}.gif",
                         width: 80, // 이미지 너비 설정
                         height: 80, // 이미지 높이 설정
                       ),
