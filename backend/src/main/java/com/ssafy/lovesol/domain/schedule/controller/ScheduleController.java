@@ -105,7 +105,7 @@ public class ScheduleController {
     public ResponseResult getRecentCoupleSchedule(
             @PathVariable(value = "coupleId") Long coupleId) {
         log.info("UserController_getRecentCoupleSchedule");
-        return new ListResponseResult<>(scheduleService.getRecentCoupleSchedule(coupleId));
+        return new SingleResponseResult<>(scheduleService.getRecentCoupleSchedule(coupleId));
     }
 
 
