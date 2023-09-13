@@ -40,7 +40,7 @@ public class PetController {
     public ResponseResult createPet(@PathVariable String coupleId, @Valid @RequestBody CreatePetRequestDto pet) throws Exception {
         log.info(coupleId + "의 펫을 생성합니다.");
         // pet 객체에 펫 이름과 커플 객체 넣어서 생성
-        ResponsePetDto responsePetDto = petService.createPet(pet.getName(), Long.parseLong(coupleId));
+        ResponsePetDto responsePetDto = petService.createPet(pet.getName(), pet.getKind(), Long.parseLong(coupleId));
         return new SingleResponseResult<ResponsePetDto>(responsePetDto);
     }
 

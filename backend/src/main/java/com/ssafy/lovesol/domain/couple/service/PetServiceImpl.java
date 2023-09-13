@@ -25,14 +25,16 @@ public class PetServiceImpl implements PetService{
         log.info("PetServiceImpl_getPet | 커플 펫 조회");
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         Pet pet = couple.getPet();
+        System.out.println(pet);
         return pet.toResponsePetDto();
     }
 
     @Override
-    public ResponsePetDto createPet(String petName, Long coupleId) {
+    public ResponsePetDto createPet(String petName, int kind, Long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
-        petRepository.save(Pet.create(petName, couple));
-        return couple.getPet().toResponsePetDto();
+        Pet pet = Pet.create(petName, kind, couple);
+        petRepository.save(pet);
+        return pet.toResponsePetDto();
     }
 
     @Override
