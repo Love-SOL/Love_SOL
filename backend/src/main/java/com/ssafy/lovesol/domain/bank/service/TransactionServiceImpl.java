@@ -22,7 +22,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +52,7 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public List<Transaction> findTransactionsDetailOrderBy(LocalDateTime transactionAt, Account account) {
-        return transactionRepository.findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(transactionAt,account);
+        return transactionRepository.findByAccountAndTransactionAtAfterAndWithdrawalAmountGreaterThan(account, transactionAt);
     }
 
     @Override
