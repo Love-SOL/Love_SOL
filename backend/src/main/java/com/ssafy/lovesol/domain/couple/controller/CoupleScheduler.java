@@ -39,7 +39,7 @@ public class CoupleScheduler {
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CommonHttpSend commonHttpSend;
-    @Scheduled(cron = "50 * * * * *")
+    @Scheduled(cron = "50 */10 * * * *")
     public void searchTransaction(){
         List<Couple> coupleList = coupleService.getAllCouple();
         for(int i = 0 ; i < coupleList.size(); i++){
