@@ -18,6 +18,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('FCM 메시지 (백그라운드) 내용: ${message.notification?.body}');
 }
 
+
 // Firebase 및 FCM 초기화 함수
 Future<void> initializeFirebase() async {
   final FirebaseOptions firebaseOptions = DefaultFirebaseOptions.currentPlatform;

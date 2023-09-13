@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(15),
         child: Column(
           children: [
             Expanded(
@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0046FF),
+                    color: Color(0xFFE4ECFF),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.only(top: 24, bottom: 24, left: 10, right: 10),
                     child:
                     Expanded(
                       flex: 1,
@@ -251,11 +251,11 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(0),
                                 child: Image.asset(
-                                  'assets/purple2.png',
-                                  width: 30,
-                                  height: 30,
+                                  'assets/shinhanlogo.png',
+                                  width: 50,
+                                  height: 50,
                                 ),
                               ),
                               Column(
@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                   ),
                                   Opacity(
@@ -274,8 +274,8 @@ class _HomePageState extends State<HomePage> {
                                     child: Text(
                                       '${accountData["personalAccount"]}', // Your smaller text here
                                       style: TextStyle(
-                                        fontSize: 12, // Adjust the font size as needed
-                                        color: Colors.white,
+                                        fontSize: 16, // Adjust the font size as needed
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -289,8 +289,9 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   '잔액: ${accountData["amount"]} 원',
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ]
@@ -302,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('이체'),
                               ),
@@ -311,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('결제'),
                               ),
@@ -603,7 +604,7 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
-  List<Map<String, dynamic>> accountData = []; // 서버에서 받아온 계좌 정보를 저장할 리스트
+  List<Map<String, dynamic>> accountData = [];
 
   @override
   void initState() {
@@ -629,9 +630,6 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('개인통장 정보'),
-      ),
       body: ListView.builder(
         itemCount: accountData.length,
         itemBuilder: (BuildContext context, int index) {
@@ -641,7 +639,7 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 }
-Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
+Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
   void _showConfirmationDialog(accountInfo) {
     showDialog(
       context: context,
@@ -672,92 +670,94 @@ Widget? buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context)
     );
   }
 
-  Widget buildContainer(String title, Color color, Function()? onPressed) {
-    return Container(
-      width: double.infinity,
-      height: 150,
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+  return Container(
+    width: double.infinity,
+    // height: 150.0,
+    margin: EdgeInsets.all(10),
+    padding: EdgeInsets.all(16.0),
+    decoration: BoxDecoration(
+      color: Color(0xFFF7F7F7),
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/shinhanlogo.png', // 이미지 파일 경로
+                  width: 30.0, // 이미지의 너비
+                  height: 30.0, // 이미지의 높이
+                ),
+                SizedBox(width: 8.0), // 이미지와 텍스트 사이의 간격 조절
+                Text(
+                  accountInfo['accountNumber'], // accountNumber를 표시
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            IconButton(
+              onPressed: () {
+                _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
+              },
+              icon: Icon(
+                Icons.list,
+                color: Colors.black,
               ),
             ),
+          ],
+        ),
+        Center(
+          child: Text(
+            '${accountInfo["balance"]}원', // balance를 표시
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          SizedBox(height: 5),
-          if (onPressed != null)
-            Align(
-              alignment: Alignment.topRight,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                child: Text('버튼'),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
               ),
+              child: Text('이체'),
             ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
+            SizedBox(width: 16), // Add spacing between buttons
+            ElevatedButton(
+              onPressed: () {
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
+              child: Text('결제'),
             ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
-              },
-            ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '개인통장',
-              Color(0xFFF7F7F7),
-                  () {
-                _showConfirmationDialog(context);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      ],
+    ),
+  );
 }
 
 
