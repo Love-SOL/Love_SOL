@@ -6,6 +6,7 @@ import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.couple.entity.Pet;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.domain.couple.service.PetService;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
@@ -38,7 +39,7 @@ public class CoupleScheduler {
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CommonHttpSend commonHttpSend;
-    @Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "50 */10 * * * *")
     public void searchTransaction(){
         List<Couple> coupleList = coupleService.getAllCouple();
         for(int i = 0 ; i < coupleList.size(); i++){
@@ -62,17 +63,20 @@ public class CoupleScheduler {
             //계좌 내역을 가져올때 출금만 가져와야하는데 여깃 출입금 둘다 가져왔음
             //1. query를 수정한다
             //2. 스켘줄러에서 처리해준다.
-            if(transactionList == null || transactionList.isEmpty()){continue;}
+            if(transactionList == null || transactionList.isEmpty()){
+                log.info("데이트 일정이 없음!");
+                continue;}
             Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
             DateLog dateLog;
+            log.info("여기까지 오긴 오냐?");
             //여기선 데이트로그를 만들어 줘야한다.
             dateLog = dateLogFind.orElseGet(() -> dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(), curDay)));
+//            if(dateLog.)
             for(int j = 0 ; j < transactionList.size();j++) {
                 int expAndMileage = (int) (transactionList.get(i).getWithdrawalAmount() * 0.01);
                 dateLog.setMileage(dateLog.getMileage() + expAndMileage);
                 dateLogService.updateDateLog(dateLog);
-                couple.getPet().setExp(couple.getPet().getExp() + expAndMileage);
-                petService.updatePet(couple.getPet());
+                petService.gainExp(couple.getCoupleId(), expAndMileage);
             }
 
 
