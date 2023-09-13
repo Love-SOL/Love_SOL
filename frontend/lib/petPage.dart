@@ -67,7 +67,7 @@ class PetPage extends StatelessWidget {
                           ],
                         ),
                         Image.asset(
-                          'bear1.gif',
+                          'assets/bear1.gif',
                           width : 100,
                           height : 100,
                         ),

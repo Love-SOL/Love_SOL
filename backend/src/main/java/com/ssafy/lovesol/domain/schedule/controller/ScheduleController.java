@@ -1,8 +1,15 @@
 package com.ssafy.lovesol.domain.schedule.controller;
 
+import com.ssafy.lovesol.domain.couple.entity.Couple;
+import com.ssafy.lovesol.domain.couple.service.CoupleService;
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.service.ScheduleService;
+import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.domain.user.service.NoticeService;
+import com.ssafy.lovesol.domain.user.service.UserService;
+import com.ssafy.lovesol.global.fcm.Service.FCMNotificationService;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
 import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
@@ -30,7 +37,10 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/schedule")
 public class ScheduleController {
-
+    private final CoupleService coupleService;
+    private final UserService userService;
+    private final FCMNotificationService fcmNotificationService;
+    private final NoticeService noticeService;
     private final ScheduleService scheduleService;
 
     @Operation(summary = "Create Schedule", description = "일정등록 하기")
@@ -42,8 +52,20 @@ public class ScheduleController {
     public ResponseResult CreateSchedule(@PathVariable(value = "coupleId") Long coupleId,
                                          @Valid @RequestBody CreateScheduleRequestDto createScheduleRequestDto , HttpServletRequest request) {
         log.info("UserController_CreateSchedule | 일정 등록");
-        if(scheduleService.createSchedule(coupleId , createScheduleRequestDto , request) >= 0)
+        if(scheduleService.createSchedule(coupleId , createScheduleRequestDto , request) >= 0) {
+            String title = "일정 등록";
+            String body = "상대방이 일정을 추가하였어요";
+            Couple couple = coupleService.getCoupleInfoByCouplId(coupleId);
+            int kind = 2;
+
+            User sender = couple.getOwner();
+            User receiver = couple.getSubOwner();
+            noticeService.registNotice(sender,receiver,title,body,kind);
+            noticeService.registNotice(receiver,sender,title,body,kind);
+            if(!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(sender.getUserId()).title(title).body(body).build())||!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(receiver.getUserId()).title(title).body(body).build()))
+            { return ResponseResult.failResponse;}
             return ResponseResult.successResponse;
+        }
         return ResponseResult.failResponse;
     }
 
@@ -105,7 +127,7 @@ public class ScheduleController {
     public ResponseResult getRecentCoupleSchedule(
             @PathVariable(value = "coupleId") Long coupleId) {
         log.info("UserController_getRecentCoupleSchedule");
-        return new ListResponseResult<>(scheduleService.getRecentCoupleSchedule(coupleId));
+        return new SingleResponseResult<>(scheduleService.getRecentCoupleSchedule(coupleId));
     }
 
 

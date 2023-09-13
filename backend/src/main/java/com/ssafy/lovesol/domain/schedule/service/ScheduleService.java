@@ -4,6 +4,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.response.CalenderResponseDto;
+import com.ssafy.lovesol.domain.schedule.dto.response.RecentCoupleScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.dto.response.ScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.entity.ScheduleType;
 import com.ssafy.lovesol.domain.user.entity.User;
@@ -16,7 +17,7 @@ public interface ScheduleService {
     ScheduleType getScheduleType(Couple couple , int ScheduleType);
     void updateSchedule(Long coupleId, UpdateScheduleRequestDto updateScheduleRequestDto , HttpServletRequest request);
     void deleteSchedule(Long scheduleId);
-    CalenderResponseDto getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);
+    List<ScheduleResponseDto> getAllScheduleByYearAndMonth(Long scheduleId , int year , int month);
     List<ScheduleResponseDto> getScheduleByDate(Long scheduleId , LocalDate dateAt);
-    List<ScheduleResponseDto> getRecentCoupleSchedule(Long coupleId);
+    RecentCoupleScheduleResponseDto getRecentCoupleSchedule(Long coupleId);
 }

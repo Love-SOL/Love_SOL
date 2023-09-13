@@ -27,22 +27,18 @@ public class CreateScheduleRequestDto {
     private int scheduleType;
 
     @Schema(description = "일정 시작 날짜", example = "20230903")
-    private String startAt;
+    private LocalDate startAt;
 
     @Schema(description = "일정 종료 날짜", example = "20230904")
-    private String endAt;
+    private LocalDate endAt;
 
     public Schedule toScheduleEntity(Couple couple , ScheduleType scheduleType){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate updatedStartAt = LocalDate.parse(startAt, formatter);
-        LocalDate updatedEndAt = LocalDate.parse(endAt, formatter);
-
         return Schedule.builder()
                 .couple(couple)
                 .scheduleType(scheduleType)
                 .content(content)
-                .startAt(updatedStartAt)
-                .endAt(updatedEndAt)
+                .startAt(startAt)
+                .endAt(endAt)
                 .build();
     }
 

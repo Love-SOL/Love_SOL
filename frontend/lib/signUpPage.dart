@@ -64,7 +64,7 @@ class SignUpPage extends StatelessWidget {
   onTapAuth1WonTransfer(String accountNumber, String authNumber, BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/account/auth'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -133,7 +133,8 @@ class SignUpPage extends StatelessWidget {
     String authNumber = '';
 
       return Scaffold(
-      appBar: AppBar(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
         backgroundColor: Color(0XFF0046FF),
         elevation: 0,
       ),
@@ -148,7 +149,7 @@ class SignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    buildInputBox('이름', '이름을 입력하세요', onChanged: (value) {
+                    buildInputBox('이름', '이름을 입력하세요', controller: nameController, onChanged: (value) {
                       name = value;
                     }),
                     SizedBox(height: 10),
@@ -251,6 +252,12 @@ class SignUpPage extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText, {TextEditingController? controller, required Null Function(dynamic value) onChanged}) {
+    TextInputType keyboardType = TextInputType.number; // 기본적으로 숫자 키보드 설정
+
+    if (label == '이름') {
+      keyboardType = TextInputType.text;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,10 +284,11 @@ class SignUpPage extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             inputFormatters: [
-              LengthLimitingTextInputFormatter(label == '계좌번호' ? 12 : 6),
-              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(
+                label == '계좌번호' ? 12 : (label == '휴대폰 번호' ? 11 : 6),
+              ),
             ],
-            keyboardType: TextInputType.number,
+            keyboardType: keyboardType, // 위에서 설정한 키보드 타입 적용
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(16.0),
@@ -299,7 +307,7 @@ class SignUpPage2 extends StatelessWidget {
   onTapSignUp(String id, String password, String name, String birthAt,String phoneNumber, String persnalAccount, BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/user/signup'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -464,7 +472,7 @@ class SignUpPage2 extends StatelessWidget {
   }
 
   Widget buildInputBox(String label, String hintText,
-      {TextEditingController? controller, required Null Function(dynamic value) onChanged}) {
+      {TextEditingController? controller, TextInputType? keyboardType, required Null Function(dynamic value) onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -490,6 +498,7 @@ class SignUpPage2 extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            keyboardType: keyboardType, // keyboardType 설정 추가
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(16.0),

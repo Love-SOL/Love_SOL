@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DiaryWidget extends StatefulWidget {
   @override
@@ -10,9 +13,68 @@ class DiaryWidget extends StatefulWidget {
 }
 
 class _DiaryWidgetState extends State<DiaryWidget> {
+  String userId = '';
+  String coupleId = '';
   DateTime selectedDate = DateTime.now();
   Map<DateTime, List<DiaryEvent>> events = {};
-  String selectedCategory = '주 관리자'; // 기본 카테고리를 '주 관리자'로 설정
+  String selectedCategory = 'MAIN_OWNER_SCHEDULE'; // 기본 카테고리를 'MAIN_OWNER_SCHEDULE'로 설정
+  Set<DateLogForCalendarResponseDto> dateLogSet = {};
+
+  void initState() {
+    super.initState();
+    _loadUserDataAndFetchData();
+  }
+
+  Future<void> _loadUserDataAndFetchData() async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchScheduleData(DateTime.now().year.toString(), DateTime.now().month.toString());
+  }
+
+  Future<void> fetchScheduleData(String year , String month) async{
+
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/date-log/calendar/' + coupleId + '?year=' + year + '&&month=' + month), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        List<DateLogForCalendarResponseDto> dateLogList =  data.map((data) => DateLogForCalendarResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+
+        for (var dateLog in dateLogList) {
+          print(dateLog.dateAt);  // 예: 일정 날짜만 출력
+          setState(() {
+            dateLogSet.add(dateLog);
+          });
+        }
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  bool isClickable() {
+    return true;
+  }
 
   @override
   @override
@@ -45,6 +107,8 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                   selectedDate.month - 1,
                   selectedDate.day,
                 );
+                dateLogSet = {};
+                fetchScheduleData(selectedDate.year.toString() , selectedDate.month.toString());
               });
             },
           ),
@@ -61,6 +125,8 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                   selectedDate.month + 1,
                   selectedDate.day,
                 );
+                dateLogSet = {};
+                fetchScheduleData(selectedDate.year.toString() , selectedDate.month.toString());
               });
             },
           ),
@@ -119,9 +185,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
           return Container();
         } else {
           final day = index - (weekDayOfFirstDay - 1) + 1;
-          final isToday = now.year == selectedDate.year &&
-              now.month == selectedDate.month &&
-              now.day == day;
 
           final eventDate = DateTime(
             selectedDate.year,
@@ -129,18 +192,22 @@ class _DiaryWidgetState extends State<DiaryWidget> {
             day,
           );
 
-          // 해당 날짜의 이벤트 리스트를 가져옴
-          final eventsForDate = events[eventDate];
+          // 이벤트 데이트가 datelog에 포함되면
+          bool isDate = dateLogSet.any((dto) =>
+          dto.dateAt.year == eventDate.year &&
+              dto.dateAt.month == eventDate.month &&
+              dto.dateAt.day == eventDate.day
+          );
 
           return GestureDetector(
-            onTap: () {
-              _showEventsForDiary(eventDate);
-            },
+            onTap: isDate ? () {
+              print("Container clicked!");
+            } : null, // isClickable이 false일 경우 onTap을 null로 설정하여 클릭 이벤트를 비활성화합니다.
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isToday ? Colors.red : Colors.transparent,
+                color: isDate ? Colors.blue : Colors.transparent,
               ),
               child: Column(
                 children: [
@@ -149,20 +216,9 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isToday ? Colors.white : Color(0xFF69695D),
+                      color: Color(0xFF69695D),
                     ),
                   ),
-                  if (eventsForDate != null) // 해당 날짜에 이벤트가 있는 경우
-                    ...eventsForDate.map((event) {
-                      return Container(
-                        width: 10, // 이벤트 표시를 위한 작은 원
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: event.color, // 이벤트의 색상 적용
-                        ),
-                      );
-                    }),
                 ],
               ),
             ),
@@ -286,6 +342,29 @@ class _DiaryWidgetState extends State<DiaryWidget> {
   }
 }
 
+class DateLogForCalendarResponseDto {
+  final int dateLogId;
+  final DateTime dateAt;
+
+  DateLogForCalendarResponseDto({required this.dateLogId, required this.dateAt});
+
+  factory DateLogForCalendarResponseDto.fromJson(Map<String, dynamic> json) {
+    return DateLogForCalendarResponseDto(
+      dateLogId: json['dateLogId'],
+      dateAt: DateTime.parse(json['dateAt']),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is DateLogForCalendarResponseDto &&
+        other.dateLogId == dateLogId;
+  }
+
+  @override
+  int get hashCode => dateLogId.hashCode;
+}
 
 class DiaryEvent {
   final String title;

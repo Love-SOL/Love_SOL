@@ -22,7 +22,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
   Future<bool> sendToBackend(int userId, String pin) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/user/simple-password'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/user/simple-password'), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -56,8 +56,9 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
   void onKeyboardTap(String value) {
     setState(() async {
       if (pin.length < maxPinLength) {
-        pin += value;
-        circleColors[pin.length - 1] = Colors.grey;
+        setState((){
+          pin += value;
+          circleColors[pin.length - 1] = Colors.grey;});
 
         if (pin.length == maxPinLength) {
           //여기서 API쏴서
@@ -115,79 +116,82 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
             height: double.infinity,
             fit: BoxFit.cover,
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '간편비밀번호',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
+      Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.1, // 위아래 여백을 화면 높이의 10%로 설정// 좌우 여백을 화면 너비의 15%로 설정
+        ),
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                '간편비밀번호',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
                 ),
-                SizedBox(height: 5),
-                Text(
-                  '비밀번호를 입력해주세요',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01), // 이 부분은 이전 답변에서 제거하세요.
+              Text(
+                '비밀번호를 입력해주세요',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildCircle(circleColors[0]),
-                    buildCircle(circleColors[1]),
-                    buildCircle(circleColors[2]),
-                    buildCircle(circleColors[3]),
-                    buildCircle(circleColors[4]),
-                    buildCircle(circleColors[5]),
-                  ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildCircle(circleColors[0]),
+                  buildCircle(circleColors[1]),
+                  buildCircle(circleColors[2]),
+                  buildCircle(circleColors[3]),
+                  buildCircle(circleColors[4]),
+                  buildCircle(circleColors[5]),
+                ],
+              ),
+              SizedBox(height: 20),
+              Text(
+                '간편비밀번호 입력',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
-                SizedBox(height: 20),
-                Text(
-                  '간편비밀번호 등록',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("1"),
-                    buildKeyboardButton("2"),
-                    buildKeyboardButton("3"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("4"),
-                    buildKeyboardButton("5"),
-                    buildKeyboardButton("6"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton("7"),
-                    buildKeyboardButton("8"),
-                    buildKeyboardButton("9"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildKeyboardButton(""),
-                    buildKeyboardButton("0"),
-                    buildBackspaceButton(),
-                  ],
-                ),
-                SizedBox(height: 10),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildKeyboardButton("1"),
+                  buildKeyboardButton("2"),
+                  buildKeyboardButton("3"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildKeyboardButton("4"),
+                  buildKeyboardButton("5"),
+                  buildKeyboardButton("6"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildKeyboardButton("7"),
+                  buildKeyboardButton("8"),
+                  buildKeyboardButton("9"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildKeyboardButton(""),
+                  buildKeyboardButton("0"),
+                  buildBackspaceButton(),
+                ],
+              ),
+              SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -204,6 +208,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                 ),
               ],
             ),
+            ),
           ),
         ],
       ),
@@ -212,8 +217,8 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
 
   Widget buildCircle(Color color) {
     return Container(
-      width: 16,
-      height: 16,
+      width: 32,
+      height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,

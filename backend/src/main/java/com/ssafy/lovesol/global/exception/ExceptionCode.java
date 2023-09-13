@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum ExceptionCode {
 
 
+	NOT_EXIST_RECENT_COUPLE_SCHEDULE_EXCEPTION(440,"커플의 최근 일정이 존재하지 않습니다."),
 	NOT_EXIST_ACCOUNT_EXCEPTION(450, "계좌가 존재하지 않습니다."),
 	NOT_EXIST_DATE_LOG(490, "데이트 일기가 존재하지 않습니다."),
 	NOT_EXIST_IMAGE(495, "이미지가 존재하지 않습니다."),

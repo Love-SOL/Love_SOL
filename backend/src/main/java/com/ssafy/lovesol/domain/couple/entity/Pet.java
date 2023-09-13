@@ -43,10 +43,11 @@ public class Pet {
         this.level++;
     }
 
-    public static Pet create(String petName, Couple couple) {
+    public static Pet create(String petName, int kind, Couple couple) {
         return Pet.builder()
                 .name(petName)
                 .couple(couple)
+                .kind(kind)
                 .level(1)
                 .build();
     }

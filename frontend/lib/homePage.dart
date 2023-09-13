@@ -31,11 +31,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
+  String userId = "";
+  String coupleId = "";
   void initState(){
     super.initState();
     _loadUserDataAndFetchData();
   }
-  String userId = '';
   Future<void> _sendFcmToken() async {
     final prefs = await SharedPreferences.getInstance();
     final fcmToken = prefs.getString('fcmToken');
@@ -77,6 +78,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
   }
   Future<void> fetchAccountData() async {
     print(userId);
@@ -768,66 +770,256 @@ class CouplePage extends StatefulWidget {
 
 class _CouplePageState extends State<CouplePage> {
   String petName = '';
+  int petType = 0;
+  String dday = '0';
+  String schedule = '일정이 없어요';
+  String scheduleDDay = '';
+  Map<String, dynamic> petData = {};
+  Map<String, dynamic> scheduleData = {
+    'content': '일정 없음',  // String 값
+    'remainingDay': 0,              // int 값
+    'date': DateTime.now()           // DateTime 객체
+  };
+  bool isPaid = false;
+  void initState(){
+    super.initState();
+    _loadAnniversaryData();
+    _loadScheduleData();
+    _loadPetData();
+  }
 
-  Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed) {
-    return Container(
-      width: double.infinity,
-      height: 150,
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+  Future<void> _loadAnniversaryData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    print('커플 페이지');
+    print(coupleId);
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/couple/anniversary/$coupleId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
+      // 성공
+      setState(() {
+        dday = responseBody['data'].toString();
+      });
+    } else {
+      print(statusCode);
+      // 실패
+    }
+
+  }
+  Future<void> _loadScheduleData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/schedule/recent/$coupleId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
+      setState(() {
+        scheduleData = Map<String, dynamic>.from(responseBody['data']);
+      });
+    } else {
+      print(statusCode);
+      // 실패
+    }
+
+  }
+
+  Future<void> _isPaid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/transaction/$coupleId"));
+    // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+    Map<String, dynamic> responseData = json.decode(response.body);
+    // 파싱한 데이터에서 필드에 접근
+    int result = responseData["data"];
+    // 필요한 작업 수행
+    print("결제내역조회완료");
+    if (result != 0) {
+      setState(() {
+        isPaid = true;
+        petType = result;
+      });
+    }
+  }
+
+  Future<void> _loadPetData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final data = responseData['data'];
+      setState(() {
+        petData = Map<String, dynamic>.from(data);
+      });
+      print(petData);
+    } else {
+      print('펫 요청 실패');
+      _isPaid();
+    }
+  }
+  Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed, bool isSchedule , bool isPet) {
+    return GestureDetector(
+      onTap: onPressed, // 위젯을 클릭했을 때 onPressed 함수 실행
+      child: Container(
+        width: double.infinity,
+        height: 150,
+        margin: EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 2),
             ),
-          ),
-          SizedBox(height: 5),
-          if (centerText != null) // 가운데 텍스트 추가
-            InkWell(
-              onTap: onCenterTextPressed, // 클릭 이벤트 추가
-              child: Center(
-                child: Text(
-                  centerText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          SizedBox(height: 5),
-          if (onPressed != null)
-            Align(
-              alignment: Alignment.topRight,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                child: Text('버튼'), // 버튼 텍스트 설정
+            SizedBox(height: 5),
+            if (centerText != null) // 가운데 텍스트 추가
+              InkWell(
+                onTap: onCenterTextPressed, // 클릭 이벤트 추가
+                child: Center(
+                  child: Text(
+                    centerText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
-            ),
-        ],
+            SizedBox(height: 5),
+            if(isSchedule)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(Icons.favorite, color: Colors.red, size: 100.0),
+                          Text("+" + dday, style: TextStyle(color: Colors.white , fontSize: 18)),
+                        ],
+                      ),
+                      SizedBox(width: 15), // 이미지와 텍스트 사이 간격 조절
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            scheduleData["content"],
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Text(
+                            '다음 일정까지: ${scheduleData["remainingDay"]}일 남았습니다', // Exp 텍스트 추가
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            SizedBox(height: 5),
+            if (isPet)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        "assets/pet${petData["kind"]}.gif",
+                        width: 80, // 이미지 너비 설정
+                        height: 80, // 이미지 높이 설정
+                      ),
+                      SizedBox(width: 10), // 이미지와 텍스트 사이 간격 조절
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            petData["name"],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Text(
+                            'EXP: ${petData["exp"]}', // Exp 텍스트 추가
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
 
   void _setPetName(BuildContext context) {
+    Future<void> _registPet() async {
+      final prefs = await SharedPreferences.getInstance();
+      final coupleId = prefs.getInt("coupleId");
+      try {
+        print("펫을 등록합니다.");
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:8080/api/pet/$coupleId'),
+          headers: <String, String>{'Content-Type': 'application/json',},
+          body: jsonEncode(<String, dynamic>{'name': petName,'kind': petType}),
+        );
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          final data = responseData['data'];
+          setState(() {
+            petData = Map<String, dynamic>.from(data);
+          });
+          print(petData);
+        } else {
+          throw Exception('API 요청 실패');
+        }
+      } catch (e) {
+        // 예외 처리
+        print('API 요청 중 오류 발생: $e');
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -850,6 +1042,7 @@ class _CouplePageState extends State<CouplePage> {
             ),
             TextButton(
               onPressed: () {
+                _registPet();
                 Navigator.of(context).pop();
               },
               child: Text('확인'),
@@ -860,60 +1053,105 @@ class _CouplePageState extends State<CouplePage> {
     );
   }
 
+  void _navigateToCalendarPage() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CalendarPage()),
+    );
+
+    // CalendarPage에서 돌아온 후 실행되는 코드
+    if (result == 'update') {
+      _loadScheduleData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              '커플통장',
-              Color(0xFFF7F7F7),
-              null,
-              '가운데에 표시할 텍스트',
-              null,
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                  '커플통장',
+                  Color(0xFFF7F7F7),
+                  null,
+                  '가운데에 표시할 텍스트',
+                  null,
+                  false,
+                  false
+              ),
             ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              'Calendar',
-              Color(0xFFF7F7F7),
-                  () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CalendarPage(),
+            SizedBox(height: 3),
+            Expanded(
+              flex: 1,
+              child: buildContainer(
+                'Calendar',
+                Color(0xFFF7F7F7),
+                    () {
+                  _navigateToCalendarPage();
+                },
+                null,
+                null,
+                true,
+                false,
+              ),
+            ),
+            SizedBox(height: 3),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  petData.isEmpty
+                      ? (isPaid
+                      ? buildContainer(
+                      'Pet',
+                      Color(0xFFF7F7F7),
+                          () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PetPage(),
+                          ),
+                        );
+                      },
+                      '펫 이름을 설정해주세요',
+                          () {
+                        _setPetName(context);
+                      },
+                      false,
+                      false// true로 변경
+                  )
+                      : buildContainer(
+                      'Pet',
+                      Color(0xFFF7F7F7),
+                      null,
+                      '무엇이 태어날까요?',
+                      null,
+                      false,
+                      false
+                  )
+                  )
+                      :
+                  buildContainer(
+                    "Pet",
+                    Color(0xFFF7F7F7),
+                        () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PetPage(),
+                        ),
+                      );
+                    },
+                    null,
+                    null,
+                    false,
+                    true,
                   ),
-                );
-              },
-              null,
-              null,
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 3),
-          Expanded(
-            flex: 1,
-            child: buildContainer(
-              'Pet',
-              Color(0xFFF7F7F7),
-                  () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PetPage(),
-                  ),
-                );
-              },
-              '펫 이름을 설정해주세요',
-                  () {
-                _setPetName(context);
-              },
-            ),
-          ),
-        ],
-      ),
+          ],
+        )
     );
   }
 }

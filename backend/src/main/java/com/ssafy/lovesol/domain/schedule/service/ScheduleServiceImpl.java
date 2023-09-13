@@ -7,12 +7,14 @@ import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
 import com.ssafy.lovesol.domain.schedule.dto.request.CreateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.request.UpdateScheduleRequestDto;
 import com.ssafy.lovesol.domain.schedule.dto.response.CalenderResponseDto;
+import com.ssafy.lovesol.domain.schedule.dto.response.RecentCoupleScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.dto.response.ScheduleResponseDto;
 import com.ssafy.lovesol.domain.schedule.entity.Schedule;
 import com.ssafy.lovesol.domain.schedule.entity.ScheduleType;
 import com.ssafy.lovesol.domain.schedule.repository.ScheduleRepository;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
+import com.ssafy.lovesol.global.exception.NotExistRecentCoupleScheduleException;
 import com.ssafy.lovesol.global.util.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -77,18 +79,12 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public CalenderResponseDto getAllScheduleByYearAndMonth(Long coupleId, int year, int month) {
+    public List<ScheduleResponseDto> getAllScheduleByYearAndMonth(Long coupleId, int year, int month) {
         log.info("ScheduleServiceImpl_getAllScheduleByYearAndMonth | 전체 일정 조회");
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
+        return scheduleRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
                 .stream().map(schedule -> schedule.toScheduleResponseDto())
                 .collect(Collectors.toList());
-
-        List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoList = dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
-                .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
-                .collect(Collectors.toList());
-
-        return CalenderResponseDto.createCalenderResponseDto(scheduleResponseDtoList , dateLogForCalenderResponseDtoList);
     }
 
     @Override
@@ -101,12 +97,14 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<ScheduleResponseDto> getRecentCoupleSchedule(Long coupleId) {
+    public RecentCoupleScheduleResponseDto getRecentCoupleSchedule(Long coupleId) {
         log.info("ScheduleServiceImpl_getRecentCoupleSchedule | 가장 가까운 커플 일정 조회");
         LocalDate closestFutureScheduleDate = scheduleRepository.findClosestFutureScheduleDate(LocalDate.now() , coupleId);
 
         return scheduleRepository.findAllSchedulesOnClosestDate(closestFutureScheduleDate , coupleId)
-                .stream().map(s -> s.toScheduleResponseDto()).collect(Collectors.toList());
+                .stream()
+                .filter(schedule -> schedule.getScheduleType().equals(ScheduleType.SHARED_SCHEDULE))
+                .findFirst().orElseThrow(NotExistRecentCoupleScheduleException::new).toRecentCoupleScheduleResponseDto();
     }
 
 

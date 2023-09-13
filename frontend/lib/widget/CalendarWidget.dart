@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarWidget extends StatefulWidget {
   @override
@@ -9,9 +13,135 @@ class CalendarWidget extends StatefulWidget {
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
+  final titleController = TextEditingController();
+  String userId = '';
+  String coupleId = '';
   DateTime selectedDate = DateTime.now();
   Map<DateTime, List<CalendarEvent>> events = {};
-  String selectedCategory = '주 관리자'; // 기본 카테고리를 '주 관리자'로 설정
+  String selectedCategory = 'MAIN_OWNER_SCHEDULE'; // 기본 카테고리를 'MAIN_OWNER_SCHEDULE'로 설정
+
+  void initState() {
+    super.initState();
+    _loadUserDataAndFetchData();
+  }
+
+  Future<void> _loadUserDataAndFetchData() async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchScheduleData(DateTime.now().year.toString(), DateTime.now().month.toString());
+  }
+
+  Future<void> fetchScheduleData(String year , String month) async{
+    Color eventColor = Colors.blue;
+
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/schedule/' + coupleId + '?year=' + year + '&&month=' + month), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      print(decode);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        List<ScheduleResponseDto> scheduleList =  data.map((data) => ScheduleResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+
+        for (var schedule in scheduleList) {
+          print(schedule.content);  // 예: 일정 내용만 출력
+
+          if (schedule.scheduleType == 'MAIN_OWNER_SCHEDULE'){
+            eventColor = Color(0xFF0046FF);
+          }else if(schedule.scheduleType =='SUB_OWNER_SCHEDULE'){
+            eventColor = Color(0xFFF90000);
+          }else{
+            eventColor = Color(0xFF9E00FF);
+          }
+          DateTime dateTime = DateTime.parse(schedule.startAt);
+
+          final event = CalendarEvent(
+            title: schedule.content,
+            color: eventColor,
+            startDate: dateTime,
+            category: schedule.scheduleType, // 선택한 카테고리 저장
+          );
+
+
+          setState(() {
+            if (events.containsKey(dateTime)) {
+              events[dateTime]!.add(event);
+            } else {
+              events[dateTime] = [event];
+            }
+          });
+
+        }
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  Future<bool> createSchedule(CalendarEvent event) async {
+    int scheduleType = 0;
+    if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
+      scheduleType = 1;
+    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
+      scheduleType = 2;
+    }else{
+      scheduleType = 0;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/schedule/'+coupleId), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'coupleId': 1,
+          'content': event.title,
+          'scheduleType': scheduleType,
+          'startAt' : DateFormat('yyyy-MM-dd').format(event.startDate),
+          'endAt' : DateFormat('yyyy-MM-dd').format(event.startDate),
+        }),
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      Map<String, dynamic> responseData = json.decode(response.body);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseData['statusCode'];
+      print(statusCode);
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        print(responseData['data']);
+
+        return true;
+      } else {
+        print(statusCode);
+        // 실패
+        return false;
+      }
+    } catch (e) {
+      print("에러발생 $e");
+      return false;
+    }
+  }
 
   @override
   @override
@@ -44,6 +174,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   selectedDate.month - 1,
                   selectedDate.day,
                 );
+                events = {};
+                fetchScheduleData(selectedDate.year.toString(), selectedDate.month.toString());
               });
             },
           ),
@@ -60,6 +192,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   selectedDate.month + 1,
                   selectedDate.day,
                 );
+                events = {};
+                fetchScheduleData(selectedDate.year.toString(), selectedDate.month.toString());
               });
             },
           ),
@@ -189,7 +323,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 ...events[eventDate]!.map((event) {
                   return ListTile(
                     title: Text(event.title),
-                    subtitle: Text(event.description),
                   );
                 }).toList()
               else
@@ -233,10 +366,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             child: Column(
               children: [
                 TextField(
+                  controller: titleController,
                   decoration: InputDecoration(labelText: '일정 제목'),
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: '일정 내용'),
                 ),
                 // 카테고리 선택 버튼
                 ElevatedButton(
@@ -246,32 +377,35 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   child: Text('카테고리 선택'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (selectedCategory == '주 관리자'){
+                  onPressed: () async {
+                    if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
                       eventColor = Color(0xFF0046FF);
-                    }else if(selectedCategory =='부 관리자'){
+                    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
                       eventColor = Color(0xFFF90000);
                     }else{
                       eventColor = Color(0xFF9E00FF);
                     }
+
                     final event = CalendarEvent(
-                      title: '일정 제목',
-                      description: '일정 내용',
+                      title: titleController.text,
                       color: eventColor,
                       startDate: eventDate,
                       category: selectedCategory, // 선택한 카테고리 저장
                     );
 
-                    setState(() {
-                      if (events.containsKey(eventDate)) {
-                        events[eventDate]!.add(event);
-                      } else {
-                        events[eventDate] = [event];
-                      }
-                    });
+                    if(await createSchedule(event)){
+                      setState(() {
+                        if (events.containsKey(eventDate)) {
+                          events[eventDate]!.add(event);
+                        } else {
+                          events[eventDate] = [event];
+                        }
+                      });
+                      _showEventsForDate(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
+                    }
 
                     Navigator.of(context).pop();
-                    _showEventsForDate(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
+
                   },
                   child: Text('일정 추가'),
                 ),
@@ -301,21 +435,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // 주 관리자 버튼
+              // MAIN_OWNER_SCHEDULE 버튼
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    selectedCategory = '주 관리자';
+                    selectedCategory = 'MAIN_OWNER_SCHEDULE';
                   });
                   Navigator.of(context).pop(); // 모달 다이얼로그 닫기
                 },
                 child: Text('주 관리자'),
               ),
-              // 부 관리자 버튼
+              // SUB_OWNER_SCHEDULE 버튼
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    selectedCategory = '부 관리자';
+                    selectedCategory = 'SUB_OWNER_SCHEDULE';
                   });
                   Navigator.of(context).pop(); // 모달 다이얼로그 닫기
                 },
@@ -350,16 +484,34 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
 class CalendarEvent {
   final String title;
-  final String description;
   final Color color;
   final DateTime startDate;
   final String category; // 일정 카테고리 추가
 
   CalendarEvent({
     required this.title,
-    required this.description,
     required this.color,
     required this.startDate,
     required this.category, // 카테고리 필드 추가
   });
+}
+
+class ScheduleResponseDto {
+  final int scheduleId;
+  final String content;
+  final String scheduleType;
+  final String startAt;
+  final String endAt;
+
+  ScheduleResponseDto({required this.scheduleId, required this.content, required this.scheduleType, required this.startAt, required this.endAt});
+
+  factory ScheduleResponseDto.fromJson(Map<String, dynamic> json) {
+    return ScheduleResponseDto(
+      scheduleId: json['scheduleId'],
+      content: json['content'],
+      scheduleType: json['scheduleType'],
+      startAt: json['startAt'],
+      endAt: json['endAt'],
+    );
+  }
 }

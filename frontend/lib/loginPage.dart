@@ -61,6 +61,7 @@ class LoginPage extends StatelessWidget {
     String id = "";
     String password = "";
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           // 배경 이미지
@@ -71,36 +72,24 @@ class LoginPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 100, // "Welcome" 글자의 수직 위치 조절
+            top: 130,
             left: 0,
             right: 0,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Welcome',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                  SizedBox(height: 20), // "Welcome" 글자와 이미지 박스 사이의 간격 조절
                   Image.asset(
                     'assets/logincenterbox.png',
                     fit: BoxFit.contain,
-                    width: 250, // 이미지 크기 조절
                   ),
-                  SizedBox(height: 20), // 이미지 박스와 입력 상자 사이의 간격 조절
-                  // 첫 번째 입력 상자 (ID 입력)
+                  SizedBox(height: 40), // 이미지 박스와 입력 상자 사이의 간격 조절
                   Container(
-                    width: 250, // 입력 상자의 너비 조절
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
                           'assets/loginidinput.png',
-                          width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
                           left: 50, // 입력 상자를 오른쪽으로 이동
@@ -127,13 +116,11 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 10), // 입력 상자와 입력 상자 사이의 간격 조절
                   // 두 번째 입력 상자 (비밀번호 입력)
                   Container(
-                    width: 250, // 입력 상자의 너비 조절
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Image.asset(
                           'assets/loginpasswordinput.png',
-                          width: 250, // 이미지 크기 조절
                         ),
                         Positioned(
                           left: 50, // 입력 상자를 오른쪽으로 이동
@@ -158,80 +145,80 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          // 로그인 버튼 및 회원가입, 간편비밀번호 옵션 추가
-          Positioned(
-            bottom: 30, // 버튼의 수직 위치 조절
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // 로그인 버튼을 누를 때 다른 페이지로 이동
-                      onTapLogin(id, password, context);
-                    },
-                    child: Container(
-                      width: 250,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/loginclick.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 5), // 원하는 만큼 상단 여백 조절
-                          child: Text(
-                            '로그인',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+              SizedBox(height:40),
+              Positioned(
+                  bottom: 50, // 버튼의 수직 위치 조절
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // 로그인 버튼을 누를 때 다른 페이지로 이동
+                            onTapLogin(id, password, context);
+                          },
+                          child: Container(
+                            width: 250,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/loginclick.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 5), // 원하는 만큼 상단 여백 조절
+                                child: Text(
+                                  '로그인',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        SizedBox(height: 10), // 로그인 버튼과 다음 버튼 사이의 간격 조절
+                        GestureDetector(
+                          onTap: () {
+                            // "회원가입" 텍스트를 누를 때 다른 페이지로 이동 (여기에서는 SignUpPage로 가정)
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SignUpPage(),
+                            ));
+                          },
+                          child: Text(
+                            '회원가입',
+                            style: TextStyle(
+                              color: Color(0xFF979797),
+                              fontSize: 16,
+                              decoration: TextDecoration.underline, // 밑줄 추가
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AuthSimplePasswordPage(userId: 1),
+                            ));
+                          },
+                          child: Text(
+                            '간편비밀번호',
+                            style: TextStyle(
+                              color: Color(0xFF979797),
+                              fontSize: 16,
+                              decoration: TextDecoration.underline, // 밑줄 추가
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10), // 로그인 버튼과 다음 버튼 사이의 간격 조절
-                  GestureDetector(
-                    onTap: () {
-                      // "회원가입" 텍스트를 누를 때 다른 페이지로 이동 (여기에서는 SignUpPage로 가정)
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
-                      ));
-                    },
-                    child: Text(
-                      '회원가입',
-                      style: TextStyle(
-                        color: Color(0xFF979797),
-                        fontSize: 16,
-                        decoration: TextDecoration.underline, // 밑줄 추가
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      // "간편비밀번호" 텍스트를 누를 때 다른 페이지로 이동
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AuthSimplePasswordPage(userId: 1),
-                      ));
-                    },
-                    child: Text(
-                      '간편비밀번호',
-                      style: TextStyle(
-                        color: Color(0xFF979797),
-                        fontSize: 16,
-                        decoration: TextDecoration.underline, // 밑줄 추가
-                      ),
-                    ),
-                  ),
+                ),
                 ],
               ),
             ),
