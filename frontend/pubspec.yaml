@@ -41,6 +41,7 @@ dependencies:
   firebase_core:
   firebase_messaging:
   flutter_local_notifications: ^15.1.1
+  dio: ^5.3.2
 
 dev_dependencies:
   flutter_test:
