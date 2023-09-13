@@ -53,6 +53,7 @@ public class CreateUserAccountRequestDto {
 				.name(name)
 				.phoneNumber(phoneNumber)
 				.birthAt(birthAt)
+				.fcmToken("")
 				.personalAccount(personalAccount)
 				.build();
 	}

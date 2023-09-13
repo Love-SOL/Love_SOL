@@ -1,6 +1,7 @@
 package com.ssafy.lovesol.domain.user.service;
 
 
+import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.user.dto.request.*;
 import com.ssafy.lovesol.domain.user.dto.response.LoginResponseDto;
@@ -46,7 +47,8 @@ public class UserServiceImpl implements UserService{
         log.info("UserServiceImpl_login | 사용자 로그인 시도");
         User loginUser = userRepository.findByIdAndPassword(loginRequestDto.getId(), loginRequestDto.getPassword()).orElseThrow(NotExistUserException::new);
         setToken(loginUser , response);
-        return loginUser.toLoginResponseDto(coupleRepository.findByOwnerOrSubOwner(loginUser,loginUser).get().getCoupleId());
+        Optional<Couple> couple = coupleRepository.findByOwnerOrSubOwner(loginUser, loginUser);
+        return loginUser.toLoginResponseDto(couple.isEmpty() ? 0 : couple.get().getCoupleId());
     }
 
     @Override
