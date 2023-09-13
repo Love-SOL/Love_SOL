@@ -6,6 +6,7 @@ import com.ssafy.lovesol.domain.bank.dto.response.GetUserAccountsResponseDto;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.TransactionService;
+import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,4 +71,10 @@ public class AccountController {
     public ResponseResult getMyTransaction(@Valid @PathVariable Long coupleId) {
         return new SingleResponseResult<Integer>(transactionService.findTransactionOne(coupleId));
     }
+
+    @GetMapping("/transaction/{accountNumber}/{idx}")
+    public ResponseResult getMyTransaction(@PathVariable(name = "accountNumber") String accountNumber , @PathVariable(name = "idx") int idx) {
+        return new ListResponseResult<>(transactionService.getTransactionList(accountNumber,idx));
+    }
+
 }

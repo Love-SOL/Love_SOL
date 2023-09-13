@@ -1,5 +1,6 @@
 package com.ssafy.lovesol.domain.bank.entity;
 
+import com.ssafy.lovesol.domain.bank.dto.response.GetTransactionResponseDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class Transaction {
     @Column(nullable = false)
     private double depositAmount;
 
+    // 출금 : 0 , 입금 : 1
+    @Column(nullable = false)
+    private int transactionType;
+
     @Column(nullable = false)
     private String content;
 
@@ -48,6 +53,14 @@ public class Transaction {
                 .depositAmount(depositAmount)
                 .withdrawalAmount(withdrawalAmount)
                 .build();
+    }
 
+    public GetTransactionResponseDto toGetTransactionResponseDto(){
+        return GetTransactionResponseDto.builder()
+            .content(content)
+            .transactionType(transactionType)
+            .transactionAmount((int)(transactionType == 0 ? withdrawalAmount : depositAmount))
+            .transactionAt(transactionAt)
+            .build();
     }
 }

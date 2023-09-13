@@ -2,6 +2,9 @@ package com.ssafy.lovesol.domain.bank.repository;
 
 import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,6 +24,7 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
     List<Transaction> findTransactionsByTransactionAtGreaterThanEqualAndAccountEqualsOrderByTransactionAtDesc(LocalDateTime transactionAt,Account account);
     Transaction findByAccount(Account account);
+    Page<Transaction> findByAccount_AccountNumberOrderByTransactionAtDesc(String accountNumber, Pageable pageable);
 }
 
 
