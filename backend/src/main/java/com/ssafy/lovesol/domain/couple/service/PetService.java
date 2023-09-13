@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PetService {
     ResponsePetDto getPet(Long coupleId);
-    void createPet(String petName, Long coupleId);
+    ResponsePetDto createPet(String petName, int kind, Long coupleId);
     void gainExp(Long coupleId, int exp);
     void deletePet(Pet pet);
 
