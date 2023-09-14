@@ -20,4 +20,7 @@ public class GetUserAccountsResponseDto {
     private String name;
     @Schema(description = "잔액", example = "12345123")
     private double balance;
+    @Schema(description = "계좌타입", example = "0:일반계좌 1:러브박스")
+    private int type;
+
 }

@@ -21,10 +21,9 @@ public class Couple {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long coupleId;
 
-    @Column(nullable = false)
     private String commonAccount;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDate anniversary;
 
     @Column(nullable = false)

@@ -18,21 +18,13 @@ import java.time.LocalDate;
 @Schema(description = "커플 등록 요청 객체")
 public class CoupleCreateRequestDto {
 
-    @NotNull
-    private String commonAccount;
 
-    @NotNull
-    private LocalDate anniversary;
-
-    @NotNull
-    private String Id;
+    private long id;
 
 
     public Couple toEntity(User owner){
         return Couple.builder()
                 .owner(owner)
-                .anniversary(this.anniversary)
-                .commonAccount(this.commonAccount)
                 .ownerTotal(0)
                 .subOwnerTotal(0)
                 .build();

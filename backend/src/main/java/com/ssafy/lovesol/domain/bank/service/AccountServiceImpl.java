@@ -81,6 +81,9 @@ public class AccountServiceImpl implements AccountService{
         return true;
     }
 
+
+
+    @Override
     public String HashEncrypt(String hashData) throws NoSuchAlgorithmException {
         // SHA-256 해시 생성
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -96,13 +99,13 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public List<GetUserAccountsResponseDto> getMyAccounts(Long userId) throws NoSuchAlgorithmException {
+    public List<GetUserAccountsResponseDto> getMyAccounts(Long userId,int type) throws NoSuchAlgorithmException {
         User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
         // 입력 데이터
         String dataToHash = user.getName() + user.getPhoneNumber();
         String HashedData = HashEncrypt(dataToHash);
 
-        List<Account> accounts = accountRepository.findByUserId(HashedData);
+        List<Account> accounts = accountRepository.findByUserIdAndType(HashedData,type);
         List<GetUserAccountsResponseDto> res = accounts.stream().map(account -> account.toGetUserAccountsResponseDto()).collect(Collectors.toList());
 
         return res;

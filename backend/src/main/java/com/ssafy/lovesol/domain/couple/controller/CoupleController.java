@@ -33,6 +33,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class CoupleController {
     @PostMapping("")
     public ResponseResult createCoupleinfo(@RequestBody @Valid CoupleCreateRequestDto coupleCreateRequestDto)
     {
-        log.info("CoupleController -> 커플 통장 초기 생성 ");
+        log.info("CoupleController -> 커플 객체 초기 생성 ");
         if(coupleService.createCouple(coupleCreateRequestDto) < 0) return ResponseResult.failResponse;
 
         return ResponseResult.successResponse;
@@ -88,6 +89,7 @@ public class CoupleController {
     @PostMapping("/connect")
     public ResponseResult sendconnection(@RequestBody @Valid ConnectNotificationReqDto connectNotificationReqDto)
     {
+        //여기서 커플 객채를 만들어줘야한다.
         String titleInit= "커플 통장 초대장이 왔어요!";
         String bodyInit= connectNotificationReqDto.getSenderId()+"님이 커플 통장에 초대했어요";
         int kind = 0;
@@ -106,9 +108,9 @@ public class CoupleController {
     }
 
     @PostMapping("/share/{ownerId}")
-    public ResponseResult connectCouple(@PathVariable long coupleId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto){
+    public ResponseResult connectCouple(@PathVariable long ownerId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto) throws NoSuchAlgorithmException {
         log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
-        if(!coupleService.connectCouple(coupleRequestDto,coupleId)){
+        if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
         }
 
