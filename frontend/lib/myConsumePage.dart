@@ -18,19 +18,23 @@ class MyConsumePage extends StatefulWidget {
 class _MyConsumePage extends State<MyConsumePage> {
   String coupleId = '';
   String accountNumber = '';
-
-  final Map<String, int> expenditureData = {
-    '식비': 150000,
-    '쇼핑': 50000,
-    '여가': 20000,
-    '생활': 100000,
-  };
+  List<PieChartSectionData> sectionList = [];
+  final Map<String, int> expenditureData = {};
 
   final Map<String, IconData> categoryIcons = {
-    '식비': Icons.restaurant,   // 식비 아이콘
+    '식당': Icons.restaurant,   // 식비 아이콘
     '쇼핑': Icons.shopping_cart, // 쇼핑 아이콘
-    '여가': Icons.beach_access,  // 여가 아이콘
-    '생활': Icons.home,         // 생활 아이콘
+    '커피숍': Icons.local_cafe,  // 여가 아이콘
+    '온라인': Icons.cloud,         // 생활 아이콘
+    '기타' : Icons.music_note
+  };
+
+  Map<String, Color> categoryColors = {
+    '식당': Colors.blue,
+    '쇼핑': Colors.red,
+    '커피숍': Colors.green,
+    '온라인': Colors.yellow,
+    '기타': Colors.deepPurple
   };
 
   @override
@@ -47,10 +51,10 @@ class _MyConsumePage extends State<MyConsumePage> {
 
   Future<void> _loadUserDataAndFetchData(String accountNumber) async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
-    await fetchTransactionData(accountNumber);
+    await fetchTransactionCategoryData(accountNumber);
   }
 
-  Future<void> fetchTransactionData(String accountNumber) async{
+  Future<void> fetchTransactionCategoryData(String accountNumber) async{
     try {
       final response = await http.get(
         Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' + accountNumber + '?year=2023&&month=9'), // 스키마를 추가하세요 (http 또는 https)
@@ -70,11 +74,13 @@ class _MyConsumePage extends State<MyConsumePage> {
         List<dynamic> data = responseBody['data'];
         List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
 
-        for(var data in dataList){
-          print(data.category);
-          print(data.amount);
-          print(data.rate);
-        }
+        setState(() {
+          sectionList = createPieChartSections(dataList);
+          addDataListToMap(dataList);
+        });
+        sectionList.forEach((sectionData) {
+          print('Color: ${sectionData.color}, Value: ${sectionData.value}, Title: ${sectionData.title}, Radius: ${sectionData.radius}');
+        });
 
       } else {
         print(statusCode);
@@ -83,6 +89,23 @@ class _MyConsumePage extends State<MyConsumePage> {
     } catch (e) {
       print("에러발생 $e");
     }
+  }
+
+  void addDataListToMap(List<GetTransactionByCategoryResponseDto> dtoList) {
+    for (GetTransactionByCategoryResponseDto dto in dtoList) {
+      expenditureData[dto.category] = dto.amount;
+    }
+  }
+
+  List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
+    return data.map((item) {
+      return PieChartSectionData(
+        color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
+        value: item.rate.toDouble(), // amount를 double로 변환
+        title: item.category,
+        radius: 50,
+      );
+    }).toList();
   }
 
   @override
@@ -191,32 +214,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                               aspectRatio: 1.3,
                               child: PieChart(
                                 PieChartData(
-                                  sections: [
-                                    PieChartSectionData(
-                                      color: Colors.blue,
-                                      value: 25,
-                                      title: '항목1',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.red,
-                                      value: 30,
-                                      title: '항목2',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.green,
-                                      value: 15,
-                                      title: '항목3',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.orange,
-                                      value: 30,
-                                      title: '항목4',
-                                      radius: 50,
-                                    ),
-                                  ],
+                                  sections: sectionList,
                                   sectionsSpace: 0,
                                   centerSpaceRadius: 40,
                                 ),
