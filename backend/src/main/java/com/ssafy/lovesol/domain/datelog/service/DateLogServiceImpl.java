@@ -9,6 +9,7 @@ import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -114,5 +116,19 @@ public class DateLogServiceImpl implements DateLogService{
         return dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
             .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ImageResponseDto> getAllImage(Long coupleId) {
+        Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
+        List<DateLog> dateLogList = dateLogRepository.findByCouple(couple);
+        List<ImageResponseDto> imageList = new ArrayList<>();
+        for (DateLog dateLog : dateLogList) {
+            List<Image> images = dateLog.getImageList();
+            for (Image image : images) {
+                imageList.add(image.toImageResponseDto());
+            }
+        }
+        return imageList;
     }
 }

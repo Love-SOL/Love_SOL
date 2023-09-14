@@ -22,4 +22,6 @@ public interface DateLogRepository extends JpaRepository<DateLog,Long> {
                                                    @Param("month") int month);
 
     Optional<DateLog> findByCoupleAndDateAt(Couple couple, LocalDate createAt);
+
+    List<DateLog> findByCouple(Couple couple);
 }
