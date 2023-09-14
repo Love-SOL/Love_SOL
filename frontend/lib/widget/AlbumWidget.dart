@@ -24,7 +24,9 @@ class _AlbumWidgetState extends State<AlbumWidget> {
   late int dateLogId; // dateLogId 변수 선언
   String userId = '';
   String coupleId = '';
-
+  File? image0;
+  String content = "";
+  bool isExpanded = false;
   @override
   void initState() {
     super.initState();
@@ -62,7 +64,9 @@ class _AlbumWidgetState extends State<AlbumWidget> {
       // Replace the URL with your API endpoint.
       var response = await dio.post('http://10.0.2.2:8080/api/date-log/$dateLogId', data: formData);
       // Handle the response as needed.
+
       print('Response: ${response.data}');
+
     } catch (e) {
       print("에러 발생: $e");
     }
@@ -193,6 +197,93 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     print(imageList);
   }
 
+// 이미지를 표시하는 위젯
+  Widget _buildImageWidget() {
+    print(image0);
+    return image0 != null
+        ? Image.file(image0!, key: UniqueKey())
+        : SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
+  }
+
+// 이미지 업데이트 함수
+  void _updateImage(XFile? image) {
+    if (image != null) {
+      print("하하하하 너냐?");
+      setState(() {
+        image0 = File(image.path);
+      });
+      print(image0);
+    }
+  }
+
+  Widget _buildImageSelectionText() {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            final picker = ImagePicker();
+            final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+            if (image != null) {
+              // 이미지를 선택한 경우, 선택한 이미지를 표시
+              _updateImage(image);
+            }
+          },
+          child: Container(
+            height: 200,
+            margin: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (image0 == null)
+                    Icon(Icons.add_photo_alternate, size: 50),
+                  if (image0 != null)
+                    Image.file(
+                      image0!,
+                      fit: BoxFit.cover, // 이미지의 가로 크기를 조절
+                      height: 200, // 이미지 높이 고정
+                      width: double.infinity, // 이미지 너비를 최대로 확장
+                    ),
+                  Text(
+                    '이미지를 선택하세요',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: TextField(
+            onChanged: (value) {
+              // 사용자가 입력한 값을 content 변수에 저장
+              content = value;
+            },
+            decoration: InputDecoration(labelText: '내용 입력'),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // 작성하기 버튼을 누를 때의 동작 추가
+            uploadImage(dateLogId, image0!, content);
+            setState(() {
+              isExpanded = false;
+            });
+            fetchAlbumData(dateLogId);
+            setState(() {
+
+            });
+          },
+          child: Text('작성하기'),
+        ),
+      ],
+    );
+  }
 
 
   @override
@@ -203,6 +294,21 @@ class _AlbumWidgetState extends State<AlbumWidget> {
         children: [
           Column(
             children: [
+              if (dateLogId != 0)
+                ExpansionTile(
+                  title: Text('이미지 삽입'),
+                  onExpansionChanged: (expanded) {
+                    // ExpansionTile이 열리거나 닫힐 때 호출되는 콜백 함수
+                    setState(() {
+                      isExpanded = expanded;
+                    });
+                  },
+                  initiallyExpanded: false,
+                  children: [
+                    // 이미지 표시 부분 (기존 내용 삭제)
+                    if (isExpanded) _buildImageSelectionText(),
+                  ],
+                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: imageList.length, // imageList의 길이로 아이템 개수 설정
@@ -233,7 +339,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                             ),
                             child: Center( // 가운데 정렬을 위해 Center 위젯 사용
                               child: AspectRatio(
-                                aspectRatio: 4 / 1,
+                                aspectRatio: 4 / 4,
                                 child: Image.network(imageItem['imgUrl']), // 이미지 URL로 이미지 가져오기
                               ),
                             ),
@@ -255,7 +361,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                           ),
                           ListTile(
                             title: Text(
-                              comments.isEmpty ? '첫 번째 댓글이 없습니다.' : comments.first,
+                              imageItem["comment"] != null ? imageItem["comment"] : "댓글이 없습니다."
                             ),
                             onTap: () {
                               _showCommentsModal(context, imageItem);
@@ -270,17 +376,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
               ),
             ],
           ),
-          if (dateLogId != 0)
-            Positioned(
-            bottom: 16, // 아래 여백 조절
-            right: 16, // 오른쪽 여백 조절
-            child: ElevatedButton(
-              onPressed: () {
-                _showAddEventDialog(dateLogId);
-              },
-              child: Icon(Icons.add_a_photo),
-            ),
-          ),
         ],
       ),
     );
@@ -289,27 +384,27 @@ class _AlbumWidgetState extends State<AlbumWidget> {
 
   Future<void> _showAddEventDialog(int dateLogId) async {
     final picker = ImagePicker();
-    File? _image;
+    File? image0;
     String content = "";
     Color eventColor = Colors.blue; // 이벤트의 기본 색상 설정
     print(dateLogId);
 
     // 이미지를 표시하는 위젯
     Widget _buildImageWidget() {
-      if (_image != null) {
-        // XFile을 File로 변환하여 이미지 표시
-        return Image.file(File(_image!.path));
-      } else {
-        return SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
-      }
+      print(image0);
+      return image0 != null
+          ? Image.file(image0!, key: UniqueKey())
+          : SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
     }
 
-    // 이미지 업데이트 함수
+// 이미지 업데이트 함수
     void _updateImage(XFile? image) {
       if (image != null) {
+        print("하하하하 너냐?");
         setState(() {
-          _image = File(image.path);
+          image0 = File(image.path);
         });
+        print(image0);
       }
     }
 
@@ -335,16 +430,21 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                       child: Text('사진 추가'),
                     ),
                     _buildImageWidget(), // 이미지를 표시하는 위젯 추가
+                    if (image0 == null)
+                      Text("TQ"),
+                    if (image0 != null)
+                      Text("?????"),
                     TextField(
                       onChanged: (value) {
                         // 사용자가 입력한 값을 content 변수에 저장
                         content = value;
                       },
+
                       decoration: InputDecoration(labelText: '내용'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        uploadImage(dateLogId, _image!, content);
+                        uploadImage(dateLogId, image0!, content);
                         Navigator.of(context).pop();
                       },
                       child: Text('일정 추가'),
@@ -412,7 +512,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                             commentController.clear();
                             writeComment(imageItem["imageId"], content);
                           });
-                          Navigator.pop(context, commentController.text);
+                          // Navigator.pop(context, commentController.text);
                         },
                       ),
                     ],
