@@ -67,6 +67,11 @@ public class AccountController {
         return new SingleResponseResult<>(accountService.getMyAccounts(userId));
     }
 
+    @GetMapping("/main/{userId}")
+    public ResponseResult getUserMainAccount(@Valid @PathVariable Long userId) throws NoSuchAlgorithmException {
+        return new SingleResponseResult<>(accountService.getUserMainAccount(userId));
+    }
+
     @GetMapping("/transaction/{coupleId}")
     public ResponseResult getMyTransaction(@Valid @PathVariable Long coupleId) {
         return new SingleResponseResult<Integer>(transactionService.findTransactionOne(coupleId));

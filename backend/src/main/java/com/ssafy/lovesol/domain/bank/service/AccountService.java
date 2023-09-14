@@ -28,4 +28,5 @@ public interface AccountService {
     Account findAccountByAccountNumber(String accountNumber);
 
     void accountSave(Account account);
+    GetUserAccountsResponseDto getUserMainAccount(Long userId) throws NoSuchAlgorithmException;
 }
