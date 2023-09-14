@@ -321,8 +321,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               if (events.containsKey(eventDate) &&
                   events[eventDate]!.isNotEmpty)
                 ...events[eventDate]!.map((event) {
-                  return ListTile(
-                    title: Text(event.title),
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),  // 여기서 수직 간격 조절 가능
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 8,
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: event.color,
+                          ),
+                        ),
+                        Expanded(child: Text(event.title)),
+                      ],
+                    ),
                   );
                 }).toList()
               else
@@ -341,18 +355,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Future<void> _showAddEventDialog(DateTime eventDate) async {
-    final picker = ImagePicker();
-    XFile? image;
     Color eventColor = Colors.blue; // 이벤트의 기본 색상 설정
-
-    Widget _buildImageWidget() {
-      if (image != null) {
-        // XFile을 File로 변환하여 이미지 표시
-        return Image.file(File(image!.path));
-      } else {
-        return SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
-      }
-    }
 
     await showDialog(
       context: context,
@@ -405,7 +408,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     }
 
                     Navigator.of(context).pop();
-
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   },
                   child: Text('일정 추가'),
                 ),
