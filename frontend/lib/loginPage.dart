@@ -37,8 +37,9 @@ class LoginPage extends StatelessWidget {
       // 필요한 작업 수행
       if (statusCode == 200) {
         Map<String, dynamic> userData = responseData["data"];
+        print("로그인 성공");
         print(userData);
-        _saveUserData(userData["userId"], userData["coupleId"]);
+        await _saveUserData(userData["userId"], userData["coupleId"]);
         // 로그인 성공 후 페이지 이동
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomePage(),
