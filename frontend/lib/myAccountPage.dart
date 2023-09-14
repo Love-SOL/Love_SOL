@@ -33,15 +33,17 @@ class _MyAccountPageState extends State<MyAccountPage> {
     final prefs = await SharedPreferences.getInstance();
     userId = (prefs.getInt('userId') ?? '').toString();
   }
-  Future<void> fetchAccountData() async {
-    print(userId);
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$userId"));
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final data = responseData['data'];
+  Future<void> fetchAccountData() async {
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/main/$userId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
       setState(() {
-        accountData = Map<String, dynamic>.from(data);
+        accountData = Map<String, dynamic>.from(responseBody['data']);
       });
       print(accountData);
     } else {
@@ -65,7 +67,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
       int statusCode = responseBody['statusCode'];
       // 필요한 작업 수행
       if (statusCode == 200) {
-        print('aaa');
         // 성공
         List<dynamic> data = responseBody['data'];
         setState(() {
@@ -80,6 +81,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
     } catch (e) {
       print("에러발생 $e");
     }
+  }
+
+  String formatLocalDateTime(String localDateTimeStr) {
+    DateTime parsedDate = DateTime.parse(localDateTimeStr.replaceAll('T', ' '));
+    return "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')} ${parsedDate.hour.toString().padLeft(2, '0')}:${parsedDate.minute.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -199,7 +205,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                   Opacity(
                                     opacity: 0.7, // Adjust the opacity as needed
                                     child: Text(
-                                      '${accountData["personalAccount"]}',
+                                      '${accountData["accountNumber"]}',
                                       style: TextStyle(
                                         fontSize: 12, // Adjust the font size as needed
                                         color: Colors.white,
@@ -214,7 +220,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '잔액: ${accountData["amount"]} 원',
+                                  '잔액: ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
                                   style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.white,
@@ -333,7 +339,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                     children: [
                                       SizedBox(width: 8),
                                       Text(
-                                        transaction.transactionAt.toString(),
+                                        formatLocalDateTime(transaction.transactionAt.toString()),
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.grey[600],
