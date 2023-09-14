@@ -157,12 +157,12 @@ class SignUpPage extends StatelessWidget {
                       birthAt = value;
                     }),
                     SizedBox(height: 10),
-                    buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {
-                      phoneNumber = value;
-                    }),
-                    SizedBox(height: 10),
                     buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {
                       personalAccount = value;
+                    }),
+                    SizedBox(height: 10),
+                    buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {
+                      phoneNumber = value;
                     }),
                     GestureDetector(
                       onTap: () {
@@ -433,11 +433,11 @@ class SignUpPage2 extends StatelessWidget {
               child:
               Column(
                 children: [
-                  buildInputBox('아이디', '아이디를 입력하세요',controller: idController, onChanged: (value) {
+                  buildInputBox('아이디', '아이디를 입력하세요', false ,  controller: idController, onChanged: (value) {
                     id = value;
                   }),
                   SizedBox(height: 20),
-                  buildInputBox('비밀번호', '비밀번호를 입력해주세요',controller: passwordController, onChanged: (value) {
+                  buildInputBox('비밀번호', '비밀번호를 입력해주세요', true ,controller: passwordController, onChanged: (value) {
                     password = value;
                   }),
                   SizedBox(height: 20),
@@ -472,9 +472,11 @@ class SignUpPage2 extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF0046FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
+                            minimumSize: Size(100, 48),
                           ),
                         ),
                       ],
@@ -489,7 +491,7 @@ class SignUpPage2 extends StatelessWidget {
     );
   }
 
-  Widget buildInputBox(String label, String hintText,
+  Widget buildInputBox(String label, String hintText, bool isPassword ,
       {TextEditingController? controller, TextInputType? keyboardType, required Null Function(dynamic value) onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -515,6 +517,7 @@ class SignUpPage2 extends StatelessWidget {
             ],
           ),
           child: TextFormField(
+            obscureText: isPassword == true ? true : false,
             controller: controller,
             onChanged: onChanged,
             keyboardType: keyboardType, // keyboardType 설정 추가
