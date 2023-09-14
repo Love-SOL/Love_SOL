@@ -958,10 +958,10 @@ class _CouplePageState extends State<CouplePage> {
                     children: [
                       Image.asset(
                         "assets/pet${petData["kind"]}.gif",
-                        width: 80, // 이미지 너비 설정
-                        height: 80, // 이미지 높이 설정
+                        width: 80,
+                        height: 80,
                       ),
-                      SizedBox(width: 10), // 이미지와 텍스트 사이 간격 조절
+                      SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

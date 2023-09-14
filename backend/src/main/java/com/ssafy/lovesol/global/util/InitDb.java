@@ -19,11 +19,11 @@ public class InitDb {
 
     private final InitService initService;
 
-//    @PostConstruct
-//    public void init() {
-//        initService.UserInit();
-//    }
-//
+    @PostConstruct
+    public void init() {
+        initService.UserInit();
+    }
+
     @Component
     @Transactional
     @RequiredArgsConstructor
