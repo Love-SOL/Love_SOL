@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './widget/ChatbotWidget.dart';
 
 class PetPage extends StatelessWidget {
   @override
@@ -99,13 +100,7 @@ class PetPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '펫 이름',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      ChatBotApp(),
                     ],
                   ),
                 ),
