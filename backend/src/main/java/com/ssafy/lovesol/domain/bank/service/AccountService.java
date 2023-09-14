@@ -18,10 +18,11 @@ public interface AccountService {
     int transferOneWon(TransferRequestDto transferRequestDto) throws CoolsmsException;
     boolean transferOneWonAuth(TransferAuthRequestDto transferAuthRequestDto);
 
-
     List<GetUserAccountsResponseDto> getMyAccounts(Long userId,int type) throws NoSuchAlgorithmException;
 
     List<Transaction> findTransactionByAccount(String accountNumber);
+
+    String HashEncrypt(String hashData) throws NoSuchAlgorithmException;
 
     List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now);
 

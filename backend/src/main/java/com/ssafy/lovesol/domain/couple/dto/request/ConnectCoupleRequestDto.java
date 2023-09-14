@@ -3,6 +3,7 @@ package com.ssafy.lovesol.domain.couple.dto.request;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +20,12 @@ import java.time.LocalDate;
 public class ConnectCoupleRequestDto {
 
 
-    @NotNull
-    private String subOnwerId;
+    private long subOnwerId;
 
+
+    @NotNull
+    @Schema(description = "기념일",example = "2020-02-02")
+    private LocalDate anniversary;
     @NotNull
     @Schema(description = "0,1 승인/거절", example = "예시")
     private int check; // 0: 승인 1: 거절

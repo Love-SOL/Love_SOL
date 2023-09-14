@@ -81,6 +81,9 @@ public class AccountServiceImpl implements AccountService{
         return true;
     }
 
+
+
+    @Override
     public String HashEncrypt(String hashData) throws NoSuchAlgorithmException {
         // SHA-256 해시 생성
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
