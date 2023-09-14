@@ -26,6 +26,7 @@ class _CalendarPageState extends State<CalendarPage> {
   bool showAlbum = false;
   String userId = '';
   String coupleId = '';
+  int dateLogId = 0;
 
   @override
   void initState() {
@@ -93,6 +94,7 @@ class _CalendarPageState extends State<CalendarPage> {
       showCalendar = true;
       showDiary = false;
       showAlbum = false;
+      dateLogId = 0;
     });
   }
 
@@ -101,6 +103,7 @@ class _CalendarPageState extends State<CalendarPage> {
       showCalendar = false;
       showDiary = true;
       showAlbum = false;
+      dateLogId = 0;
     });
   }
 
@@ -109,6 +112,15 @@ class _CalendarPageState extends State<CalendarPage> {
       showCalendar = false;
       showDiary = false;
       showAlbum = true;
+      dateLogId = 0;
+    });
+  }
+
+  void _changeShowDiary(int dateLogId) {
+    setState(() {
+      showDiary = false;
+      showAlbum = true;
+      this.dateLogId = dateLogId;
     });
   }
 
@@ -284,14 +296,16 @@ class _CalendarPageState extends State<CalendarPage> {
                         Container(
                           width: double.infinity,
                           decoration: commonBoxDecoration,
-                          child: DiaryWidget(),
+                          child: DiaryWidget(
+                            onShowDiaryChanged: _changeShowDiary, // 콜백 함수를 전달
+                          ),
                         ),
 
                       if (showAlbum)
                         Container(
                           width: double.infinity,
                           decoration: commonBoxDecoration,
-                          child: AlbumWidget(),
+                          child: AlbumWidget(dateLogId: dateLogId),
                         ),
                     ],
                   ),
