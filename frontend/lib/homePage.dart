@@ -47,7 +47,6 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
     _loadUserDataAndFetchData();
-
   }
   Future<void> _sendFcmToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -85,7 +84,7 @@ class _HomePageState extends State<HomePage> {
     _sendFcmToken();
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
-    await fetchTransactionCategoryData(accountData["personalAccount"]);
+    await fetchTransactionCategoryData(accountData["accountNumber"]);
   }
 
   Future<void> _loadUserData() async {
@@ -95,13 +94,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$userId"));
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/main/$userId"));
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final data = responseData['data'];
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
       setState(() {
-        accountData = Map<String, dynamic>.from(data);
+        accountData = Map<String, dynamic>.from(responseBody['data']);
       });
       print(accountData);
     } else {
@@ -325,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
                                 children: [
                                   Text(
-                                    "accountType", // Display account type here
+                                    "주 계좌", // Display account type here
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -335,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                                   Opacity(
                                     opacity: 0.7, // Adjust the opacity as needed
                                     child: Text(
-                                      '${accountData["personalAccount"]}', // Your smaller text here
+                                      '${accountData["accountNumber"]}', // Your smaller text here
                                       style: TextStyle(
                                         fontSize: 16, // Adjust the font size as needed
                                         color: Colors.black,
@@ -350,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '잔액: ${accountData["amount"]} 원',
+                                  '잔액: ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -452,48 +453,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildBox(double width, Color color, Map<String, dynamic> accountData, double height) {
-    return GestureDetector(
-      onTap: () {
-      },
-      // child: Container(
-      //   width: width,
-      //   height: height,
-      //   decoration: BoxDecoration(
-      //     color: color,
-      //     borderRadius: BorderRadius.circular(20.0),
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.grey,
-      //         offset: Offset(0, 2),
-      //         blurRadius: 4.0,
-      //       ),
-      //     ],
-      //   ),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       Text(
-      //         '계좌번호: ${accountData["personalAccount"]}',
-      //         style: TextStyle(
-      //           fontSize: 18,
-      //           fontWeight: FontWeight.bold,
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //       Text(
-      //         '잔액: ${accountData["amount"]}',
-      //         style: TextStyle(
-      //           fontSize: 16,
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
@@ -643,15 +602,22 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   List<Map<String, dynamic>> accountData = [];
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
     fetchAccountData(); // 초기 데이터 로드
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
   }
 
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/account/1'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/account/$userId'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -889,11 +855,13 @@ class _CouplePageState extends State<CouplePage> {
     final coupleId = prefs.getInt("coupleId");
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final data = responseData['data'];
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
       setState(() {
-        petData = Map<String, dynamic>.from(data);
+        petData = Map<String, dynamic>.from(responseBody['data']);
       });
       print(petData);
     } else {

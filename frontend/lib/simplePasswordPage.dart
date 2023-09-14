@@ -192,20 +192,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                 ],
               ),
               SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ));
-                  },
-                  child: Text(
-                    '다른 방법으로 로그인 >',
-                    style: TextStyle(
-                      color: Color(0xFF777777),
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
+
               ],
             ),
             ),

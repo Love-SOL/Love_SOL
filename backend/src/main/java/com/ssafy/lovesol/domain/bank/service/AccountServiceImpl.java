@@ -153,5 +153,10 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.save(account);
     }
 
+    @Override
+    public GetUserAccountsResponseDto getUserMainAccount(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
+        return accountRepository.findByAccountNumber(user.getPersonalAccount()).get().toGetUserAccountsResponseDto();
+    }
 
 }
