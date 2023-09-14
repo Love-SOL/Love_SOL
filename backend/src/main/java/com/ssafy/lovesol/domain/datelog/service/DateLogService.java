@@ -4,6 +4,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogForCalenderResponseDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,4 +24,6 @@ public interface DateLogService {
     void updateDateLog(DateLog dateLog);
     DateLog getDateLogForupdate(Long dateLogId);
     List<DateLogForCalenderResponseDto> getDateLogList(Long coupleId, int year,int month);
+
+    List<ImageResponseDto> getAllImage(Long coupleId);
 }

@@ -4,6 +4,7 @@ import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.request.UpdateImageDto;
 import com.ssafy.lovesol.domain.datelog.dto.response.DateLogResponseDto;
+import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 @ApiResponses({
@@ -101,6 +103,12 @@ public class DateLogController {
         log.info(imageId + " 이미지를 상세 조회합니다.");
         // 이미지 객체 정보를 조회한다.
         return new SingleResponseResult<Image>(imageService.getImage(Long.parseLong(imageId)));
+    }
+
+    @GetMapping("/image/all/{coupleId}")
+    public ResponseResult getImageALL(@PathVariable Long coupleId) throws Exception {
+        log.info(coupleId + " 커플 전체 이미지를 조회합니다.");
+        return new SingleResponseResult<List<ImageResponseDto>>(dateLogService.getAllImage(coupleId));
     }
 
     /**
