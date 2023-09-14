@@ -5,7 +5,6 @@ import 'dart:convert';
 const apiKey = '';
 const endpoint = 'https://api.openai.com/v1/chat/completions';
 
-void main() => runApp(ChatBotApp());
 
 Future<String> getChatGPTResponse(List<Map<String, dynamic>> messages) async {
 
@@ -38,6 +37,10 @@ Future<String> getChatGPTResponse(List<Map<String, dynamic>> messages) async {
 }
 
 class ChatBotApp extends StatefulWidget {
+  final Function(String) onMessageReceived; // 콜백 함수 추가
+
+  ChatBotApp({required this.onMessageReceived});
+
   @override
   _ChatBotAppState createState() => _ChatBotAppState();
 }
@@ -45,6 +48,8 @@ class ChatBotApp extends StatefulWidget {
 class _ChatBotAppState extends State<ChatBotApp> {
   final TextEditingController _controller = TextEditingController();
   final List<ChatMessage> _messages = [];
+
+
 
   void _handleMessageSubmit(String message) async {
 
@@ -75,6 +80,7 @@ class _ChatBotAppState extends State<ChatBotApp> {
           isUserMessage: false,
         ));
       });
+      widget.onMessageReceived(botResponse);
     } catch (e) {
       final errorMessage = 'API 요청에 실패했습니다: $e';
       setState(() {
@@ -93,30 +99,43 @@ class _ChatBotAppState extends State<ChatBotApp> {
     return MaterialApp(
       home: Scaffold(
         body: Column(
-          children: <Widget>[
+          children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: _messages.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final message = _messages[index];
-                  return ChatBubble(
-                    text: message.text,
-                    isUserMessage: message.isUserMessage,
-                  );
-                },
+              flex: 6,
+              child: SingleChildScrollView(
+                child: Container(
+                  color: Color(0xE4ECFF),
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      final message = _messages[index];
+                      return ChatBubble(
+                        text: message.text,
+                        isUserMessage: message.isUserMessage,
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
-            _buildMessageInput(),
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Color(0xFFFFFFFF),
+                child: _buildMessageInput(),
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-
   Widget _buildMessageInput() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(16.0),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -154,26 +173,6 @@ class ChatBubble extends StatelessWidget {
 
   ChatBubble({required this.text, required this.isUserMessage});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-//       child: Container(
-//         margin: EdgeInsets.all(8.0),
-//         padding: EdgeInsets.all(12.0),
-//         decoration: BoxDecoration(
-//           color: isUserMessage ? Colors.blue : Colors.green,
-//           borderRadius: BorderRadius.circular(8.0),
-//         ),
-//         child: Text(
-//           text,
-//           style: TextStyle(color: Colors.white),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -193,3 +192,4 @@ class ChatBubble extends StatelessWidget {
     );
   }
 }
+
