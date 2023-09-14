@@ -28,9 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,7 +77,7 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public List<GetTransactionResponseDto> getTransactionList(String accountNumber , int idx) {
-        log.info("계좌의 거래내역 조회 (6건씩)");
+        log.info("계좌의 거래내역 조회 (8건씩)");
         Pageable pageable = PageRequest.of(idx, 6, Sort.by(Sort.Order.desc("transactionAt")));
         Page<Transaction> transactions = transactionRepository.findByAccount_AccountNumberOrderByTransactionAtDesc(accountNumber, pageable);
         return transactions.getContent().stream().map(transaction -> transaction.toGetTransactionResponseDto()).toList();
@@ -104,6 +106,8 @@ public class TransactionServiceImpl  implements TransactionService{
                         .build());
         }
 
-        return dtoList;
+        return dtoList.stream()
+            .sorted(Comparator.comparing(GetTransactionByCategoryResponseDto::getAmount).reversed())
+            .collect(Collectors.toList());
     }
 }
