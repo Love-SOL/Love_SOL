@@ -1,21 +1,112 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class MyConsumePage extends StatelessWidget {
+class MyConsumePage extends StatefulWidget {
+  final String accountNumber;
 
-  final Map<String, int> expenditureData = {
-    '식비': 150000,
-    '쇼핑': 50000,
-    '여가': 20000,
-    '생활': 100000,
-  };
+  MyConsumePage({required this.accountNumber});
+
+  @override
+  _MyConsumePage createState() => _MyConsumePage();
+}
+
+
+class _MyConsumePage extends State<MyConsumePage> {
+  String coupleId = '';
+  String accountNumber = '';
+  List<PieChartSectionData> sectionList = [];
+  final Map<String, int> expenditureData = {};
 
   final Map<String, IconData> categoryIcons = {
-    '식비': Icons.restaurant,   // 식비 아이콘
+    '식당': Icons.restaurant,   // 식비 아이콘
     '쇼핑': Icons.shopping_cart, // 쇼핑 아이콘
-    '여가': Icons.beach_access,  // 여가 아이콘
-    '생활': Icons.home,         // 생활 아이콘
+    '커피숍': Icons.local_cafe,  // 여가 아이콘
+    '온라인': Icons.cloud,         // 생활 아이콘
+    '기타' : Icons.music_note
   };
+
+  Map<String, Color> categoryColors = {
+    '식당': Colors.blue,
+    '쇼핑': Colors.red,
+    '커피숍': Colors.green,
+    '온라인': Colors.yellow,
+    '기타': Colors.deepPurple
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserDataAndFetchData(widget.accountNumber);
+  }
+
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  Future<void> _loadUserDataAndFetchData(String accountNumber) async {
+    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await fetchTransactionCategoryData(accountNumber);
+  }
+
+  Future<void> fetchTransactionCategoryData(String accountNumber) async{
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' + accountNumber + '?year=2023&&month=9'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+
+        setState(() {
+          sectionList = createPieChartSections(dataList);
+          addDataListToMap(dataList);
+        });
+        sectionList.forEach((sectionData) {
+          print('Color: ${sectionData.color}, Value: ${sectionData.value}, Title: ${sectionData.title}, Radius: ${sectionData.radius}');
+        });
+
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  void addDataListToMap(List<GetTransactionByCategoryResponseDto> dtoList) {
+    for (GetTransactionByCategoryResponseDto dto in dtoList) {
+      expenditureData[dto.category] = dto.amount;
+    }
+  }
+
+  List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
+    return data.map((item) {
+      return PieChartSectionData(
+        color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
+        value: item.rate.toDouble(), // amount를 double로 변환
+        title: item.category,
+        radius: 50,
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,32 +214,7 @@ class MyConsumePage extends StatelessWidget {
                               aspectRatio: 1.3,
                               child: PieChart(
                                 PieChartData(
-                                  sections: [
-                                    PieChartSectionData(
-                                      color: Colors.blue,
-                                      value: 25,
-                                      title: '항목1',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.red,
-                                      value: 30,
-                                      title: '항목2',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.green,
-                                      value: 15,
-                                      title: '항목3',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.orange,
-                                      value: 30,
-                                      title: '항목4',
-                                      radius: 50,
-                                    ),
-                                  ],
+                                  sections: sectionList,
                                   sectionsSpace: 0,
                                   centerSpaceRadius: 40,
                                 ),
@@ -251,6 +317,26 @@ class MyConsumePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class GetTransactionByCategoryResponseDto {
+  final String category;
+  final int amount;
+  final double rate;
+
+  GetTransactionByCategoryResponseDto({
+    required this.category,
+    required this.amount,
+    required this.rate,
+  });
+
+  factory GetTransactionByCategoryResponseDto.fromJson(Map<String, dynamic> json) {
+    return GetTransactionByCategoryResponseDto(
+      category: json['category'],
+      amount: json['amount'],
+      rate: json['rate'].toDouble(),
     );
   }
 }

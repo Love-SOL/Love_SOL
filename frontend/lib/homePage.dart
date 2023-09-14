@@ -31,17 +31,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
+  List<PieChartSectionData> sectionList = [];
+
   String userId = "";
   String coupleId = "";
+
+  Map<String, Color> categoryColors = {
+    '식당': Colors.blue,
+    '쇼핑': Colors.red,
+    '커피숍': Colors.green,
+    '온라인': Colors.yellow,
+    '기타': Colors.deepPurple
+  };
+
   void initState(){
     super.initState();
     _loadUserDataAndFetchData();
+
   }
   Future<void> _sendFcmToken() async {
     final prefs = await SharedPreferences.getInstance();
     final fcmToken = prefs.getString('fcmToken');
     final userId = prefs.getInt("userId");
-
     try {
       final response = await http.post(
         Uri.parse('http://10.0.2.2:8080/api/user/token'),
@@ -74,14 +85,16 @@ class _HomePageState extends State<HomePage> {
     _sendFcmToken();
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
+    await fetchTransactionCategoryData(accountData["personalAccount"]);
   }
+
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     userId = (prefs.getInt('userId') ?? '').toString();
     coupleId = (prefs.getInt('coupleId') ?? '').toString();
   }
+
   Future<void> fetchAccountData() async {
-    print(userId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/user/account/$userId"));
 
     if (response.statusCode == 200) {
@@ -95,6 +108,54 @@ class _HomePageState extends State<HomePage> {
       throw Exception('API 요청 실패');
     }
   }
+
+  Future<void> fetchTransactionCategoryData(String accountNumber) async{
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' + accountNumber + '?year=2023&&month=9'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+
+        setState(() {
+          sectionList = createPieChartSections(dataList);
+        });
+        sectionList.forEach((sectionData) {
+          print('Color: ${sectionData.color}, Value: ${sectionData.value}, Title: ${sectionData.title}, Radius: ${sectionData.radius}');
+        });
+
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
+    }
+  }
+
+  List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
+    return data.map((item) {
+      return PieChartSectionData(
+        color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
+        value: item.rate.toDouble(), // amount를 double로 변환
+        title: item.category,
+        radius: 50,
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -223,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MyAccountPage(),
+                      builder: (context) => MyAccountPage(accountNumber: "01012341234"),
                     ),
                   );
                 },
@@ -334,7 +395,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MyConsumePage(),
+                      builder: (context) => MyConsumePage(accountNumber: "01012341234"),
                     ),
                   );
                 },
@@ -374,32 +435,7 @@ class _HomePageState extends State<HomePage> {
                               aspectRatio: 1.3,
                               child: PieChart(
                                 PieChartData(
-                                  sections: [
-                                    PieChartSectionData(
-                                      color: Colors.blue,
-                                      value: 25,
-                                      title: '항목1',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.red,
-                                      value: 30,
-                                      title: '항목2',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.green,
-                                      value: 15,
-                                      title: '항목3',
-                                      radius: 50,
-                                    ),
-                                    PieChartSectionData(
-                                      color: Colors.orange,
-                                      value: 30,
-                                      title: '항목4',
-                                      radius: 50,
-                                    ),
-                                  ],
+                                  sections: sectionList,
                                   sectionsSpace: 0,
                                   centerSpaceRadius: 40,
                                 ),
@@ -1156,4 +1192,23 @@ class _CouplePageState extends State<CouplePage> {
   }
 }
 
+class GetTransactionByCategoryResponseDto {
+  final String category;
+  final int amount;
+  final double rate;
+
+  GetTransactionByCategoryResponseDto({
+    required this.category,
+    required this.amount,
+    required this.rate,
+  });
+
+  factory GetTransactionByCategoryResponseDto.fromJson(Map<String, dynamic> json) {
+    return GetTransactionByCategoryResponseDto(
+      category: json['category'],
+      amount: json['amount'],
+      rate: json['rate'].toDouble(),
+    );
+  }
+}
 

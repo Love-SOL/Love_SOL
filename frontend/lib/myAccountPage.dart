@@ -4,12 +4,18 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAccountPage extends StatefulWidget {
+  final String accountNumber;
+
+  MyAccountPage({required this.accountNumber});
+
   @override
   _MyAccountPageState createState() => _MyAccountPageState();
 }
 
 class _MyAccountPageState extends State<MyAccountPage> {
   Map<String, dynamic> accountData = {};
+  String accountNumber = '';
+  List<GetTransactionResponseDto> transactions = [];
 
   @override
   void initState() {
@@ -20,7 +26,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String userId = '';
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
-    await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
+    await fetchAccountData(); //
+    await fetchTransactionData(widget.accountNumber);
   }
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,6 +46,39 @@ class _MyAccountPageState extends State<MyAccountPage> {
       print(accountData);
     } else {
       throw Exception('API 요청 실패');
+    }
+  }
+
+  Future<void> fetchTransactionData(String accountNumber) async{
+    print(accountNumber);
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/account/transaction/$accountNumber/0'), // 스키마를 추가하세요 (http 또는 https)
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
+      var decode = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBody = json.decode(decode);
+      // 파싱한 데이터에서 필드에 접근
+      int statusCode = responseBody['statusCode'];
+      // 필요한 작업 수행
+      if (statusCode == 200) {
+        print('aaa');
+        // 성공
+        List<dynamic> data = responseBody['data'];
+        setState(() {
+          transactions = data.map((model) => GetTransactionResponseDto.fromJson(model)).toList();
+        });
+        print(transactions);
+
+      } else {
+        print(statusCode);
+        // 실패
+      }
+    } catch (e) {
+      print("에러발생 $e");
     }
   }
 
@@ -245,7 +285,21 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         SizedBox(height: 20),
                         Expanded(
                           child: ListView.builder(
+                            itemCount: transactions.length,
                             itemBuilder: (BuildContext context, int index) {
+                              final transaction = transactions[index];
+
+                              Color transactionColor;
+                              String transactionSign;
+
+                              if (transaction.transactionType == 0) {
+                                transactionColor = Colors.red;
+                                transactionSign = '-';
+                              } else {
+                                transactionColor = Colors.blue;
+                                transactionSign = '+';
+                              }
+
                               return Column(
                                 children: [
                                   Row(
@@ -255,7 +309,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         children: [
                                           SizedBox(width: 8),
                                           Text(
-                                            '가게이름',
+                                            transaction.content,
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -265,11 +319,24 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         ],
                                       ),
                                       Text(
-                                        '원',
+                                        '$transactionSign${transaction.transactionAmount}원',  // 거래액 앞에 +/- 기호 동적 추가
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.normal,
-                                          color: Colors.black,
+                                          color: transactionColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: 8),
+                                      Text(
+                                        transaction.transactionAt.toString(),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[600],
                                         ),
                                       ),
                                     ],
@@ -283,7 +350,48 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               );
                             },
                           ),
-                        ),
+                        )
+                        // Expanded(
+                        //   child: ListView.builder(
+                        //     itemBuilder: (BuildContext context, int index) {
+                        //       return Column(
+                        //         children: [
+                        //           Row(
+                        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //             children: [
+                        //               Row(
+                        //                 children: [
+                        //                   SizedBox(width: 8),
+                        //                   Text(
+                        //                     '가게이름',
+                        //                     style: TextStyle(
+                        //                       fontSize: 18,
+                        //                       fontWeight: FontWeight.bold,
+                        //                       color: Colors.black,
+                        //                     ),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Text(
+                        //                 '원',
+                        //                 style: TextStyle(
+                        //                   fontSize: 18,
+                        //                   fontWeight: FontWeight.normal,
+                        //                   color: Colors.black,
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //           Divider(
+                        //             color: Colors.grey,
+                        //             thickness: 1,
+                        //           ),
+                        //           SizedBox(height:16),
+                        //         ],
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -293,6 +401,29 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class GetTransactionResponseDto {
+  final String content;
+  final int transactionType;
+  final int transactionAmount;
+  final String transactionAt; // LocalDateTime을 Dart에서는 String으로 처리
+
+  GetTransactionResponseDto({
+    required this.content,
+    required this.transactionType,
+    required this.transactionAmount,
+    required this.transactionAt,
+  });
+
+  factory GetTransactionResponseDto.fromJson(Map<String, dynamic> json) {
+    return GetTransactionResponseDto(
+      content: json['content'],
+      transactionType: json['transactionType'],
+      transactionAmount: json['transactionAmount'],
+      transactionAt: json['transactionAt'],
     );
   }
 }

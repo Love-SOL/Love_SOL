@@ -73,7 +73,7 @@ public class AccountController {
     }
 
     @GetMapping("/transaction/{accountNumber}/{idx}")
-    public ResponseResult getTransactionList(@PathVariable(name = "accountNumber") String accountNumber , @PathVariable(name = "idx") int idx) {
+        public ResponseResult getTransactionList(@PathVariable(name = "accountNumber") String accountNumber , @PathVariable(name = "idx") int idx) {
         return new ListResponseResult<>(transactionService.getTransactionList(accountNumber,idx));
     }
 
