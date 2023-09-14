@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:dio/src/multipart_file.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 class DiaryWidget extends StatefulWidget {
   @override
@@ -28,6 +30,27 @@ class _DiaryWidgetState extends State<DiaryWidget> {
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchScheduleData(DateTime.now().year.toString(), DateTime.now().month.toString());
+  }
+
+  void uploadImage(int dateLogId, File image, String content) async {
+    try {
+      var dio = Dio();
+      var formData = FormData.fromMap({
+        "content": content
+      });
+      List<int> imageBytes = image.readAsBytesSync();
+
+      MultipartFile multipartFile = MultipartFile.fromBytes(imageBytes, filename: "image.jpg");
+
+      // String Content를 FormData에 추가
+      formData.files.add(MapEntry('image', multipartFile));
+      // Replace the URL with your API endpoint.
+      var response = await dio.post('http://10.0.2.2:8080/api/date-log/$dateLogId', data: formData);
+      // Handle the response as needed.
+      print('Response: ${response.data}');
+    } catch (e) {
+      print("에러 발생: $e");
+    }
   }
 
   Future<void> fetchScheduleData(String year , String month) async{
@@ -192,16 +215,27 @@ class _DiaryWidgetState extends State<DiaryWidget> {
             day,
           );
 
+
+          int dateLogId = -1;
           // 이벤트 데이트가 datelog에 포함되면
           bool isDate = dateLogSet.any((dto) =>
           dto.dateAt.year == eventDate.year &&
               dto.dateAt.month == eventDate.month &&
               dto.dateAt.day == eventDate.day
           );
-
+          if (isDate) {
+            // isDate가 true인 경우 해당 날짜의 dateLogId를 찾아서 저장
+            dateLogId = dateLogSet
+                .firstWhere((dto) =>
+            dto.dateAt.year == eventDate.year &&
+                dto.dateAt.month == eventDate.month &&
+                dto.dateAt.day == eventDate.day)
+                .dateLogId;
+          }
           return GestureDetector(
             onTap: isDate ? () {
               print("Container clicked!");
+              _showEventsForDiary(eventDate,dateLogId);
             } : null, // isClickable이 false일 경우 onTap을 null로 설정하여 클릭 이벤트를 비활성화합니다.
             child: Container(
               alignment: Alignment.center,
@@ -229,7 +263,8 @@ class _DiaryWidgetState extends State<DiaryWidget> {
     );
   }
 
-  void _showEventsForDiary(DateTime eventDate) {
+  void _showEventsForDiary(DateTime eventDate, dateLogId) {
+    print(dateLogId);
     showDialog(
       context: context,
       builder: (context) {
@@ -253,7 +288,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                 Text('일정이 없습니다.'),
               ElevatedButton(
                 onPressed: () {
-                  _showAddEventDialog(eventDate);
+                  _showAddEventDialog(eventDate, dateLogId);
                 },
                 child: Text('일정 추가'),
               ),
@@ -264,15 +299,16 @@ class _DiaryWidgetState extends State<DiaryWidget> {
     );
   }
 
-  Future<void> _showAddEventDialog(DateTime eventDate) async {
+  Future<void> _showAddEventDialog(DateTime eventDate, int dateLogId) async {
     final picker = ImagePicker();
-    XFile? image;
+    File? _image;
+    String content = "";
     Color eventColor = Colors.blue; // 이벤트의 기본 색상 설정
-
+    print(dateLogId);
     Widget _buildImageWidget() {
-      if (image != null) {
+      if (_image != null) {
         // XFile을 File로 변환하여 이미지 표시
-        return Image.file(File(image!.path));
+        return Image.file(File(_image!.path));
       } else {
         return SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
       }
@@ -291,37 +327,51 @@ class _DiaryWidgetState extends State<DiaryWidget> {
               children: [
                 TextButton(
                   onPressed: () async {
-                    image = await picker.pickImage(source: ImageSource.gallery);
-                    setState(() {}); // 이미지를 업데이트하기 위해 setState 호출
+                    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      setState(() {
+                        _image = File(image.path);
+                      }); // 이미지를 업데이트하기 위해 setState 호출
+                    }
                   },
                   child: Text('사진 추가'),
                 ),
                 _buildImageWidget(), // 이미지를 표시하는 위젯 추가
                 TextField(
+                  onChanged: (value) {
+                    // 사용자가 입력한 값을 id 변수에 저장
+                    content = value;
+                  },
                   decoration: InputDecoration(labelText: '내용'),
                 ),
                 // 카테고리 선택 버튼
                 ElevatedButton(
                   onPressed: () {
+                    if (_image != null) {
+                      uploadImage(dateLogId, _image!, content);
+                      print("이미지 추가해야함");
+                      return;
+                    }
 
-                    final event = DiaryEvent(
-                      title: '일정 제목',
-                      description: '일정 내용',
-                      color: eventColor,
-                      startDate: eventDate,
-                      category: selectedCategory, // 선택한 카테고리 저장
-                    );
 
-                    setState(() {
-                      if (events.containsKey(eventDate)) {
-                        events[eventDate]!.add(event);
-                      } else {
-                        events[eventDate] = [event];
-                      }
-                    });
+                    // final event = DiaryEvent(
+                    //   title: '일정 제목',
+                    //   description: '일정 내용',
+                    //   color: eventColor,
+                    //   startDate: eventDate,
+                    //   category: selectedCategory, // 선택한 카테고리 저장
+                    // );
+                    //
+                    // setState(() {
+                    //   if (events.containsKey(eventDate)) {
+                    //     events[eventDate]!.add(event);
+                    //   } else {
+                    //     events[eventDate] = [event];
+                    //   }
+                    // });
 
                     Navigator.of(context).pop();
-                    _showEventsForDiary(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
+                    _showEventsForDiary(eventDate, dateLogId); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
                   },
                   child: Text('일정 추가'),
                 ),
