@@ -70,7 +70,7 @@ public class CoupleServiceImpl implements CoupleService{
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public boolean cutCouple(long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).get();
         Account commonAccount = accountRepository.findByAccountNumber(couple.getCommonAccount()).get();
@@ -78,9 +78,12 @@ public class CoupleServiceImpl implements CoupleService{
         User owner = couple.getOwner();
         User subOwner = couple.getSubOwner();
         double total =  couple.getSubOwnerTotal() + couple.getSubOwnerTotal();
-        double ownerPer = Math.round(couple.getOwnerTotal()/total*1000)/1000.0;
-        double ownerGet = Math.round(total*ownerPer);
-        double subOwnerGet = total - ownerGet;
+        double ownerPer = Math.round((couple.getOwnerTotal()/total)*1000)/1000.0;
+        log.info(Double.toString(total));
+        double ownerGet = Math.round(commonAccount.getBalance()*ownerPer);
+
+        double subOwnerGet = commonAccount.getBalance() - ownerGet;
+        log.info(Double.toString(subOwnerGet)+ " " + Double.toString(ownerPer));
         Account ownerAccount = accountRepository.findByAccountNumber(owner.getPersonalAccount()).get();
         Account subOwnerAccount = accountRepository.findByAccountNumber(subOwner.getPersonalAccount()).get();
 
@@ -94,12 +97,14 @@ public class CoupleServiceImpl implements CoupleService{
 
         ResponseEntity<String> response = commonHttpSend.autoDeposit(data,"/transfer/krw");
         JSONObject result = new JSONObject(response.getBody());
-        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
-        if(successCode != 0 ){
-            log.info("입금을 실패 했습니다.");
-            //여기서 notice를 추가해주자.
-            return false;
-        }
+//        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
+//        log.info(Integer.toString(successCode));
+//        if(successCode != 0 ){
+//            log.info("입금을 실패 했습니다.");
+//            //여기서 notice를 추가해주자.
+//            return false;
+//        }
+        log.info(Double.toString(ownerAccount.getBalance()+ownerGet));
         ownerAccount.setBalance(ownerAccount.getBalance()+ownerGet);
 
         LocalDateTime now = LocalDateTime.now();
@@ -124,12 +129,13 @@ public class CoupleServiceImpl implements CoupleService{
 
         response = commonHttpSend.autoDeposit(data,"/transfer/krw");
         result = new JSONObject(response.getBody());
-        successCode = result.getJSONObject("dataHeader").getInt("successCode");
-        if(successCode != 0 ){
-            log.info("입금을 실패 했습니다.");
-            //여기서 notice를 추가해주자.
-            return false;
-        }
+//        successCode = result.getJSONObject("dataHeader").getInt("successCode");
+//        if(successCode != 0 ){
+//            log.info("입금을 실패 했습니다.");
+//            //여기서 notice를 추가해주자.
+//            return false;
+//        }
+        log.info(Double.toString(subOwnerAccount.getBalance()+subOwnerGet));
         subOwnerAccount.setBalance(subOwnerAccount.getBalance()+subOwnerGet);
 
         withdrawal = Transaction.builder()
@@ -144,10 +150,10 @@ public class CoupleServiceImpl implements CoupleService{
 
         //이제부터 여기서 해야하는 거는
 
-
+        coupleRepository.delete(couple);
         accountRepository.delete(commonAccount);
 
-        return false;
+        return true;
     }
 
     @Override
