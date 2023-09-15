@@ -175,6 +175,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: 5),
                           Row(
                             children: [
                               Spacer(),
@@ -205,7 +206,7 @@ class LoginPage extends StatelessWidget {
                             },
 
                             child: Text(
-                              '간편비밀번호',
+                              '간편로그인',
                               style: TextStyle(
                                 color: Color(0xFF979797),
                                 fontSize: 15,

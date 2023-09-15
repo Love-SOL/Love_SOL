@@ -1068,8 +1068,7 @@ class _CouplePageState extends State<CouplePage> {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => CalendarPage()),
     );
-
-    // CalendarPage에서 돌아온 후 실행되는 코드
+    
     if (result == 'update') {
       _loadScheduleData();
     }

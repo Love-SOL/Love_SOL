@@ -129,6 +129,7 @@ class _PetPageState extends State<PetPage> {
           ),
         ),
       ),
+
         bottomNavigationBar: buildBottomNavigationBar(context, 3)
     );
   }
