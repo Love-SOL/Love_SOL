@@ -30,12 +30,18 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
         );
-      } else if (index == 3 || index == 4) {
+      } else if (index == 3 ) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PetPage()),
         );
-      }
+      } else if (index == 4 ) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PetPage()),
+    );
+  }
+
     },
     items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -55,8 +61,8 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
         label: '챗봇',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person_2),
-        label: '마이페이지',
+        icon: Icon(Icons.heart_broken_sharp),
+        label: '커플',
       ),
     ],
   );

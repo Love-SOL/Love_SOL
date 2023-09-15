@@ -161,7 +161,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0046FF),
+                    color: Color(0xFFE4ECFF),
                     borderRadius: BorderRadius.circular(0),
                     boxShadow: [
                       BoxShadow(
@@ -184,11 +184,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(0),
                                 child: Image.asset(
-                                  'assets/purple2.png',
-                                  width: 30,
-                                  height: 30,
+                                  'assets/shinhanlogo.png',
+                                  width: 50,
+                                  height: 50,
                                 ),
                               ),
                               Column(

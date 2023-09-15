@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   List<PieChartSectionData> sectionList = [];
 
+
+
   String userId = "";
   String coupleId = "";
 
@@ -329,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
                                 children: [
                                   Text(
-                                    "주 계좌", // Display account type here
+                                    "주 계좌",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -339,9 +341,9 @@ class _HomePageState extends State<HomePage> {
                                   Opacity(
                                     opacity: 0.7, // Adjust the opacity as needed
                                     child: Text(
-                                      '${accountData["accountNumber"]}', // Your smaller text here
+                                      '${accountData["accountNumber"]}',
                                       style: TextStyle(
-                                        fontSize: 16, // Adjust the font size as needed
+                                        fontSize: 16,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -354,7 +356,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '잔액: ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
+                                  '${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -751,7 +753,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0471E8),
+                primary: Color(0xFF0046FF),
               ),
               child: Text('이체'),
             ),
@@ -760,7 +762,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF1151C7),
+                primary: Color(0xFF0046FF),
               ),
               child: Text('결제'),
             ),
