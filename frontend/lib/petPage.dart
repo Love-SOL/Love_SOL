@@ -74,10 +74,11 @@ class _PetPageState extends State<PetPage> {
                           ),
                           Expanded( // 말풍선 영역
                             flex: 5,
-                            child: Container(
-                              padding: EdgeInsets.all(16),
+                            child:
+                            Container(
+                              padding: EdgeInsets.all(25),
                               decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Color(0xFF0466FF),
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(30),
                                   bottomRight: Radius.circular(30),

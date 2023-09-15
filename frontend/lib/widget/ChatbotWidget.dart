@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const apiKey = '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';
+const apiKey = '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';
 const endpoint = 'https://api.openai.com/v1/chat/completions';
 
 
@@ -181,7 +181,7 @@ class ChatBubble extends StatelessWidget {
         margin: EdgeInsets.all(8.0),
         padding: EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isUserMessage ? Colors.blue : Colors.green,
+          color: isUserMessage ? Colors.grey : Color(0xFF0466FF),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Text(

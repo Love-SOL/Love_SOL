@@ -339,7 +339,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Opacity(
-                                    opacity: 0.7, // Adjust the opacity as needed
+                                    opacity: 0.4,
                                     child: Text(
                                       '${accountData["accountNumber"]}',
                                       style: TextStyle(
