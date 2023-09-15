@@ -38,7 +38,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
       } else if (index == 4 ) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PetPage()),
+          MaterialPageRoute(builder: (context) => CouplePage()),
     );
   }
 
