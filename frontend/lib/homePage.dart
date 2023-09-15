@@ -650,8 +650,12 @@ class _PersonalPageState extends State<PersonalPage> {
   @override
   void initState() {
     super.initState();
-    fetchAccountData(); // 초기 데이터 로드
-    _loadUserData();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadUserData();
+    await fetchAccountData(); // 초기 데이터 로드
   }
 
   Future<void> _loadUserData() async {
@@ -660,11 +664,14 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   Future<void> fetchAccountData() async {
+    print(userId);
+    print("설마링");
     final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/account/$userId'));
-
     if (response.statusCode == 200) {
+      print(response.body);
       final Map<String, dynamic> responseData = json.decode(response.body);
       final List<dynamic> data = responseData['data'];
+      print(data);
       setState(() {
         accountData = List<Map<String, dynamic>>.from(data);
       });
@@ -879,6 +886,8 @@ class _CouplePageState extends State<CouplePage> {
   Future<void> _isPaid() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
+    print("이것이 나와야 함");
+    print(coupleId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/transaction/$coupleId"));
     // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
     Map<String, dynamic> responseData = json.decode(response.body);
@@ -891,18 +900,21 @@ class _CouplePageState extends State<CouplePage> {
         isPaid = true;
         petType = result;
       });
+      print(isPaid);
     }
   }
 
   Future<void> _loadPetData() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
+    print(coupleId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    int statusCode = responseBody['statusCode'];
-
+    print(responseBody);
+    int statusCode = responseBody['status'];
+    print(statusCode);
     if (statusCode == 200) {
       setState(() {
         petData = Map<String, dynamic>.from(responseBody['data']);
