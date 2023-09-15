@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './widget/ChatbotWidget.dart';
 import './widget/BottomNav.dart';
+import 'package:http/http.dart' as http;
 
 class PetPage extends StatefulWidget {
   @override
@@ -8,8 +12,43 @@ class PetPage extends StatefulWidget {
 }
 
 class _PetPageState extends State<PetPage> {
-  String chatBotResponse = '안녕! 난 petName이야, 데이트 장소 추천해줄게!';
+  String chatBotResponse = '안녕! 난 럽쏠이야, 데이트 장소 추천해줄게!';
+  String petImage = "assets/bear1.gif";
+  Map<String, dynamic> petData = {};
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadPetData();
+  }
+
+  Future<void> _loadPetData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    print(coupleId);
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+    print(statusCode);
+    print("펫 조회합니당");
+    if (statusCode == 200) {
+      setState(() {
+        petData = Map<String, dynamic>.from(responseBody['data']);
+        chatBotResponse = "안녕 난 ${petData['name']}이야, 데이트 장소 추천해줄게!";
+        petImage = "assets/pet${petData['kind']}.gif";
+      });
+      print(petData);
+    } else {
+      print('펫 요청 실패');
+    }
+  }
   void updateChatBotResponse(String response) {
     setState(() {
       chatBotResponse = response;
@@ -69,7 +108,7 @@ class _PetPageState extends State<PetPage> {
                           Expanded( // 이미지 영역
                             flex: 5,
                             child: Image.asset(
-                              'assets/bear1.gif',
+                              petImage,
                             ),
                           ),
                           Expanded( // 말풍선 영역
