@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   String coupleId = "";
 
   Map<String, Color> categoryColors = {
-    '식당': Colors.blue,
+    '식당': Color(0xFF0245AC),
     '쇼핑': Colors.red,
     '커피숍': Colors.green,
     '온라인': Colors.yellow,
