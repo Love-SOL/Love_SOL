@@ -62,7 +62,7 @@ public class UserScheduler {
             data.put("입금계좌통장메모","LoveSol");
             data.put("출금계좌통장메모","LoveSol");
 
-            ResponseEntity<String> response = commonHttpSend.autoDeposit(data,"/transfer/krw");
+            ResponseEntity<String> response = commonHttpSend.shinhanAPI(data,"/transfer/krw");
             JSONObject result = new JSONObject(response.getBody());
             int successCode = result.getJSONObject("dataHeader").getInt("successCode");
             if(successCode != 0 ){

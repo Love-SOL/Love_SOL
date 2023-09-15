@@ -22,7 +22,7 @@ public class CommonHttpSend {
 
     @Value("${key.api.shinhan}")
     private String key;
-    public ResponseEntity<String> autoDeposit(Map<String,String> data, String uri){
+    public ResponseEntity<String> shinhanAPI(Map<String,String> data, String uri){
 
 
         String url = "https://shbhack.shinhan.com/v1" +uri;

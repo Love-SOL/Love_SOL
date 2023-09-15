@@ -95,7 +95,7 @@ public class CoupleServiceImpl implements CoupleService{
         data.put("입금계좌통장메모","LoveSol");
         data.put("출금계좌통장메모","LoveSol");
 
-        ResponseEntity<String> response = commonHttpSend.autoDeposit(data,"/transfer/krw");
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data,"/transfer/krw");
         JSONObject result = new JSONObject(response.getBody());
 //        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
 //        log.info(Integer.toString(successCode));
@@ -127,7 +127,7 @@ public class CoupleServiceImpl implements CoupleService{
         data.put("입금계좌통장메모","LoveSol");
         data.put("출금계좌통장메모","LoveSol");
 
-        response = commonHttpSend.autoDeposit(data,"/transfer/krw");
+        response = commonHttpSend.shinhanAPI(data,"/transfer/krw");
         result = new JSONObject(response.getBody());
 //        successCode = result.getJSONObject("dataHeader").getInt("successCode");
 //        if(successCode != 0 ){
@@ -221,7 +221,7 @@ public class CoupleServiceImpl implements CoupleService{
 //          "지불가능잔액":"331551"
         Map<String, String> data = new HashMap<>();
         data.put("출금계좌번호",couple.getCommonAccount());
-        ResponseEntity<String> response =  commonHttpSend.autoDeposit( data,"/account/balance/detail");
+        ResponseEntity<String> response =  commonHttpSend.shinhanAPI( data,"/account/balance/detail");
         return ResponseAccountInfoDto.builder()
                 .coupleId(couple.getCoupleId())
                 .coupleAccount(couple.getCommonAccount())
