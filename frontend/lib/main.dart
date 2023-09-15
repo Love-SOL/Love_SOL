@@ -72,6 +72,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Love SOL',
+      theme: ThemeData(
+          fontFamily: "Pretendard"
+      ),
       home: LoginPage(), // 처음 실행되는 페이지 설정 (예: 로그인 페이지)
     );
   }

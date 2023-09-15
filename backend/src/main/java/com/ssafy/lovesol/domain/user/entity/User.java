@@ -51,7 +51,6 @@ public class User {
     @Column(nullable =true)
     private int depositAt;
 
-    @Column(nullable = false)
     @ColumnDefault(value = "''")
     private String fcmToken;
 

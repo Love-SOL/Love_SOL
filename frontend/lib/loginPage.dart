@@ -65,15 +65,13 @@ class LoginPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          // 배경 이미지
-          Image.asset(
-            'assets/loginbackground.png',
+          Container(
+            color: Color(0xFFF7F7F7),
             width: double.infinity,
             height: double.infinity,
-            fit: BoxFit.cover,
           ),
           Positioned(
-            top: 130,
+            top: 100,
             left: 0,
             right: 0,
             child: Center(
@@ -81,7 +79,7 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/logincenterbox.png',
+                    'assets/logoblue.png',
                     fit: BoxFit.contain,
                   ),
                   SizedBox(height: 40), // 이미지 박스와 입력 상자 사이의 간격 조절
@@ -126,7 +124,7 @@ class LoginPage extends StatelessWidget {
                         Positioned(
                           left: 50, // 입력 상자를 오른쪽으로 이동
                           child: SizedBox(
-                            width: 250, // 입력 상자의 너비 조절
+                            width: 230, // 입력 상자의 너비 조절
                             child: TextField(
                               onChanged: (value) {
                                 // 사용자가 입력한 값을 id 변수에 저장
@@ -176,6 +174,7 @@ class LoginPage extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
+                                    fontFamily: 'DoHyeon',
                                   ),
                                 ),
                               ),
