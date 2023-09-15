@@ -26,7 +26,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String userId = '';
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
-    await fetchAccountData(); //
+    await fetchAccountData(widget.accountNumber); //
     await fetchTransactionData(widget.accountNumber);
   }
   Future<void> _loadUserData() async {
@@ -34,8 +34,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
     userId = (prefs.getInt('userId') ?? '').toString();
   }
 
-  Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/main/$userId"));
+  Future<void> fetchAccountData(String accountNumber) async {
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/"+ accountNumber + "/info"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
@@ -195,7 +195,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
                                 children: [
                                   Text(
-                                    "accountType", // Display account type here
+                                    "${accountData['accountType'] == 0 ? "주 계좌" : " 커플 통장" }", // Display account type here
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
