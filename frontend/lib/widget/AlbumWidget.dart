@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:dio/src/multipart_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class AlbumWidget extends StatefulWidget {
   final int dateLogId; // dateLogId를 저장할 변수 추가
@@ -49,7 +50,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     coupleId = (prefs.getInt('coupleId') ?? '').toString();
   }
 
-  void uploadImage(int dateLogId, File image, String content) async {
+  Future<void> uploadImage(int dateLogId, File image, String content) async {
     try {
       var dio = Dio();
       var formData = FormData.fromMap({
@@ -208,7 +209,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
 // 이미지 업데이트 함수
   void _updateImage(XFile? image) {
     if (image != null) {
-      print("하하하하 너냐?");
       setState(() {
         image0 = File(image.path);
       });
@@ -218,6 +218,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
 
   Widget _buildImageSelectionText() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end, // 우측 정렬
       children: [
         GestureDetector(
           onTap: () async {
@@ -248,10 +249,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                       height: 200, // 이미지 높이 고정
                       width: double.infinity, // 이미지 너비를 최대로 확장
                     ),
-                  Text(
-                    '이미지를 선택하세요',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
                 ],
               ),
             ),
@@ -267,19 +264,21 @@ class _AlbumWidgetState extends State<AlbumWidget> {
             decoration: InputDecoration(labelText: '내용 입력'),
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            // 작성하기 버튼을 누를 때의 동작 추가
-            uploadImage(dateLogId, image0!, content);
-            setState(() {
-              isExpanded = false;
-            });
-            fetchAlbumData(dateLogId);
-            setState(() {
-
-            });
-          },
-          child: Text('작성하기'),
+        Align( // 작성하기 버튼을 우측 정렬하고 우측에 약간의 간격을 띄웁니다.
+          alignment: Alignment.centerRight,
+          child: ElevatedButton(
+            onPressed: () async {
+              // 작성하기 버튼을 누를 때의 동작 추가
+              await uploadImage(dateLogId, image0!, content);
+              // 이미지 업로드 후 화면 갱신
+              await fetchAlbumData(dateLogId);
+              setState(() {
+                isExpanded = false;
+              });
+              // 다른 작업을 수행할 필요가 있을 경우 여기에 추가하세요.
+            },
+            child: Text('작성하기'),
+          ),
         ),
       ],
     );
@@ -296,7 +295,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
             children: [
               if (dateLogId != 0)
                 ExpansionTile(
-                  title: Text('이미지 삽입'),
+                  title: Text('일기 작성'),
                   onExpansionChanged: (expanded) {
                     // ExpansionTile이 열리거나 닫힐 때 호출되는 콜백 함수
                     setState(() {
@@ -400,7 +399,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
 // 이미지 업데이트 함수
     void _updateImage(XFile? image) {
       if (image != null) {
-        print("하하하하 너냐?");
         setState(() {
           image0 = File(image.path);
         });
@@ -430,10 +428,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                       child: Text('사진 추가'),
                     ),
                     _buildImageWidget(), // 이미지를 표시하는 위젯 추가
-                    if (image0 == null)
-                      Text("TQ"),
-                    if (image0 != null)
-                      Text("?????"),
                     TextField(
                       onChanged: (value) {
                         // 사용자가 입력한 값을 content 변수에 저장
