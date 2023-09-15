@@ -65,7 +65,7 @@ public class InitDb {
                     .owner(user1)
                     .subOwner(user2)
                     .anniversary(LocalDate.now().minusYears(1))
-                    .commonAccount("01012341234")
+                    .commonAccount("01011112222-1")
                     .ownerTotal(0)
                     .subOwnerTotal(0)
                     .build();
@@ -89,7 +89,7 @@ public class InitDb {
                     .type(0)
                     .build();
             Account account3 = Account.builder()
-                    .accountNumber("01033334444")
+                    .accountNumber("01011112222-1")
                     .balance(100000)
                     .name("김신한")
                    .userId("a7c7664734060856bf6b826e2f4c78f8bfa4a0cd123354d4bdb27952c7922e1b")
