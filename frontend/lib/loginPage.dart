@@ -57,13 +57,14 @@ class LoginPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          Container(
-            color: Color(0xFFFFFFFF),
+          Image.asset(
+            'assets/loginbackground.png',
             width: double.infinity,
             height: double.infinity,
+            fit: BoxFit.cover,
           ),
           Positioned(
-            top: 150,
+            top: 130,
             left: 0,
             right: 0,
             child: Center(
@@ -71,7 +72,7 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/logoblue.png',
+                    'assets/logincenterbox.png',
                     fit: BoxFit.contain,
                   ),
                   SizedBox(height: 50),

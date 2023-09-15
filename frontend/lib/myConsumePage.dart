@@ -18,6 +18,8 @@ class MyConsumePage extends StatefulWidget {
 class _MyConsumePage extends State<MyConsumePage> {
   String coupleId = '';
   String accountNumber = '';
+
+  int currentIndex = 0;
   List<PieChartSectionData> sectionList = [];
   final Map<String, int> expenditureData = {};
 
@@ -91,6 +93,15 @@ class _MyConsumePage extends State<MyConsumePage> {
     }
   }
 
+  PieChartSectionData createPieChartSection(GetTransactionByCategoryResponseDto data) {
+    return PieChartSectionData(
+      color: categoryColors[data.category] ?? Colors.grey,
+      value: data.rate.toDouble(),
+      title: data.category,
+      radius: 50,
+    );
+  }
+
   void addDataListToMap(List<GetTransactionByCategoryResponseDto> dtoList) {
     for (GetTransactionByCategoryResponseDto dto in dtoList) {
       expenditureData[dto.category] = dto.amount;
@@ -100,7 +111,7 @@ class _MyConsumePage extends State<MyConsumePage> {
   List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
     return data.map((item) {
       return PieChartSectionData(
-        color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
+        color: categoryColors[item.category] ?? Colors.grey,
         value: item.rate.toDouble(), // amount를 double로 변환
         title: item.category,
         radius: 50,
