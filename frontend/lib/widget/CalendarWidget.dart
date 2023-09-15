@@ -159,7 +159,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     return Column(
       children: <Widget>[
         _buildHeader(),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         _buildWeekDays(),
         SizedBox(height: 20),
         Expanded(
@@ -323,45 +323,59 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           title: Text(
             DateFormat('yyyy년 MM월 dd일').format(eventDate),
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (events.containsKey(eventDate) &&
-                  events[eventDate]!.isNotEmpty)
-                ...events[eventDate]!.map((event) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    // 여기서 수직 간격 조절 가능
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 8,
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: event.color,
+          content: Container(
+            width: double.maxFinite,
+            height: 250,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (events.containsKey(eventDate) &&
+                    events[eventDate]!.isNotEmpty)
+                  ...events[eventDate]!.map((event) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 12,
+                            height: 8,
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: event.color,
+                            ),
                           ),
-                        ),
-                        Expanded(child: Text(event.title)),
-                      ],
-                    ),
-                  );
-                }).toList()
-              else
-                Text('일정이 없습니다.'),
-              ElevatedButton(
-                onPressed: () {
-                  _showCategoryDialog(eventDate);
-                },
-                child: Text('일정 추가'),
-              ),
-            ],
+                          Expanded(child: Text(event.title)),
+                        ],
+                      ),
+                    );
+                  }).toList()
+                else
+                  Text('일정이 없습니다.'),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                _showCategoryDialog(eventDate);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+                minimumSize: Size(double.infinity, 40),
+              ),
+              child: Text('+ 일정을 추가하세요'),
+            ),
+            SizedBox(height: 10),
+          ],
         );
       },
     );
@@ -434,42 +448,96 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 
-  // 카테고리를 선택하는 다이얼로그를 표시하는 메소드
   void _showCategoryDialog(DateTime eventDate) {
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
       builder: (BuildContext context) {
         return Container(
           padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = 'MAIN_OWNER_SCHEDULE';
                   });
-                  _showAddEventDialog(eventDate); // 모달 bottom sheet 닫기
+                  _showAddEventDialog(eventDate);
                 },
-                child: Text('주 관리자'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == 'MAIN_OWNER_SCHEDULE'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('주 관리자'),
+                  ],
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = 'SUB_OWNER_SCHEDULE';
                   });
-                  _showAddEventDialog(eventDate); // Pass eventDate to _showAddEventDialog
+                  _showAddEventDialog(
+                      eventDate);
                 },
-                child: Text('부 관리자'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == 'SUB_OWNER_SCHEDULE'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('부 관리자'),
+                  ],
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = '공동';
                   });
                   _showAddEventDialog(eventDate); // 모달 bottom sheet 닫기
                 },
-                child: Text('공동'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == '공동'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('공동'),
+                  ],
+                ),
               ),
             ],
           ),
