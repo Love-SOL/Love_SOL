@@ -73,7 +73,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     }
   }
 
-  void writeComment(int imageId, String content) async {
+  Future<void> writeComment(int imageId, String content) async {
     try {
       print(content);
       final response = await http.post(
@@ -138,7 +138,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
           int dateLogId = data['dateLogId'];
           String dateAt = data['dateAt'];
           int mileage = data['mileage'];
-
           // imageList 항목에 접근
           List<dynamic> updatedImageList = data['imageList'].reversed.toList(); // 새로운 이미지 목록
           setState(() {
@@ -360,7 +359,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                           ),
                           ListTile(
                             title: Text(
-                              imageItem["comment"] != null ? imageItem["comment"] : "댓글이 없습니다."
+                                imageItem["commentList"].length != 0 ? imageItem["commentList"][0]["content"] : "댓글이 없습니다."
                             ),
                             onTap: () {
                               _showCommentsModal(context, imageItem);
@@ -380,92 +379,13 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     );
   }
 
-
-  Future<void> _showAddEventDialog(int dateLogId) async {
-    final picker = ImagePicker();
-    File? image0;
-    String content = "";
-    Color eventColor = Colors.blue; // 이벤트의 기본 색상 설정
-    print(dateLogId);
-
-    // 이미지를 표시하는 위젯
-    Widget _buildImageWidget() {
-      print(image0);
-      return image0 != null
-          ? Image.file(image0!, key: UniqueKey())
-          : SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
-    }
-
-// 이미지 업데이트 함수
-    void _updateImage(XFile? image) {
-      if (image != null) {
-        setState(() {
-          image0 = File(image.path);
-        });
-        print(image0);
-      }
-    }
-
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text(
-                "사진을 입력해주세요",
-                style: TextStyle(fontSize: 16),
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    TextButton(
-                      onPressed: () async {
-                        final XFile? image =
-                        await picker.pickImage(source: ImageSource.gallery);
-                        _updateImage(image); // 이미지 업데이트
-                      },
-                      child: Text('사진 추가'),
-                    ),
-                    _buildImageWidget(), // 이미지를 표시하는 위젯 추가
-                    TextField(
-                      onChanged: (value) {
-                        // 사용자가 입력한 값을 content 변수에 저장
-                        content = value;
-                      },
-
-                      decoration: InputDecoration(labelText: '내용'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        uploadImage(dateLogId, image0!, content);
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('일정 추가'),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('취소'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-
-
   Future<void> _showCommentsModal(BuildContext context, imageItem) async {
     print(imageItem["imageId"]);
     String content = "";
+
+    // 이미지 아이템의 commentList를 가져옵니다.
+    List<dynamic> commentList = imageItem['commentList'];
+    print(commentList);
     final newComment = await showModalBottomSheet<String>(
       context: context,
       builder: (BuildContext context) {
@@ -475,10 +395,10 @@ class _AlbumWidgetState extends State<AlbumWidget> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: comments.length,
+                    itemCount: commentList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(comments[index]),
+                        title: Text(commentList[index]["content"]),
                       );
                     },
                   ),
@@ -498,16 +418,16 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                           },
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () {
-                          setState(() {
-                            // comments.add(commentController.text);
-                            commentController.clear();
-                            writeComment(imageItem["imageId"], content);
-                          });
-                          // Navigator.pop(context, commentController.text);
-                        },
+                      ElevatedButton(
+                      onPressed: () async {
+                        await writeComment(imageItem["imageId"], content);
+                        await fetchAlbumData(dateLogId);
+                        setState(() {
+                          content = ""; // 댓글 작성 후 content 변수 초기화
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('댓글 작성'),
                       ),
                     ],
                   ),
