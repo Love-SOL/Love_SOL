@@ -261,6 +261,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ElevatedButton(
                       onPressed: _showCalendar,
                       style: ElevatedButton.styleFrom(
+
                         primary: showCalendar ? Color(0xFF0046FF) : Color(0xFFDADADA),
                       ),
                       child: Text("일정"),

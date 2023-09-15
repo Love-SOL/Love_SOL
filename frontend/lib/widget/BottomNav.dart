@@ -13,6 +13,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
     unselectedLabelStyle: TextStyle(color: Colors.white),
     selectedItemColor: Color(0xFF0046fF),
     unselectedItemColor: Colors.grey,
+    elevation: 10,
     currentIndex: currentIndex,
     onTap: (int index) {
       if (index == 0) {
@@ -50,7 +51,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.event_note),
-        label: '일정',
+        label: '캘린더',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.home),

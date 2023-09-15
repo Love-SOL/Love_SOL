@@ -309,7 +309,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: imageList.length, // imageList의 길이로 아이템 개수 설정
+                  itemCount: imageList.length,
                   itemBuilder: (context, index) {
                     final imageItem = imageList[index];
                     return Container(
@@ -329,23 +329,23 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                       child: Column(
                         children: [
                           Container(
-                            height: 200, // 높이를 200px로 지정
+                            height: 200,
                             margin: EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Center( // 가운데 정렬을 위해 Center 위젯 사용
+                            child: Center(
                               child: AspectRatio(
                                 aspectRatio: 4 / 4,
-                                child: Image.network(imageItem['imgUrl']), // 이미지 URL로 이미지 가져오기
+                                child: Image.network(imageItem['imgUrl']),
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5),
                             child: Text(
-                              imageItem['content'], // 이미지 설명 또는 내용 출력
+                              imageItem['content'],
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
