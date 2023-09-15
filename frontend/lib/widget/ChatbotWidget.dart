@@ -50,9 +50,7 @@ class _ChatBotAppState extends State<ChatBotApp> {
   final List<ChatMessage> _messages = [];
 
 
-
   void _handleMessageSubmit(String message) async {
-
     setState(() {
       _messages.add(ChatMessage(
         text: message,
@@ -89,7 +87,6 @@ class _ChatBotAppState extends State<ChatBotApp> {
           isUserMessage: false,
         ));
       });
-
     }
   }
 
@@ -141,18 +138,14 @@ class _ChatBotAppState extends State<ChatBotApp> {
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: InputDecoration(hintText: '메시지 입력'),
+              onSubmitted: (message) {
+                if (message.isNotEmpty) {
+                  _handleMessageSubmit(message);
+                  _controller.clear();
+                }
+              },
+              decoration: InputDecoration(hintText: '궁금한 점을 입력하세요'),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () {
-              final message = _controller.text;
-              if (message.isNotEmpty) {
-                _handleMessageSubmit(message);
-                _controller.clear();
-              }
-            },
           ),
         ],
       ),
