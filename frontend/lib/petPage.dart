@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './widget/ChatbotWidget.dart';
+import './widget/BottomNav.dart';
 
 class PetPage extends StatefulWidget {
   @override
@@ -128,6 +129,7 @@ class _PetPageState extends State<PetPage> {
           ),
         ),
       ),
+        bottomNavigationBar: buildBottomNavigationBar(context, 3)
     );
   }
 }

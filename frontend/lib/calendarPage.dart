@@ -10,6 +10,7 @@ import './widget/AlbumWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'widget/BottomNav.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -314,6 +315,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
         ),
+          bottomNavigationBar: buildBottomNavigationBar(context, 1)
       ),
     );
   }

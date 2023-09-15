@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'myConsumePage.dart';
 import 'myAccountPage.dart';
+import './widget/BottomNav.dart';
 
 
 void main() {
@@ -163,6 +164,7 @@ class _HomePageState extends State<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
@@ -225,7 +227,8 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(15),
-        child: Column(
+        child:
+        Column(
           children: [
             Expanded(
               flex: 1,
@@ -453,6 +456,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 2)
     );
   }
 }
@@ -589,51 +593,10 @@ class _HomePage2State extends State<HomePage2> {
           Expanded(
             child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
           ),
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            showSelectedLabels: false, // 선택된 아이템의 라벨 숨김
-            showUnselectedLabels: false,
-            selectedLabelStyle: TextStyle(color: Colors.white),
-            unselectedLabelStyle: TextStyle(color: Colors.white),
-            selectedItemColor: Color(0xFF1151C7), // 선택된 아이템의 색상
-            unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.wallet),
-                label: '홈',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_note),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.sms),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_2),
-                label: '',
-              ),
-            ],
-            onTap: (int index) {
-              if (index == 0) {
-              } else if (index == 1) {
-              }
-              else if (index == 2) {
-              }
-              else if (index == 3) {
-              }
-              else if (index == 4) {
-              }
-            },
-          ),
+
         ],
       ),
+        bottomNavigationBar: buildBottomNavigationBar(context, 0)
     );
   }
 }
