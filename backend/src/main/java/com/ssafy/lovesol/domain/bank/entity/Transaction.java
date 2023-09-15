@@ -52,6 +52,7 @@ public class Transaction {
                 .branchName(branchName)
                 .depositAmount(depositAmount)
                 .withdrawalAmount(withdrawalAmount)
+                .transactionType(1)
                 .build();
     }
 
