@@ -1,9 +1,11 @@
 package com.ssafy.lovesol.domain.couple.service;
 
 import com.ssafy.lovesol.domain.bank.entity.Account;
+import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
 import com.ssafy.lovesol.domain.bank.service.AccountService;
 import com.ssafy.lovesol.domain.bank.service.AccountServiceImpl;
+import com.ssafy.lovesol.domain.bank.service.TransactionService;
 import com.ssafy.lovesol.domain.couple.dto.request.ConnectCoupleRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.CoupleCreateRequestDto;
 import com.ssafy.lovesol.domain.couple.dto.request.DDayRequestDto;
@@ -17,12 +19,14 @@ import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -35,6 +39,7 @@ public class CoupleServiceImpl implements CoupleService{
     private final CommonHttpSend commonHttpSend;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final TransactionService transactionService;
     @Override
     public long createCouple(CoupleCreateRequestDto coupleDto) {
         log.info("후보2");
@@ -62,6 +67,87 @@ public class CoupleServiceImpl implements CoupleService{
             return couple.get().getCommonAccount();
         }
         return "";
+    }
+
+    @Override
+    @Transactional
+    public boolean cutCouple(long coupleId) {
+        Couple couple = coupleRepository.findById(coupleId).get();
+        Account commonAccount = accountRepository.findByAccountNumber(couple.getCommonAccount()).get();
+        //여기서부터는 이제 공통 계좌와 돈 나눠주는거임
+        User owner = couple.getOwner();
+        User subOwner = couple.getSubOwner();
+        double total =  couple.getSubOwnerTotal() + couple.getSubOwnerTotal();
+        double ownerPer = Math.round(couple.getOwnerTotal()/total*1000)/1000.0;
+        double ownerGet = Math.round(total*ownerPer);
+        double subOwnerGet = total - ownerGet;
+        Account ownerAccount = accountRepository.findByAccountNumber(owner.getPersonalAccount()).get();
+        Account subOwnerAccount = accountRepository.findByAccountNumber(subOwner.getPersonalAccount()).get();
+
+        HashMap<String,String> data = new HashMap<>();
+        data.put("출금계좌번호",couple.getCommonAccount());
+        data.put("입금은행코드","088");
+        data.put("입금계좌번호", owner.getPersonalAccount());
+        data.put("이체금액",Integer.toString((int)ownerGet));
+        data.put("입금계좌통장메모","LoveSol");
+        data.put("출금계좌통장메모","LoveSol");
+
+        ResponseEntity<String> response = commonHttpSend.autoDeposit(data,"/transfer/krw");
+        JSONObject result = new JSONObject(response.getBody());
+        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
+        if(successCode != 0 ){
+            log.info("입금을 실패 했습니다.");
+            //여기서 notice를 추가해주자.
+            return false;
+        }
+        ownerAccount.setBalance(ownerAccount.getBalance()+ownerGet);
+
+        LocalDateTime now = LocalDateTime.now();
+        Transaction withdrawal = Transaction.builder()
+                .transactionAt(now)
+                .depositAmount(ownerGet)
+                .withdrawalAmount(0)
+                .content("LoveSol")
+                .branchName("LoveSol 자동이체 출금")
+                .account(ownerAccount)
+                .build();
+        transactionService.registTransactionInfo(withdrawal);
+
+        //subowner 입금해주기
+        data = new HashMap<>();
+        data.put("출금계좌번호",couple.getCommonAccount());
+        data.put("입금은행코드","088");
+        data.put("입금계좌번호", subOwner.getPersonalAccount());
+        data.put("이체금액",Integer.toString((int)subOwnerGet));
+        data.put("입금계좌통장메모","LoveSol");
+        data.put("출금계좌통장메모","LoveSol");
+
+        response = commonHttpSend.autoDeposit(data,"/transfer/krw");
+        result = new JSONObject(response.getBody());
+        successCode = result.getJSONObject("dataHeader").getInt("successCode");
+        if(successCode != 0 ){
+            log.info("입금을 실패 했습니다.");
+            //여기서 notice를 추가해주자.
+            return false;
+        }
+        subOwnerAccount.setBalance(subOwnerAccount.getBalance()+subOwnerGet);
+
+        withdrawal = Transaction.builder()
+                .transactionAt(now)
+                .depositAmount(ownerGet)
+                .withdrawalAmount(0)
+                .content("LoveSol")
+                .branchName("LoveSol 자동이체 출금")
+                .account(subOwnerAccount)
+                .build();
+        transactionService.registTransactionInfo(withdrawal);
+
+        //이제부터 여기서 해야하는 거는
+
+
+        accountRepository.delete(commonAccount);
+
+        return false;
     }
 
     @Override

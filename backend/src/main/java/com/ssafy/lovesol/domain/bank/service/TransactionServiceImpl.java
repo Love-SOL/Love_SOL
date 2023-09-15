@@ -42,7 +42,6 @@ public class TransactionServiceImpl  implements TransactionService{
     private final AccountRepository accountRepository;
     private final CoupleRepository coupleRepository;
     @Override
-    @Transactional
     public void registTransactionInfo(Transaction transaction) {
         transactionRepository.save(transaction);
     }

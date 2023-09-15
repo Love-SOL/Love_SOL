@@ -116,6 +116,18 @@ public class CoupleController {
 
         return ResponseResult.successResponse;
     }
+
+
+    @PostMapping("/farewall/{coupleId}")
+    public ResponseResult farewallCouple(@PathVariable long coupleId)
+    {
+        log.info("CoupleController -> 커플 통장 정산하기");
+        if(!coupleService.cutCouple(coupleId)){
+            return ResponseResult.failResponse;
+        }
+        return ResponseResult.successResponse;
+    }
+
     @GetMapping("/test")
     public ResponseEntity<String> test(){
         log.info("CoupleController -> 환율 조회 ");
