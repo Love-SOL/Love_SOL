@@ -589,6 +589,49 @@ class _HomePage2State extends State<HomePage2> {
           Expanded(
             child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
           ),
+          BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            showSelectedLabels: false, // 선택된 아이템의 라벨 숨김
+            showUnselectedLabels: false,
+            selectedLabelStyle: TextStyle(color: Colors.white),
+            unselectedLabelStyle: TextStyle(color: Colors.white),
+            selectedItemColor: Color(0xFF1151C7), // 선택된 아이템의 색상
+            unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.wallet),
+                label: '홈',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_note),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.sms),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_2),
+                label: '',
+              ),
+            ],
+            onTap: (int index) {
+              if (index == 0) {
+              } else if (index == 1) {
+              }
+              else if (index == 2) {
+              }
+              else if (index == 3) {
+              }
+              else if (index == 4) {
+              }
+            },
+          ),
         ],
       ),
     );
@@ -634,7 +677,8 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: ListView.builder(
+      body:
+      ListView.builder(
         itemCount: accountData.length,
         itemBuilder: (BuildContext context, int index) {
           return buildAccountCard(accountData[index], context);
@@ -744,7 +788,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFF0471E8),
               ),
               child: Text('이체'),
             ),
@@ -753,7 +797,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFF1151C7),
               ),
               child: Text('결제'),
             ),

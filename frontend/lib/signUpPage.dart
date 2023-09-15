@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'simplePasswordPage.dart';
-import 'homePage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'signUpPage2.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -135,16 +134,26 @@ class SignUpPage extends StatelessWidget {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-        backgroundColor: Color(0XFF0046FF),
-        elevation: 0,
-      ),
+          automaticallyImplyLeading : false,
+          backgroundColor: Color(0XFDADADA),
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Image.asset(
+                'assets/ottbar.png',
+                width: 100,
+              ),
+            ),
+          ],
+        ),
       body: Container(
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
-              flex: 10,
+              flex: 7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,11 +161,19 @@ class SignUpPage extends StatelessWidget {
                     buildInputBox('이름', '이름을 입력하세요', controller: nameController, onChanged: (value) {
                       name = value;
                     }),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     buildInputBox('생년월일', '숫자 8자리 입력', controller: birthdateController, onChanged: (value) {
                       birthAt = value;
                     }),
+<<<<<<< HEAD
                     SizedBox(height: 10),
+=======
+                    SizedBox(height: 15),
+                    buildInputBox('휴대폰 번호', '휴대폰 번호를 입력하세요', controller: phoneNumberController, onChanged: (value) {
+                      phoneNumber = value;
+                    }),
+                    SizedBox(height: 15),
+>>>>>>> refactor/FE-page-detail
                     buildInputBox('계좌번호', '12자리 입력', controller: accountNumberController, onChanged: (value) {
                       personalAccount = value;
                     }),
@@ -216,7 +233,7 @@ class SignUpPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      minimumSize: Size(100, 48),
+                      minimumSize: Size(120, 48),
                     ),
                   ),
                   ElevatedButton(
@@ -254,7 +271,7 @@ class SignUpPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      minimumSize: Size(100, 48),
+                      minimumSize: Size(120, 48),
                     ),
                   ),
                 ],
@@ -316,6 +333,7 @@ class SignUpPage extends StatelessWidget {
       ],
     );
   }
+<<<<<<< HEAD
 }
 
 class SignUpPage2 extends StatelessWidget {
@@ -532,4 +550,6 @@ class SignUpPage2 extends StatelessWidget {
       ],
     );
   }
+=======
+>>>>>>> refactor/FE-page-detail
 }

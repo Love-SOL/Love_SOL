@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const apiKey = '';
+const apiKey = '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';
 const endpoint = 'https://api.openai.com/v1/chat/completions';
 
 
