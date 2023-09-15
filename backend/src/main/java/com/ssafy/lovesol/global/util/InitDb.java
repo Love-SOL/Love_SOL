@@ -19,10 +19,10 @@ public class InitDb {
 
     private final InitService initService;
 
-//    @PostConstruct
-//    public void init() {
-//        initService.UserInit();
-//    }
+    @PostConstruct
+    public void init() {
+        initService.UserInit();
+    }
 
     @Component
     @Transactional
@@ -78,6 +78,7 @@ public class InitDb {
                     .name("박신한")
                     .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
                     .bankCode(88)
+                    .type(0)
                     .build();
             Account account2 = Account.builder()
                     .accountNumber("01012341234")
@@ -85,6 +86,7 @@ public class InitDb {
                     .name("박신한")
                     .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
                     .bankCode(88)
+                    .type(0)
                     .build();
             Account account3 = Account.builder()
                     .accountNumber("01033334444")
@@ -92,6 +94,7 @@ public class InitDb {
                     .name("김신한")
                    .userId("a7c7664734060856bf6b826e2f4c78f8bfa4a0cd123354d4bdb27952c7922e1b")
                     .bankCode(88)
+                    .type(0)
                     .build();
 
             em.persist(account);
