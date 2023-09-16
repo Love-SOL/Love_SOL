@@ -948,11 +948,7 @@ class _CouplePageState extends State<CouplePage> {
   String scheduleDDay = '';
   Map<String, dynamic> petData = {};
   Map<String, dynamic> loveBoxData = {};
-  Map<String, dynamic> scheduleData = {
-    'content': '약속 없음',  // String 값
-    'remainingDay': 0,              // int 값
-    'date': DateTime.now()           // DateTime 객체
-  };
+  Map<String, dynamic> scheduleData = {};
   bool isPaid = false;
   void initState(){
     super.initState();
@@ -1128,7 +1124,7 @@ class _CouplePageState extends State<CouplePage> {
                         alignment: Alignment.center,
                         children: [
                           Icon(Icons.favorite, color: Color(0xFFFF0000), size: 100.0),
-                          Text("+" + dday, style: TextStyle(color: Colors.white , fontSize: 18)),
+                          Text(scheduleData.isNotEmpty ? "+" + dday : "ㅜ_ㅜ", style: TextStyle(color: Colors.white , fontSize: 18)),
                         ],
                       ),
                       SizedBox(width: 15), // 이미지와 텍스트 사이 간격 조절
@@ -1136,7 +1132,7 @@ class _CouplePageState extends State<CouplePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            scheduleData["content"],
+                            scheduleData.isNotEmpty ? scheduleData["content"] : "아직 약속이 없어요",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -1145,7 +1141,7 @@ class _CouplePageState extends State<CouplePage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요', // Exp 텍스트 추가
+                            scheduleData.isNotEmpty ? '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요' : "이번 주말 데이트 어때요?", // Exp 텍스트 추가
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFFA47DE5),
