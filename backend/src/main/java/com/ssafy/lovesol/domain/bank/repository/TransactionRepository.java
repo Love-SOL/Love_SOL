@@ -21,7 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             "  AND t.transactionAt >= :transactionAt" +
             "  AND t.withdrawalAmount != 0" +
             "ORDER BY t.transactionAt")
-    List<Transaction> findByTransactionAtList(LocalDateTime transactionAt,String account);
+    List<Transaction> findByTransactionAtList(@Param(value = "transactionAt") LocalDateTime transactionAt,@Param(value = "account") String account);
     Optional<Transaction> findFirstByAccountAndDepositAmountOrderByTransactionAtDesc(Account account,int depositAmount);
 
     @Query("SELECT t FROM Transaction t WHERE t.account = :account AND t.transactionAt >= :transactionAt AND t.withdrawalAmount > 0")
