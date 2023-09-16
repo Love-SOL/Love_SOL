@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'myConsumePage.dart';
+import 'loginPage.dart';
 import 'myAccountPage.dart';
 import 'package:intl/intl.dart';
 import './widget/BottomNav.dart';
@@ -169,8 +170,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     return accountNumber.substring(0, 3) + '-' +
-        accountNumber.substring(3, 6) + '-' +
-        accountNumber.substring(6, 12);
+          accountNumber.substring(3, 6) + '-' +
+          accountNumber.substring(6, 12);
   }
 
   @override
@@ -179,9 +180,8 @@ class _HomePageState extends State<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-
       appBar: AppBar(
-        automaticallyImplyLeading : false,
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
         iconTheme: IconThemeData(
@@ -190,46 +190,14 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
+            onPressed: () {
+              _showOptionsDialog(context);
+            },
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
-                  );
-                },
-              );
+              _showNotificationDialog(context);
             },
           ),
         ],
@@ -476,135 +444,78 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: buildBottomNavigationBar(context, 2)
     );
   }
-}
 
-class HomePage2 extends StatefulWidget {
-  @override
-  _HomePage2State createState() => _HomePage2State();
-}
-
-class _HomePage2State extends State<HomePage2> {
-  int _selectedPageIndex = 0;
-
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
+  void _showOptionsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('My Page'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
-              );
-            },
-          ),
-        ],
-        title: Text(
-          "홈",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.all(24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () => _selectPage(0),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5, // 그림자 크기
-                      primary: _selectedPageIndex == 0
-                          ? Colors.grey
-                          : Color(0xFF0046FF),
-                    ),
-                    child: Text(
-                      '개인',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _selectedPageIndex == 0
-                            ? Colors.white
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
                 ),
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () => _selectPage(1),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5, // 그림자 크기
-                      primary: _selectedPageIndex == 1
-                          ? Colors.grey
-                          : Color(0xFF0046FF),
-                    ),
-                    child: Text(
-                      '커플',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _selectedPageIndex == 1
-                            ? Colors.white
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
+                child: Text('로그아웃'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('정산하기'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Container(
+            width: double.maxFinite,
+            height: 300,
+            child: ListView(
+              children: [
+                ListTile(
+                  title: Text('알림 1'),
+                  subtitle: Text('알림 내용 1'),
+                ),
+                ListTile(
+                  title: Text('알림 2'),
+                  subtitle: Text('알림 내용 2'),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
-          ),
-
-        ],
-      ),
-        bottomNavigationBar: buildBottomNavigationBar(context, 0)
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
