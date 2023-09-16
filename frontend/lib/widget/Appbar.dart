@@ -67,6 +67,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           title: Text('My Page'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -126,6 +129,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
@@ -142,10 +148,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ),
                     ),
                     actions: [
-                      TextButton(
+                      ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF0046FF),
+                        ),
                         child: Text('닫기'),
                       ),
                     ],
