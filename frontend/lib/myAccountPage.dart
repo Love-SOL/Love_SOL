@@ -30,7 +30,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
   String userId = '';
   Future<void> _loadUserDataAndFetchData() async {
-    await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
+    await _loadUserData();
     await fetchAccountData(widget.accountNumber); //
     await fetchTransactionData(widget.accountNumber);
   }
