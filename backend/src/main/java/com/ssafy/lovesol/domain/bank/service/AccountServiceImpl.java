@@ -18,6 +18,8 @@ import com.ssafy.lovesol.global.util.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
+
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +52,7 @@ public class AccountServiceImpl implements AccountService{
         data.put("입금은행코드","088");
         data.put("입금계좌번호",transferRequestDto.getAccountNumber());
         data.put("입금통장메모",randomSixNumber);
-        ResponseEntity<String> response = commonHttpSend.autoDeposit(data, "/auth/1transfer");
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data, "/auth/1transfer");
 
         try {
             // String 형태의 응답 본문을 JsonNode 객체로 변환
@@ -157,6 +159,23 @@ public class AccountServiceImpl implements AccountService{
     public GetUserAccountsResponseDto getUserMainAccount(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
         return accountRepository.findByAccountNumber(user.getPersonalAccount()).get().toGetUserAccountsResponseDto();
+    }
+
+    @Override
+    public GetUserAccountsResponseDto getAccountInfo(String accountNumber) {
+        HashMap<String,String> data = new HashMap<>();
+        data.put("계좌번호","230307000000");
+
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data,"/account/deposit/detail");
+        JSONObject result = new JSONObject(response.getBody());
+        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
+
+        if(successCode != 0 ){
+            log.info("계좌 조회 성공");
+            accountRepository.findByAccountNumber(accountNumber).get().toGetUserAccountsResponseDto();
+        }
+
+        return null;
     }
 
 }

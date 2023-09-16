@@ -135,7 +135,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       Map<String, dynamic> responseData = json.decode(response.body);
       // 파싱한 데이터에서 필드에 접근
       int statusCode = responseData['statusCode'];
-      print(statusCode);
       // 필요한 작업 수행
       if (statusCode == 200) {
         // 성공
@@ -426,7 +425,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       _showEventsForDate(eventDate); // 일정을 추가한 후에 해당 날짜의 이벤트 표시
                     }
 
-                    Navigator.of(context).pop();
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },

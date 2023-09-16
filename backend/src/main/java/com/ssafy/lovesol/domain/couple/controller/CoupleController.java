@@ -133,7 +133,7 @@ public class CoupleController {
         log.info("CoupleController -> 환율 조회 ");
         Map<String, String> data = new HashMap<>();
         data.put("조회일자","20230901");
-       return commonHttpSend.autoDeposit(data, "/search/fxrate/number");
+       return commonHttpSend.shinhanAPI(data, "/search/fxrate/number");
 
     }
 

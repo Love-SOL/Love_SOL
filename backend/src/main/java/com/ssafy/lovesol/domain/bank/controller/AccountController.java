@@ -67,6 +67,11 @@ public class AccountController {
         return new SingleResponseResult<>(accountService.getMyAccounts(userId,0));
     }
 
+    @GetMapping("/{accountNumber}/info")
+    public ResponseResult getAccountInfo(@PathVariable(value = "accountNumber") String accountNumber) throws NoSuchAlgorithmException {
+        return new SingleResponseResult<>(accountService.getAccountInfo(accountNumber));
+    }
+
     @GetMapping("/couple/{userId}")
     public ResponseResult getMyLoveBox(@Valid @PathVariable Long userId) throws NoSuchAlgorithmException {
         return new SingleResponseResult<>(accountService.getMyAccounts(userId,1));

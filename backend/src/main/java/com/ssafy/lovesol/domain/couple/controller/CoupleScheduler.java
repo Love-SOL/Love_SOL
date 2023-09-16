@@ -48,7 +48,7 @@ public class CoupleScheduler {
             Map<String,String> data = new HashMap<>();
             data.put("계좌번호",couple.getCommonAccount());
             //계좌번호로 결재 내역 조회
-            ResponseEntity<String> response = commonHttpSend.autoDeposit(data,"/search/transaction");
+            ResponseEntity<String> response = commonHttpSend.shinhanAPI(data,"/search/transaction");
             JSONObject result = new JSONObject(response.getBody());
             //실제 결재내역을 정상적으로 받은 경우
             int successCode = result.getJSONObject("dataHeader").getInt("successCode");

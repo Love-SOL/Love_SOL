@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'myConsumePage.dart';
 import 'myAccountPage.dart';
+import 'package:intl/intl.dart';
 import './widget/BottomNav.dart';
 
 
@@ -132,7 +133,8 @@ class _HomePageState extends State<HomePage> {
         // 성공
         List<dynamic> data = responseBody['data'];
         List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
-
+        print('실행');
+        print(dataList);
         setState(() {
           sectionList = createPieChartSections(dataList);
         });
@@ -151,6 +153,7 @@ class _HomePageState extends State<HomePage> {
 
   List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
     return data.map((item) {
+      print(item);
       return PieChartSectionData(
         color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
         value: item.rate.toDouble(), // amount를 double로 변환
@@ -290,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MyAccountPage(accountNumber: "01012341234"),
+                      builder: (context) => MyAccountPage(accountNumber: accountData["accountNumber"]),
                     ),
                   );
                 },
@@ -401,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MyConsumePage(accountNumber: "01012341234"),
+                      builder: (context) => MyConsumePage(accountNumber: accountData["accountNumber"]),
                     ),
                   );
                 },
@@ -439,13 +442,15 @@ class _HomePageState extends State<HomePage> {
                             alignment: Alignment.center, // 가운데 정렬
                             child: AspectRatio(
                               aspectRatio: 1.3,
-                              child: PieChart(
+                              child: sectionList.isNotEmpty
+                                  ? PieChart(
                                 PieChartData(
                                   sections: sectionList,
                                   sectionsSpace: 0,
                                   centerSpaceRadius: 40,
                                 ),
-                              ),
+                              )
+                                  : Center(child: Text("소비 내역이 없습니다", style: TextStyle(fontSize: 20))),
                             ),
                           ),
                         ),
@@ -629,22 +634,23 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   Future<void> fetchAccountData() async {
-    print(userId);
-    print("설마링");
+
     final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/account/$userId'));
-    if (response.statusCode == 200) {
-      print(response.body);
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final List<dynamic> data = responseData['data'];
-      print(data);
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
       setState(() {
-        accountData = List<Map<String, dynamic>>.from(data);
+        accountData = List<Map<String, dynamic>>.from(responseBody['data']);
       });
       print(accountData);
     } else {
       throw Exception('API 요청 실패');
     }
   }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -659,6 +665,7 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 }
+
 Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
   void _showConfirmationDialog(accountInfo) {
     showDialog(
@@ -746,7 +753,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
         ),
         Center(
           child: Text(
-            '${accountInfo["balance"]}원', // balance를 표시
+            '${formatCurrency(removeSosu(accountInfo["balance"].toString()))}원', // balance를 표시
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
@@ -780,6 +787,15 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
   );
 }
 
+String formatCurrency(String amountStr) {
+  int amount = int.parse(amountStr);
+  final formatCurrency = NumberFormat.simpleCurrency(decimalDigits: 0, locale: 'ko_KR'); // locale에 따라 적절한 포맷을 선택할 수 있습니다.
+  return formatCurrency.format(amount).substring(1); // '₩' 기호 제거
+}
+
+String removeSosu(String amount){
+  return amount.substring(0, amount.length-2);
+}
 
 class CouplePage extends StatefulWidget {
   @override
@@ -877,9 +893,8 @@ class _CouplePageState extends State<CouplePage> {
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    print(responseBody);
-    int statusCode = responseBody['status'];
-    print(statusCode);
+    int statusCode = responseBody['statusCode'];
+
     if (statusCode == 200) {
       setState(() {
         petData = Map<String, dynamic>.from(responseBody['data']);
