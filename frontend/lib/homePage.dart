@@ -701,17 +701,14 @@ class _PersonalPageState extends State<PersonalPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '러브박스',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        Image.asset(
+                          'assets/lovebox.png',
+                          width: 100,
+                          height: 50,
                         ),
                         SizedBox(height:10),
                         if (loveBoxData.isNotEmpty)
-                          buildAccountCard(loveBoxData, context),
+                          buildAccountCard(loveBoxData, context, true),
                       ],
                     ),
                   ),
@@ -724,7 +721,7 @@ class _PersonalPageState extends State<PersonalPage> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: Color(0xFFE6DFFF),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -743,7 +740,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return Column(
                           children: [
-                            buildAccountCard(accountData[index], context),
+                            buildAccountCard(accountData[index], context, false),
                             SizedBox(height: 10.0),
                           ],
                         );
@@ -764,7 +761,7 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 }
 
-Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) {
+Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context, bool isLoveBox) {
   void _showConfirmationDialog(accountInfo) {
     showDialog(
       context: context,
@@ -832,8 +829,20 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
     child: Container(
       width: double.infinity,
       // height: 150.0,
-      margin: EdgeInsets.only(right: 16, bottom: 10),
+      margin: EdgeInsets.all(16.0),
       padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: isLoveBox ? Color(0xFFA47DE5) : Colors.white, // isLoveBox 값에 따라 배경색 설정
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -879,7 +888,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: isLoveBox ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -1345,7 +1354,7 @@ class _CouplePageState extends State<CouplePage> {
                 },
                 child: Container(
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+                  margin: EdgeInsets.only(left: 16, right: 16),
                   padding: EdgeInsets.all(0),
                   decoration: BoxDecoration(
                   color: Color(0xFFA47DE5),
@@ -1360,7 +1369,7 @@ class _CouplePageState extends State<CouplePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 18), // Adjust left padding
+                    padding: const EdgeInsets.only(left: 6), // Adjust left padding
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start, // Align to the start (left side)
                       mainAxisAlignment: MainAxisAlignment.start, // Align to the start (top side)
@@ -1386,7 +1395,7 @@ class _CouplePageState extends State<CouplePage> {
                           ],
                         ),
                         if (loveBoxData.isNotEmpty)
-                          buildAccountCard(loveBoxData, context),
+                          buildAccountCard(loveBoxData, context, true),
                       ],
                     ),
                   ),
