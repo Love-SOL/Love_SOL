@@ -102,7 +102,8 @@
 
 
 
-### FIGMA
+### FIGMA (전 기획안)
+![KakaoTalk_20230917_063258283](https://github.com/Love-SOL/Love_SOL/assets/33506590/e5e97063-68cf-4a9c-8eea-4f07c45a5d8f)
 
 
 
