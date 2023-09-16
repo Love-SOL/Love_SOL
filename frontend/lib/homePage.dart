@@ -344,7 +344,7 @@ class _HomePageState extends State<HomePage> {
                                   Opacity(
                                     opacity: 0.4,
                                     child: Text(
-                                      '${accountData["accountNumber"]}',
+                                      '${accountData["accountNumber"] == null ? "" : accountData["accountNumber"]}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -359,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
+                                  '${accountData["balance"] == null ? "0" : formatCurrency(removeSosu(accountData["balance"].toString()))} 원',
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,

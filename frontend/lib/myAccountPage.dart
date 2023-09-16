@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class MyAccountPage extends StatefulWidget {
   final String accountNumber;
@@ -88,6 +89,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String formatLocalDateTime(String localDateTimeStr) {
     DateTime parsedDate = DateTime.parse(localDateTimeStr.replaceAll('T', ' '));
     return "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')} ${parsedDate.hour.toString().padLeft(2, '0')}:${parsedDate.minute.toString().padLeft(2, '0')}";
+  }
+
+  String formatCurrency(String amountStr) {
+    int amount = int.parse(amountStr);
+    final formatCurrency = NumberFormat.simpleCurrency(decimalDigits: 0, locale: 'ko_KR'); // locale에 따라 적절한 포맷을 선택할 수 있습니다.
+    return formatCurrency.format(amount).substring(1); // '₩' 기호 제거
+  }
+
+  String removeSosu(String amount){
+    return amount.substring(0, amount.length-2);
   }
 
   @override
@@ -207,7 +218,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                   Opacity(
                                     opacity: 0.4,
                                     child: Text(
-                                      '${accountData["accountNumber"]}',
+                                      '${accountData["accountNumber"] == null ? "0" : accountData["accountNumber"]}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -222,7 +233,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  ' ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
+                                  '${accountData["balance"] == null ? "" : formatCurrency(removeSosu(accountData["balance"].toString()))} 원',
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
