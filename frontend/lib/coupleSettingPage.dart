@@ -81,8 +81,9 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Color(0XFF0046FF),
+        backgroundColor: Color(0XFFF7F7F7),
         elevation: 0,
       ),
       body: Container(
@@ -92,14 +93,13 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
             Column(
               children: [
                 buildInputBox('상대방 ID', '아이디를 입력해주세요', onChanged: (value) {
                   receiverId = value;
                 }),
                 SizedBox(height: 10),
-                buildInputBox('기념일', '기념일을 입력해주세요', onChanged: (value) {
+                buildInputBox('기념일', '(예 : 2023-09-16)', onChanged: (value) {
                   aniversary = value;
                 }),
                 SizedBox(height: 10),
@@ -110,7 +110,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
                 buildInputBox('자동이체 금액', '금액을 선택해주세요', onChanged: (value) {
                   amount = value;
                 }),
-                SizedBox(height: 20),
+                SizedBox(height: 100),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

@@ -50,7 +50,7 @@ class SignUpPage extends StatelessWidget {
             style: ElevatedButton.styleFrom(
             primary: Color(0xFF0046FF),
             ),
-            child: Text('아니오'),
+            child: Text('확인'),
                 )
               ],
             );
@@ -92,14 +92,20 @@ class SignUpPage extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('성공'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               content: Text('인증에 성공하셨습니다.'),
               actions: <Widget>[
-                TextButton(
-                  child: Text('확인'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Alert 창 닫기
-                  },
-                ),
+                ElevatedButton(
+                onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+            primary: Color(0xFF0046FF),
+            ),
+            child: Text('확인')
+                )
               ],
             );
           },
@@ -110,15 +116,21 @@ class SignUpPage extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               title: Text('실패'),
               content: Text('인증에 실패하셨습니다. 다시 한번 확인해주세요.'),
               actions: <Widget>[
-                TextButton(
-                  child: Text('확인'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Alert 창 닫기
-                  },
-                ),
+                ElevatedButton(
+                onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+            primary: Color(0xFF0046FF),
+            ),
+            child: Text('확인')
+                )
               ],
             );
           },
@@ -148,7 +160,7 @@ class SignUpPage extends StatelessWidget {
               padding: const EdgeInsets.all(5),
               child: Image.asset(
                 'assets/ottbar.png',
-                width: 100,
+                width: 80,
               ),
             ),
           ],
@@ -245,15 +257,21 @@ class SignUpPage extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
                               title: Text('알림'),
                               content: Text('이름, 생년월일, 휴대폰번호, 계좌번호 입력과 인증을 모두 마치셔야합니다.'),
                               actions: <Widget>[
-                                TextButton(
-                                  child: Text('확인'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Alert 창 닫기
-                                  },
-                                ),
+                                ElevatedButton(
+                                onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF0046FF),
+                            ),
+                            child: Text('확인')
+                                )
                               ],
                             );
                           },
