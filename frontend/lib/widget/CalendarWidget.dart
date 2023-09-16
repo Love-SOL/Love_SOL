@@ -299,7 +299,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   if (eventsForDate != null) // 해당 날짜에 이벤트가 있는 경우
                     ...eventsForDate.map((event) {
                       return Container(
-                        width: 10, // 이벤트 표시를 위한 작은 원
+                        width: 10,
                         height: 10,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,

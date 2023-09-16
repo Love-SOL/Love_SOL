@@ -245,7 +245,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
               print("Container clicked!");
               _changeShowDiary(dateLogId);
             }
-                : null, // isClickable이 false일 경우 onTap을 null로 설정하여 클릭 이벤트를 비활성화합니다.
+                : null,
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -259,7 +259,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF69695D),
+                      color: isDate ? Colors.white : Color(0xFF69695D),
                     ),
                   ),
                 ],
