@@ -1151,11 +1151,13 @@ class _CouplePageState extends State<CouplePage> {
           headers: <String, String>{'Content-Type': 'application/json',},
           body: jsonEncode(<String, dynamic>{'name': petName,'kind': petType}),
         );
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = json.decode(response.body);
-          final data = responseData['data'];
+        var decode = utf8.decode(response.bodyBytes);
+        Map<String, dynamic> responseBody = json.decode(decode);
+        int statusCode = responseBody['statusCode'];
+
+        if (statusCode == 200) {
           setState(() {
-            petData = Map<String, dynamic>.from(data);
+            petData = Map<String, dynamic>.from(responseBody['data']);
           });
           print(petData);
         } else {
