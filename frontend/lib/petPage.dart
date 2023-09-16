@@ -128,7 +128,7 @@ class _PetPageState extends State<PetPage> {
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Color(0xFFA47DE5),
+                        color: Color(0xFFE6DFFF),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(

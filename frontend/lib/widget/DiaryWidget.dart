@@ -182,14 +182,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
-              shadows: [
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 3.0,
-                  color: Colors.white,
-                ),
-              ],
             ),
           );
         }).toList(),
@@ -271,14 +263,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: isDate ? Color(0xFFA47DE5) : Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(2.0, 2.0),
-                            blurRadius: 3.0,
-                            color: Colors.deepPurple,
-                          ),
-                        ],
+                        color: isDate ? Color(0xFFA47DE5) : Color(0xFF69695D),
                       ),
                   ),
                   isDate

@@ -274,11 +274,19 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ],
-          title: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Image.asset('assets/lovesollogo.png'),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Image.asset(
+                'assets/lovesollogo.png',
+                width: 180.0, // Adjust the width to your desired size
+                height: 100.0, // Adjust the height to your desired size
+                fit: BoxFit.contain, // Adjust the fit as needed
+              ),
+              SizedBox(width: 0), // Adjust the amount of space between the logo and other items
+            ],
           ),
-          centerTitle: true,
         ),
         body: Container(
           color: Color(0xFFF7F7F7),
@@ -1308,18 +1316,15 @@ class _CouplePageState extends State<CouplePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(top:18, bottom: 10),
+                    padding: const EdgeInsets.only(left: 18), // Adjust left padding
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start, // Align to the start (left side)
+                      mainAxisAlignment: MainAxisAlignment.start, // Align to the start (top side)
                       children: [
-                        Text(
-                          '러브박스',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        Image.asset(
+                          'assets/lovebox.png',
+                          width: 100,
+                          height: 100,
                         ),
                         if (loveBoxData.isNotEmpty)
                           buildAccountCard(loveBoxData, context),
