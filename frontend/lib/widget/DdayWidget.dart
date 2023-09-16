@@ -112,6 +112,9 @@ class _DDayPageState extends State<DDayPage> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFE6DFFF), // 버튼의 배경색을 지정
+                ),
                 child: Text(
                   "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate
                       .day}일",
@@ -131,6 +134,9 @@ class _DDayPageState extends State<DDayPage> {
                   final text = textController.text;
                   registCustomDDay(text);
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFE6DFFF), // 버튼의 배경색을 지정
+                ),
                 child: Text("설정"),
               ),
             ],
