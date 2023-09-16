@@ -115,19 +115,7 @@ public class UserController {
                         .build()
         );
     }
-    @Operation(summary = "fcm test용", description = "사용할 계정에 대해서 fcmToken 넣어놓고 진행해주세요")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Push 알람 발송 성공")
-    })
-    @PostMapping("/fcm/test")
-    public ResponseResult sendTest(@Valid @RequestBody FcmRequestDto fcmRequestDto)
-    {
-        log.info("UserController_sendTest -> FCM 푸쉬 알림 발송");
-        if(fcmNotificationService.sendNotificationByToken(fcmRequestDto)){
-            return ResponseResult.successResponse;
-        }
-        return ResponseResult.failResponse;
-    }
+
     @Operation(summary = "PhoneNumber Auth", description = "사용자 휴대폰 번호인증을 요청합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "휴대폰번호로 문자메시지 발송 성공")
