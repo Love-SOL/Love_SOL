@@ -8,6 +8,9 @@ import com.ssafy.lovesol.domain.couple.dto.request.*;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
+import com.ssafy.lovesol.domain.couple.service.PetService;
+import com.ssafy.lovesol.domain.datelog.entity.DateLog;
+import com.ssafy.lovesol.domain.datelog.service.DateLogService;
 import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.NoticeService;
@@ -41,6 +44,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "응답이 성공적으로 반환되었습니다."),
@@ -59,6 +63,8 @@ public class CoupleController {
     private final UserService userService;
     private final FCMNotificationService fcmNotificationService;
     private final NoticeService noticeService;
+    private final PetService petService;
+    private final DateLogService dateLogService;
     @Operation(summary = "Couple info", description = "사용자의 커플 정보를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커플 테이블 조회 성공")
@@ -222,5 +228,51 @@ public class CoupleController {
         return new SingleResponseResult<>(coupleService.getDDay(coupleId));
     }
 
+    @PostMapping("/refresh/{coupleId}")
+    public ResponseResult refreshTransaction(@PathVariable(value = "coupleId") @Valid long couplId){
+        Couple couple = coupleService.getCoupleInfoByCouplId(couplId);
+        //여기서 결재 내역 조회한다.
+        Map<String,String> data = new HashMap<>();
+        data.put("계좌번호",couple.getCommonAccount());
+        //계좌번호로 결재 내역 조회
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data,"/search/transaction");
+        JSONObject result = new JSONObject(response.getBody());
+        //실제 결재내역을 정상적으로 받은 경우
+        int successCode = result.getJSONObject("dataHeader").getInt("successCode");
+        if(successCode!=0){
+            log.info("계좌 내역 조회에 실패했습니다.");
+            return ResponseResult.failResponse;
+        }
+        LocalDateTime current = LocalDate.now().atStartOfDay();
+        Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
+        List<Transaction> transactionList = transactionService.findTransactionsDetail(current,coupleAccount);
+        LocalDate curDay = current.toLocalDate();
+        //계좌 내역을 가져올때 출금만 가져와야하는데 여깃 출입금 둘다 가져왔음
+        //1. query를 수정한다
+        //2. 스켘줄러에서 처리해준다.
+        if(transactionList == null || transactionList.isEmpty()){
+            log.info("데이트 일정이 없음!");
+            return ResponseResult.successResponse;}
+        Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
+        DateLog dateLog;
+        log.info("여기까지 오긴 오냐?");
+        //여기선 데이트로그를 만들어 줘야한다.
+        dateLog = dateLogFind.orElseGet(() -> dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(), curDay)));
+        //            if(dateLog.)
+        int total = 0;
+        for(int j = 0 ; j < transactionList.size();j++) {
+            total += (int) (transactionList.get(j).getWithdrawalAmount() * 0.01);
+        }
+        dateLog.setMileage(total);
+        dateLogService.updateDateLog(dateLog);
+        if(couple.getPet()!=  null){petService.gainExp(couple.getCoupleId(), total);
+            if(couple.getPet().getLevel()<3){
+                couple.getPet().levelUp();
+            }
+            petService.updatePet(couple.getPet());
+        }
+
+        return ResponseResult.successResponse;
+    }
 
 }
