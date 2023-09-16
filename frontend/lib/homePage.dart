@@ -50,10 +50,11 @@ class _HomePageState extends State<HomePage> {
     '기타': Color(0xFFE6EDFF),
   };
 
-  void initState(){
+  void initState() {
     super.initState();
     _loadUserDataAndFetchData();
   }
+
   Future<void> _sendFcmToken() async {
     final prefs = await SharedPreferences.getInstance();
     final fcmToken = prefs.getString('fcmToken');
@@ -101,7 +102,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchAccountData() async {
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/main/$userId"));
+    final response = await http.get(
+        Uri.parse("http://10.0.2.2:8080/api/account/main/$userId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
@@ -117,10 +119,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> fetchTransactionCategoryData(String accountNumber) async{
+  Future<void> fetchTransactionCategoryData(String accountNumber) async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' + accountNumber + '?year=2023&&month=9'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/account/transaction/category/' +
+            accountNumber + '?year=2023&&month=9'),
+        // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -135,15 +139,18 @@ class _HomePageState extends State<HomePage> {
       if (statusCode == 200) {
         // 성공
         List<dynamic> data = responseBody['data'];
-        List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+        List<GetTransactionByCategoryResponseDto> dataList = data.map((data) =>
+            GetTransactionByCategoryResponseDto.fromJson(
+                data as Map<String, dynamic>)).toList();
 
         setState(() {
           sectionList = createPieChartSections(dataList);
         });
         sectionList.forEach((sectionData) {
-          print('Color: ${sectionData.color}, Value: ${sectionData.value}, Title: ${sectionData.title}, Radius: ${sectionData.radius}');
+          print('Color: ${sectionData.color}, Value: ${sectionData
+              .value}, Title: ${sectionData.title}, Radius: ${sectionData
+              .radius}');
         });
-
       } else {
         print(statusCode);
         // 실패
@@ -154,7 +161,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchNoticeData() async {
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/notice/$userId"));
+    final response = await http.get(
+        Uri.parse("http://10.0.2.2:8080/api/notice/$userId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
@@ -162,23 +170,26 @@ class _HomePageState extends State<HomePage> {
 
     if (statusCode == 200) {
       List<dynamic> data = responseBody['data'];
-      List<NoticeResDto> dataList = data.map((data) => NoticeResDto.fromJson(data as Map<String, dynamic>)).toList();
+      List<NoticeResDto> dataList = data.map((data) =>
+          NoticeResDto.fromJson(data as Map<String, dynamic>)).toList();
 
       setState(() {
         noticeList = dataList;
       });
-
     } else {
       throw Exception('API 요청 실패');
     }
   }
 
-  List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
+  List<PieChartSectionData> createPieChartSections(
+      List<GetTransactionByCategoryResponseDto> data) {
     return data.map((item) {
       print(item);
       return PieChartSectionData(
-        color: categoryColors[item.category] ?? Colors.grey, // 카테고리에 맞는 색상, 없으면 회색으로 설정
-        value: item.rate.toDouble(), // amount를 double로 변환
+        color: categoryColors[item.category] ?? Colors.grey,
+        // 카테고리에 맞는 색상, 없으면 회색으로 설정
+        value: item.rate.toDouble(),
+        // amount를 double로 변환
         title: item.category,
         radius: 50,
       );
@@ -191,294 +202,133 @@ class _HomePageState extends State<HomePage> {
     }
 
     return accountNumber.substring(0, 3) + '-' +
-          accountNumber.substring(3, 6) + '-' +
-          accountNumber.substring(6, 12);
+        accountNumber.substring(3, 6) + '-' +
+        accountNumber.substring(6, 12);
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-              _showOptionsDialog(context);
-            },
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Color(0xFFF7F7F7),
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Color(0XFF0046FF),
           ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView.builder(
-                        itemCount: noticeList.length,
-                        itemBuilder: (context, index) {
-                          final notice = noticeList[index];
-                          return ListTile(
-                            title: Text(notice.title),
-                            subtitle: Text(notice.body),
-                          );
-                        },
+          actions: [
+            IconButton(
+              icon: Image.asset('assets/personicon.png'),
+              onPressed: () {
+                _showOptionsDialog(context);
+              },
+            ),
+            IconButton(
+              icon: Image.asset('assets/bellicon.png'),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-        title: Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: Image.asset('assets/lovesollogo.png'),
-        ),
-        centerTitle: true,
-      ),
-      body: Container(
-        color: Color(0xFFF7F7F7),
-        padding: EdgeInsets.all(15),
-        child:
-        Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, 2),
-                        blurRadius: 4.0,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Text(
-                          '내 계좌',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      title: Text('알림'),
+                      content: Container(
+                        width: double.maxFinite,
+                        height: 300,
+                        child: ListView.builder(
+                          itemCount: noticeList.length,
+                          itemBuilder: (context, index) {
+                            final notice = noticeList[index];
+                            return ListTile(
+                              title: Text(notice.title),
+                              subtitle: Text(notice.body),
+                            );
+                          },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PersonalPage(),
-                            ));
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF0046FF),
+                          ),
+                          child: Text('닫기'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+          title: Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Image.asset('assets/lovesollogo.png'),
+          ),
+          centerTitle: true,
+        ),
+        body: Container(
+          color: Color(0xFFF7F7F7),
+          padding: EdgeInsets.all(15),
+          child:
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0, 2),
+                          blurRadius: 4.0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
                           child: Text(
-                            '전체보기 >',
+                            '내 계좌',
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF0046FF),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              flex: 4,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MyAccountPage(accountNumber: accountData["accountNumber"]),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFE4ECFF),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, 2),
-                        blurRadius: 4.0,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 24, bottom: 24, left: 10, right: 10),
-                    child:
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: Image.asset(
-                                  'assets/shinhanlogo.png',
-                                  width: 50,
-                                  height: 50,
-                                ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PersonalPage(),
+                              ));
+                            },
+                            child: Text(
+                              '전체보기 >',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xFF0046FF),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
-                                children: [
-                                  Text(
-                                    "주 계좌",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Opacity(
-                                    opacity: 0.4,
-                                    child: Text(
-                                      '${accountData["accountNumber"] == null ? "" : formatAccountNumber(accountData["accountNumber"])}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${accountData["balance"] == null ? "0" : formatCurrency(removeSosu(accountData["balance"].toString()))} 원',
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ]
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF0046FF),
-                                ),
-                                child: Text('이체'),
-                              ),
-                              SizedBox(width: 16), // Add spacing between buttons
-                              ElevatedButton(
-                                onPressed: () {
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF0046FF),
-                                ),
-                                child: Text('결제'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              flex: 5,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MyConsumePage(accountNumber: accountData["accountNumber"]),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          '내 소비',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: AspectRatio(
-                              aspectRatio: 1.3,
-                              child: sectionList.isNotEmpty
-                                  ? PieChart(
-                                PieChartData(
-                                  sections: sectionList,
-                                  sectionsSpace: 0,
-                                  centerSpaceRadius: 40,
-                                ),
-                              )
-                                  : Center(child: Text("소비 내역이 없습니다", style: TextStyle(fontSize: 20))),
                             ),
                           ),
                         ),
@@ -487,11 +337,196 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+              Expanded(
+                flex: 4,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MyAccountPage(
+                                accountNumber: accountData["accountNumber"]),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE4ECFF),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0, 2),
+                          blurRadius: 4.0,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 24, bottom: 24, left: 10, right: 10),
+                      child:
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Image.asset(
+                                    'assets/shinhanlogo.png',
+                                    width: 50,
+                                    height: 50,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // Align text to the left
+                                  children: [
+                                    Text(
+                                      "주 계좌",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Opacity(
+                                      opacity: 0.4,
+                                      child: Text(
+                                        '${accountData["accountNumber"] == null
+                                            ? ""
+                                            : formatAccountNumber(
+                                            accountData["accountNumber"])}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${accountData["balance"] == null
+                                        ? "0"
+                                        : formatCurrency(removeSosu(
+                                        accountData["balance"].toString()))} 원',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ]
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF0046FF),
+                                  ),
+                                  child: Text('이체'),
+                                ),
+                                SizedBox(width: 16),
+                                // Add spacing between buttons
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF0046FF),
+                                  ),
+                                  child: Text('결제'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Expanded(
+                flex: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MyConsumePage(
+                                accountNumber: accountData["accountNumber"]),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFFFFF),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '내 소비',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: AspectRatio(
+                                aspectRatio: 1.3,
+                                child: sectionList.isNotEmpty
+                                    ? PieChart(
+                                  PieChartData(
+                                    sections: sectionList,
+                                    sectionsSpace: 0,
+                                    centerSpaceRadius: 40,
+                                  ),
+                                )
+                                    : Center(child: Text("소비 내역이 없습니다",
+                                    style: TextStyle(fontSize: 20))),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: buildBottomNavigationBar(context, 2)
+        bottomNavigationBar: buildBottomNavigationBar(context, 2)
     );
   }
 
@@ -500,6 +535,9 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           title: Text('My Page'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -529,41 +567,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        );
-      },
-    );
-  }
-
-  void _showNotificationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('알림'),
-          content: Container(
-            width: double.maxFinite,
-            height: 300,
-            child: ListView(
-              children: [
-                ListTile(
-                  title: Text('알림 1'),
-                  subtitle: Text('알림 내용 1'),
-                ),
-                ListTile(
-                  title: Text('알림 2'),
-                  subtitle: Text('알림 내용 2'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('닫기'),
-            ),
-          ],
         );
       },
     );
@@ -737,9 +740,17 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('커플통장으로 전환하시겠습니까?'),
+          title: Text(
+            '커플통장으로 전환하시겠습니까?',
+            style: TextStyle(
+              fontSize: 18.0,  // 원하는 크기로 설정
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
               child: Text('예'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -749,12 +760,18 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                   ),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
             ),
-            TextButton(
-              child: Text('아니오'),
+            ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFDADADA),
+              ),
+              child: Text('아니오'),
             ),
           ],
         );
@@ -891,6 +908,7 @@ class _CouplePageState extends State<CouplePage> {
   String schedule = '일정이 없어요';
   String scheduleDDay = '';
   Map<String, dynamic> petData = {};
+  Map<String, dynamic> loveBoxData = {};
   Map<String, dynamic> scheduleData = {
     'content': '일정 없음',  // String 값
     'remainingDay': 0,              // int 값
@@ -903,6 +921,7 @@ class _CouplePageState extends State<CouplePage> {
     _loadAnniversaryData();
     _loadScheduleData();
     _loadPetData();
+    fetchLoveBoxData();
   }
 
   Future<void> _loadUserData() async {
@@ -929,7 +948,6 @@ class _CouplePageState extends State<CouplePage> {
       print(statusCode);
       // 실패
     }
-
   }
   Future<void> _loadScheduleData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -939,15 +957,11 @@ class _CouplePageState extends State<CouplePage> {
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
     int statusCode = responseBody['statusCode'];
-    print('스테이터스 코드');
-    print(statusCode);
 
     if (statusCode == 200) {
       setState(() {
         scheduleData = Map<String, dynamic>.from(responseBody['data']);
       });
-      print('몇일?');
-      print(scheduleData);
     } else {
       print(statusCode);
       // 실패
@@ -958,44 +972,46 @@ class _CouplePageState extends State<CouplePage> {
   Future<void> _isPaid() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
-    print("이것이 나와야 함");
-    print(coupleId);
+
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/transaction/$coupleId"));
     // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
     Map<String, dynamic> responseData = json.decode(response.body);
     // 파싱한 데이터에서 필드에 접근
     int result = responseData["data"];
     // 필요한 작업 수행
-    print("결제내역조회완료");
+
     if (result != 0) {
       setState(() {
         isPaid = true;
         petType = result;
       });
-      print(isPaid);
     }
   }
 
   Future<void> _loadPetData() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
-    print(coupleId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    int statusCode = responseBody['status'];
+    int statusCode = responseBody['statusCode'];
 
     if (statusCode == 200) {
-      setState(() {
-        petData = Map<String, dynamic>.from(responseBody['data']);
-      });
-      print(petData);
+      if(responseBody['data'] == null){
+        _isPaid();
+      }else{
+        setState(() {
+          petData = Map<String, dynamic>.from(responseBody['data']);
+        });
+      }
     } else {
       print('펫 요청 실패');
-      _isPaid();
+
     }
   }
+
+
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed, bool isSchedule , bool isPet) {
     return GestureDetector(
       onTap: onPressed, // 위젯을 클릭했을 때 onPressed 함수 실행
@@ -1194,6 +1210,27 @@ class _CouplePageState extends State<CouplePage> {
     }
   }
 
+  Future<void> fetchLoveBoxData() async {
+    print('fetchLoveBoxData');
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt("userId");
+    print(userId);
+
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/couple/" + userId.toString()));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+    if (statusCode == 200) {
+      setState(() {
+        loveBoxData = Map<String, dynamic>.from(responseBody['data'][0]);
+      });
+      print(loveBoxData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1206,15 +1243,42 @@ class _CouplePageState extends State<CouplePage> {
         child: Column(
           children: [
             Expanded(
-              flex: 1,
-              child: buildContainer(
-                  '커플통장',
-                  Color(0xFFF7F7F7),
-                  null,
-                  '가운데에 표시할 텍스트',
-                  null,
-                  false,
-                  false
+              flex : 1,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(left:16, right:16, top: 16),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'LOVE BOX',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      if(loveBoxData.isNotEmpty)
+                        buildAccountCard(loveBoxData, context),
+                    ],
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 3),
