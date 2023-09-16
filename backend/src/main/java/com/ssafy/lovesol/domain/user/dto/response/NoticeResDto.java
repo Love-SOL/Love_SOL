@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Schema(description = "샘플 반환 DTO")
 public class NoticeResDto {
 
-    private int kind;
+    private String kind;
     private String title;
     private String body;
     private LocalDateTime createAt;
