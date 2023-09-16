@@ -450,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 16),
                         Expanded(
                           child: Align(
-                            alignment: Alignment.center, // 가운데 정렬
+                            alignment: Alignment.center,
                             child: AspectRatio(
                               aspectRatio: 1.3,
                               child: sectionList.isNotEmpty
