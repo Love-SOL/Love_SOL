@@ -104,7 +104,7 @@ public class DateLogController {
         Map<String, String> data = new HashMap<>();
         data.put("kind", "1");
         fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(owner.getUserId()).title(titleInit).body(bodyInit).build(), data);
-        fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(owner.getUserId()).title(titleInit).body(bodyInit).build(), data);
+        fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(subOwner.getUserId()).title(titleInit).body(bodyInit).build(), data);
         return ResponseResult.successResponse;
     }
 
