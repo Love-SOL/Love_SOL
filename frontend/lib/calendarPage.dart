@@ -19,7 +19,7 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? dDayDate;
   DateTime? targetDate = DateTime.now();
-  String? dDayText = '일정 없음';
+  String? dDayText = '';
   int? dDay = 0;
   bool showCalendar = true;
   bool showDiary = false;
@@ -144,6 +144,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     _openDDayPage();
                   },
                   child: Container(
+                    height: 90,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -196,9 +197,9 @@ class _CalendarPageState extends State<CalendarPage> {
                             ],
                           ),
                           Text(
-                            '$dDayText (D-$dDay)',
+                            dDayText != '' ? '$dDayText (D-$dDay)' : "연인과 일정을 계획해보세요",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: (dDayText != '' ? 20 : 15),
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
