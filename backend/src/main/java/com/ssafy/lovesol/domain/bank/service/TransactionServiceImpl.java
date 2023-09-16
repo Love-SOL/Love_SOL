@@ -59,9 +59,7 @@ public class TransactionServiceImpl  implements TransactionService{
     @Override
     public int findTransactionOne(Long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
-        log.info("커플 조회");
         Account account = accountRepository.findByAccountNumber(couple.getCommonAccount()).orElseThrow(NotExistAccountException::new);
-        log.info("계좌 조회");
         Transaction transaction = transactionRepository.findFirstByAccount(account);
         int category = 0;
         if (transaction != null) {

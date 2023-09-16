@@ -58,7 +58,6 @@ public class ImageServiceImple implements ImageService{
 
         image.updateImageUrl(storeFileUrl);
         image.updateContent(content);
-        // TODO: S3에 이미지 변경하기
     }
 
     @Override

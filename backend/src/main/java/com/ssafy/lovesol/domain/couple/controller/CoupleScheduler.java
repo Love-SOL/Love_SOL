@@ -39,7 +39,8 @@ public class CoupleScheduler {
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CommonHttpSend commonHttpSend;
-//    @Scheduled(cron = "30 * * * * *")
+
+    @Scheduled(cron = "0 30 11 * * *")
     public void searchTransaction(){
         List<Couple> coupleList = coupleService.getAllCouple();
         for(int i = 0 ; i < coupleList.size(); i++){
@@ -60,40 +61,22 @@ public class CoupleScheduler {
             Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
             List<Transaction> transactionList = transactionService.findTransactionsDetail(current,coupleAccount);
             LocalDate curDay = current.toLocalDate();
-            //계좌 내역을 가져올때 출금만 가져와야하는데 여깃 출입금 둘다 가져왔음
+
             //1. query를 수정한다
-            //2. 스켘줄러에서 처리해준다.
+            //2. 스케줄러에서 처리해준다.
             if(transactionList == null || transactionList.isEmpty()){
                 log.info("데이트 일정이 없음!");
                 continue;}
             Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
             DateLog dateLog;
-            log.info("여기까지 오긴 오냐?");
-            //여기선 데이트로그를 만들어 줘야한다.
             dateLog = dateLogFind.orElseGet(() -> dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(), curDay)));
-//            if(dateLog.)
+
             for(int j = 0 ; j < transactionList.size();j++) {
                 int expAndMileage = (int) (transactionList.get(i).getWithdrawalAmount() * 0.01);
                 dateLog.setMileage(dateLog.getMileage() + expAndMileage);
                 dateLogService.updateDateLog(dateLog);
                 if(couple.getPet()!=  null){petService.gainExp(couple.getCoupleId(), expAndMileage);}
             }
-
-
-
-
-            //먼저 List가 not Null 인경우 couple의 현재 날짜의 Datelog를 확인한다
-            //그 후 없으면 마일리지를 0원으로 생성해준다
-            //그리고 transactionList를 통해 사용한 결재 내역의 0.01 배 만큼 마일리지를 업데이트를 진행해준다
-            //그리고 petexp또한 경험치를 증가시켜주는데 증가하는 과정에서 000이 넘으면 경험치를 업데이트 해준다.
         }
-//        LocalDateTime
-//
-/*
-1. 커플 리스트를 전부가져온다..?
-2. 커플 Account를 기반으로 해당 계좌를 조회한다.
--> transaction에서 출금 계좌가 내 계좌인경우
-*/
     }
-
 }

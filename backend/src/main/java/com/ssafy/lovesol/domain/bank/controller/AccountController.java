@@ -98,11 +98,4 @@ public class AccountController {
         log.info("계좌 번호로 카테고리별 소비내역 조회");
         return new ListResponseResult<>(transactionService.getTransactionListByCategory(accountNumber, year, month));
     }
-
-    // @GetMapping("/couple/{coupleId}")
-    // public ResponseResult getAccountByCoupleId(@PathVariable(name = "coupleId") Long coupleId) {
-    //     log.info("커플 계좌 조회");
-    //     return new SingleResponseResult<>(accountService.getAccountByCoupleId(coupleId));
-    // }
-
 }

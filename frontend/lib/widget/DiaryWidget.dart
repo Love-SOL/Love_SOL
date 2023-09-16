@@ -220,7 +220,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
             day,
           );
 
-
           int dateLogId = -1;
           // 이벤트 데이트가 datelog에 포함되면
           bool isDate = dateLogSet.any((dto) =>
@@ -257,27 +256,23 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                 : null,
             child: Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isDate ? Color(0xFF0466FF) : Colors.transparent,
-              ),
               child: Column(
                 children: [
                   Text(
                     "$day",
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: isDate ? Colors.white : Color(0xFF69695D),
-                    ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDate ? Color(0xFFA47DE5) : Color(0xFF69695D),
+                      ),
                   ),
                   isDate
                       ? Text(
-                    amount + "원",
+                    "-" + amount,
                     style: TextStyle(
-                      fontSize:12,
+                      fontSize:10,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Color(0xFFA47DE5),
                     ),
                   )
                       : SizedBox.shrink(),
@@ -290,8 +285,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
       itemCount: 7 * 6,
     );
   }
-
-
 }
 
 class DateLogForCalendarResponseDto {
@@ -334,4 +327,34 @@ class DiaryEvent {
     required this.startDate,
     required this.category, // 카테고리 필드 추가
   });
+}
+
+class HeartShapeWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100, // Adjust the size as needed
+      height: 100, // Adjust the size as needed
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            left: 0,
+            child: Icon(
+              Icons.favorite,
+              size: 100, // Adjust the size as needed
+              color: Colors.red,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            child: Icon(
+              Icons.favorite,
+              size: 100, // Adjust the size as needed
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

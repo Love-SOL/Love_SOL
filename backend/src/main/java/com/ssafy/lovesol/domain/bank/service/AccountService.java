@@ -20,11 +20,7 @@ public interface AccountService {
 
     List<GetUserAccountsResponseDto> getMyAccounts(Long userId,int type) throws NoSuchAlgorithmException;
 
-    List<Transaction> findTransactionByAccount(String accountNumber);
-
     String HashEncrypt(String hashData) throws NoSuchAlgorithmException;
-
-    List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now);
 
     Account findAccountByAccountNumber(String accountNumber);
 
@@ -33,5 +29,4 @@ public interface AccountService {
 
     GetUserAccountsResponseDto getAccountInfo(String accountNumber);
 
-    GetUserAccountsResponseDto getAccountByCoupleId(Long coupleId);
 }

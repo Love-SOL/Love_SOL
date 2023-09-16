@@ -141,7 +141,6 @@ public class DateLogController {
         log.info(imageId + " 이미지를 수정합니다.");
         // 이미지 객체를 수정한다.
         imageService.updateImage(imageId, image, content);
-        // TODO: 이미지 수정 알림을 보낸다.
         return ResponseResult.successResponse;
     }
 
