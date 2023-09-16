@@ -891,6 +891,7 @@ class _CouplePageState extends State<CouplePage> {
   String schedule = '일정이 없어요';
   String scheduleDDay = '';
   Map<String, dynamic> petData = {};
+  Map<String, dynamic> loveBoxData = {};
   Map<String, dynamic> scheduleData = {
     'content': '일정 없음',  // String 값
     'remainingDay': 0,              // int 값
@@ -903,6 +904,7 @@ class _CouplePageState extends State<CouplePage> {
     _loadAnniversaryData();
     _loadScheduleData();
     _loadPetData();
+    fetchLoveBoxData();
   }
 
   Future<void> _loadUserData() async {
@@ -929,7 +931,6 @@ class _CouplePageState extends State<CouplePage> {
       print(statusCode);
       // 실패
     }
-
   }
   Future<void> _loadScheduleData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -954,37 +955,31 @@ class _CouplePageState extends State<CouplePage> {
   Future<void> _isPaid() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
-    print("이것이 나와야 함");
-    print(coupleId);
+
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/transaction/$coupleId"));
     // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
     Map<String, dynamic> responseData = json.decode(response.body);
     // 파싱한 데이터에서 필드에 접근
     int result = responseData["data"];
     // 필요한 작업 수행
-    print("결제내역조회완료");
+
     if (result != 0) {
       setState(() {
         isPaid = true;
         petType = result;
       });
-      print('isPaid');
-      print(isPaid);
     }
   }
 
   Future<void> _loadPetData() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
-    print(coupleId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/pet/$coupleId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
     int statusCode = responseBody['statusCode'];
 
-    print('status code');
-    print(statusCode);
     if (statusCode == 200) {
       if(responseBody['data'] == null){
         _isPaid();
@@ -998,6 +993,8 @@ class _CouplePageState extends State<CouplePage> {
 
     }
   }
+
+
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed, bool isSchedule , bool isPet) {
     return GestureDetector(
       onTap: onPressed, // 위젯을 클릭했을 때 onPressed 함수 실행
@@ -1196,6 +1193,27 @@ class _CouplePageState extends State<CouplePage> {
     }
   }
 
+  Future<void> fetchLoveBoxData() async {
+    print('fetchLoveBoxData');
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt("userId");
+    print(userId);
+
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/couple/" + userId.toString()));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+    if (statusCode == 200) {
+      setState(() {
+        loveBoxData = Map<String, dynamic>.from(responseBody['data'][0]);
+      });
+      print(loveBoxData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1208,15 +1226,42 @@ class _CouplePageState extends State<CouplePage> {
         child: Column(
           children: [
             Expanded(
-              flex: 1,
-              child: buildContainer(
-                  '커플통장',
-                  Color(0xFFF7F7F7),
-                  null,
-                  '가운데에 표시할 텍스트',
-                  null,
-                  false,
-                  false
+              flex : 1,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(left:16, right:16, top: 16),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'LOVE BOX',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      if(loveBoxData.isNotEmpty)
+                        buildAccountCard(loveBoxData, context),
+                    ],
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 3),
