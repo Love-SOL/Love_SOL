@@ -26,14 +26,10 @@
 
 
 ### 회원가입
-
-![](https://hackmd.io/_uploads/BkvEZ9Xy6.png)
-
-![](https://hackmd.io/_uploads/BJsEWcm1p.png)
-
-![](https://hackmd.io/_uploads/SyzB-qQyT.png)
-
-![](https://hackmd.io/_uploads/SySHb9QkT.png)
+![image](https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec)
+![image](https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/82c89a2a-2aa1-4a33-b188-b2556ad5e26f)
+![image]([https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec](https://github.com/Love-SOL/Love_SOL/assets/33506590/fdb45009-345b-4f69-b338-1260c5127794))
 
 
 
