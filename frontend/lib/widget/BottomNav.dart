@@ -11,7 +11,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
     showUnselectedLabels: true,
     selectedLabelStyle: TextStyle(color: Colors.white),
     unselectedLabelStyle: TextStyle(color: Colors.white),
-    selectedItemColor: Color(0xFF0046fF),
+    selectedItemColor: Color(0xFFA47DE5),
     unselectedItemColor: Colors.grey,
     elevation: 10,
     currentIndex: currentIndex,

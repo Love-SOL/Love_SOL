@@ -101,7 +101,7 @@ class _ChatBotAppState extends State<ChatBotApp> {
               flex: 6,
               child: SingleChildScrollView(
                 child: Container(
-                  color: Color(0xE4ECFF),
+                  color: Color(0xA47DE5),
                   child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -174,7 +174,7 @@ class ChatBubble extends StatelessWidget {
         margin: EdgeInsets.all(8.0),
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: isUserMessage ? Colors.grey : Color(0xFF0466FF),
+          color: isUserMessage ? Color(0xFFDADADA) : Color(0xFFA47DE5),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Text(

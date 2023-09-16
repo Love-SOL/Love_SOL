@@ -135,7 +135,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFE4ECFF),
+                    color: Color(0xFFA47DE5),
                     borderRadius: BorderRadius.circular(0),
                     boxShadow: [
                       BoxShadow(
@@ -173,7 +173,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Opacity(
@@ -210,7 +210,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF0046FF),
+                                  primary: Color(0xFFA47DE5),
                                 ),
                                 child: Text('이체'),
                               ),
@@ -219,7 +219,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF0046FF),
+                                  primary: Color(0xFFA47DE5),
                                 ),
                                 child: Text('결제'),
                               ),

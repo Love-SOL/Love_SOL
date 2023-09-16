@@ -38,9 +38,15 @@ class LoginPage extends StatelessWidget {
         print(userData);
         await _saveUserData(userData["userId"], userData["coupleId"]);
 
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ));
+        if (userData["coupleId"] == 0) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ));
+        }else {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CouplePage(),
+          ));
+        }
       } else {
         print(statusCode);
         // 로그인 실패 처리
@@ -59,7 +65,7 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'assets/loginbackground.png',
+            'assets/spbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -151,7 +157,7 @@ class LoginPage extends StatelessWidget {
                               width: 270,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: Color(0xFF0046FF),
+                                color: Color(0xFFA47DE5),
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(

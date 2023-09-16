@@ -146,8 +146,17 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFFF7F7F7), // 배경색
-                      borderRadius: BorderRadius.circular(10), // 박스 모양 설정
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFFA47DE5), // 시작 색상
+                          Color(0xFFEEE1FF), // 종료 색상
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp,
+                      ),
+                      borderRadius: BorderRadius.circular(20), // 박스 모양 설정
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5), // 그림자 색상
@@ -170,15 +179,16 @@ class _CalendarPageState extends State<CalendarPage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Icon(
-                                    Icons.calendar_today,
+                                    Icons.favorite,
                                     color: Colors.red,
                                   ),
                                   SizedBox(width: 5),
                                   Text(
                                     DateFormat('yyyy.MM.dd').format(targetDate!), // 디데이 계산 결과를 표시
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.white
                                     ),
                                   ),
                                 ],
@@ -190,6 +200,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -204,24 +215,27 @@ class _CalendarPageState extends State<CalendarPage> {
                     ElevatedButton(
                       onPressed: _showCalendar,
                       style: ElevatedButton.styleFrom(
-
-                        primary: showCalendar ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                        primary: showCalendar ? Color(0xFFA47DE5) : Color(0xFFFFFFFF),
+                        onPrimary: showCalendar ? Colors.white : Color(0xFFA47DE5), // Text color based on condition
                       ),
                       child: Text("일정"),
                     ),
                     ElevatedButton(
                       onPressed: _showDiary,
                       style: ElevatedButton.styleFrom(
-                        primary: showDiary ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                        primary: showDiary ? Color(0xFFA47DE5) : Color(0xFFFFFFFF),
+                        onPrimary: showDiary ? Colors.white : Color(0xFFA47DE5),
                       ),
                       child: Text("일기"),
                     ),
                     ElevatedButton(
                       onPressed: _showAlbum,
                       style: ElevatedButton.styleFrom(
-                        primary: showAlbum ? Color(0xFF0046FF) : Color(0xFFDADADA),
+                        primary: showAlbum ? Color(0xFFA47DE5) : Color(0xFFFFFFFF),
+                        onPrimary: showAlbum ? Colors.white : Color(0xFFA47DE5),
                       ),
                       child: Text("앨범"),
+
                     ),
                   ],
                 ),
@@ -271,8 +285,8 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   BoxDecoration commonBoxDecoration = BoxDecoration(
-    color: Color(0xFFE4ECFF), // 배경색
-    borderRadius: BorderRadius.circular(10), // 박스 모양 설정
+    color: Colors.white, // 배경색
+    borderRadius: BorderRadius.circular(20), // 박스 모양 설정
     boxShadow: [
       BoxShadow(
         color: Colors.grey.withOpacity(0.5), // 그림자 색상

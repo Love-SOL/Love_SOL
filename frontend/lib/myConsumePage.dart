@@ -34,10 +34,10 @@ class _MyConsumePage extends State<MyConsumePage> {
   };
 
   Map<String, Color> categoryColors = {
-    '식당': Color(0xFF0245AC),
-    '쇼핑': Color(0xFF336BFF),
-    '커피숍': Color(0xFF80A3FF),
-    '온라인': Color(0xFFCCDAFF),
+    '식당': Color(0xFF7928FF),
+    '쇼핑': Color(0xFF914FFF),
+    '커피숍': Color(0xFFA47DE5),
+    '온라인': Color(0xFFCFBEED),
     '기타': Color(0xFFE6EDFF),
   };
 
@@ -138,7 +138,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFE4ECFF),
+                    color: Color(0xFFA47DE5),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -160,7 +160,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(height: 16),
