@@ -106,6 +106,7 @@ public class CoupleController {
 
         noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
 
+        coupleService.saveCouple(couple);
         Map<String, String> data = new HashMap<>();
         data.put("kind",Integer.toString(kind));
         data.put("senderId",Long.toString(sender.getUserId()));
