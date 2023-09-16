@@ -62,7 +62,7 @@ public class ScheduleController {
             User receiver = couple.getSubOwner();
             noticeService.registNotice(sender,receiver,title,body,kind);
             noticeService.registNotice(receiver,sender,title,body,kind);
-            if(!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(sender.getUserId()).title(title).body(body).build())||!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(receiver.getUserId()).title(title).body(body).build()))
+            if(!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(sender.getUserId()).title(title).body(body).build())&&!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(receiver.getUserId()).title(title).body(body).build()))
             { return ResponseResult.failResponse;}
             return ResponseResult.successResponse;
         }
