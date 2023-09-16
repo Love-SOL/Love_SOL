@@ -38,9 +38,15 @@ class LoginPage extends StatelessWidget {
         print(userData);
         await _saveUserData(userData["userId"], userData["coupleId"]);
 
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ));
+        if (userData["coupleId"] == 0) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ));
+        }else {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CouplePage(),
+          ));
+        }
       } else {
         print(statusCode);
         // 로그인 실패 처리
