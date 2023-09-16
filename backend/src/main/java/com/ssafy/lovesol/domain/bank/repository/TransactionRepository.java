@@ -38,6 +38,8 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
         "AND YEAR(t.transactionAt) = :year " +
         "AND MONTH(t.transactionAt) = :month")
     List<Transaction> findByAccountNumberAndYearAndMonth(@Param(value = "accountNumber") String accountNumber,@Param(value = "year") int year,@Param(value = "month") int month);
+
+    List<Transaction> findByAccountAccountNumberAndTransactionAtBetweenAndTransactionType(String accountNumber, LocalDateTime start, LocalDateTime end, int transactionType);
 }
 
 

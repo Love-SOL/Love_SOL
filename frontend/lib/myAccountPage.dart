@@ -104,13 +104,18 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   String formatAccountNumber(String accountNumber) {
-    if (accountNumber.length != 12) {
+    if (accountNumber.length == 12) {
+      return accountNumber.substring(0, 3) + '-' +
+          accountNumber.substring(3, 6) + '-' +
+          accountNumber.substring(6, 12);
+    } else if (accountNumber.length == 14) {
+      return accountNumber.substring(0, 3) + '-' +
+          accountNumber.substring(3, 6) + '-' +
+          accountNumber.substring(6, 12) +
+          accountNumber.substring(12, 14);
+    } else {
       return "Invalid account number";
     }
-
-    return accountNumber.substring(0, 3) + '-' +
-        accountNumber.substring(3, 6) + '-' +
-        accountNumber.substring(6, 12);
   }
 
   @override

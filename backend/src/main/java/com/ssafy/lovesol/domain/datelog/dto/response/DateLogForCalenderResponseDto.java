@@ -19,4 +19,7 @@ public class DateLogForCalenderResponseDto {
 
     @Schema(description = "데이트 한 날짜", example = "20230903")
     private LocalDate dateAt;
+
+    @Schema(description = "데이트 한 날짜의 결제 금액", example = "15000")
+    private int totalAmount;
 }

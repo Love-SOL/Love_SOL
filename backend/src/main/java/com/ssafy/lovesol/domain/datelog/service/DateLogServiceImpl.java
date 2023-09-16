@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.lovesol.domain.bank.entity.Transaction;
+import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
@@ -42,6 +44,7 @@ public class DateLogServiceImpl implements DateLogService{
     private String bucket;
     final private DateLogRepository dateLogRepository;
     final private CoupleRepository coupleRepository;
+    final private TransactionRepository transactionRepository;
 
     @Override
     public Long createDateLog(Long coupleId, LocalDate dateAt) {
@@ -113,9 +116,27 @@ public class DateLogServiceImpl implements DateLogService{
     @Override
     public List<DateLogForCalenderResponseDto> getDateLogList(Long coupleId, int year, int month) {
         log.info("DateLogServiceImpl_getDateLogList || 데이트 일기 조회");
-        return dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
-            .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
-            .collect(Collectors.toList());
+        String commonAccount = coupleRepository.findById(coupleId).get().getCommonAccount();
+        List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoArrayList = new ArrayList<>();
+
+        for (DateLog dateLog : dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)) {
+            LocalDateTime dateAt = dateLog.getDateAt().atStartOfDay();
+            LocalDateTime endAt = dateLog.getDateAt().atTime(LocalTime.MAX);
+
+            System.out.println("dateAt = " + dateAt);
+            System.out.println("endAt = " + endAt);
+
+            List<Transaction> transactionList = transactionRepository.findByAccountAccountNumberAndTransactionAtBetweenAndTransactionType(commonAccount, dateAt, endAt , 0);
+            int totalAmount = 0;
+            for (Transaction transaction : transactionList) {
+                totalAmount += transaction.getWithdrawalAmount();
+            }
+            if(totalAmount == 0) continue;
+
+            dateLogForCalenderResponseDtoArrayList.add(dateLog.toDateLogForCalenderResponseDto(totalAmount));
+        }
+
+        return dateLogForCalenderResponseDtoArrayList;
     }
 
     @Override
