@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'authSimplePasswordPage.dart';
-import 'signUpPage.dart';
 import 'homePage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'signUpPage2.dart';
+import 'signUpPage.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key});

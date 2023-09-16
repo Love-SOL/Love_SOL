@@ -59,32 +59,29 @@ class SignUpPage2 extends StatelessWidget {
     String id = "";
     String password = "";
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0XFFFFFFFF),
         elevation: 0,
         actions: [
-          IconButton(
-            icon: Image.asset('assets/ottbar.png'),
-            onPressed: () {
-            },
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Image.asset(
+              'assets/ottbar2.png',
+              width: 80,
+            ),
           ),
         ],
       ),
       body: Container(
-
-        color: Color(0xFFF7F7F7),
+        color: Color(0xFFFFFFFF),
         padding: EdgeInsets.all(20),
 
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-
           children: [
-            Expanded(
-              flex: 1,
-              child: SizedBox(),
-            ),
             Expanded(
               flex: 2,
               child:
@@ -119,7 +116,7 @@ class SignUpPage2 extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 70),
             Expanded(
               flex: 6,
               child:
@@ -132,7 +129,7 @@ class SignUpPage2 extends StatelessWidget {
                   buildInputBox('비밀번호', '비밀번호를 입력해주세요',controller: passwordController, onChanged: (value) {
                     password = value;
                   }),
-                  SizedBox(height: 20),
+                  SizedBox(height: 50),
                   Expanded(
                     flex: 1,
                     child:
@@ -164,9 +161,11 @@ class SignUpPage2 extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF0046FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
+                            minimumSize: Size(120, 48),
                           ),
                         ),
                       ],

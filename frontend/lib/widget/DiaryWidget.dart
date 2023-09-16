@@ -107,7 +107,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[

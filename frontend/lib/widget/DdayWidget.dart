@@ -76,6 +76,7 @@ class _DDayPageState extends State<DDayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Container(
           decoration: BoxDecoration(

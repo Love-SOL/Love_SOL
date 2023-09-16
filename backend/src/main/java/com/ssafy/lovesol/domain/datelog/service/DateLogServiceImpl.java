@@ -15,8 +15,11 @@ import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
+import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.exception.NotExistDateLogException;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
+import com.ssafy.lovesol.global.response.ResponseResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,11 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -152,5 +151,10 @@ public class DateLogServiceImpl implements DateLogService{
             }
         }
         return imageList;
+    }
+
+    public Couple getDatelogCouple(Long dateLogId) {
+        DateLog datelog = dateLogRepository.findById(dateLogId).get();
+        return datelog.getCouple();
     }
 }

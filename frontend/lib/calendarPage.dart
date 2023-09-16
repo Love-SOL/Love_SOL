@@ -129,6 +129,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return WillPopScope(
       onWillPop: _onBackPressed, // 뒤로 가기 버튼을 눌렀을 때 실행될 함수
       child : Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: CustomAppBar(
           title: "캘린더",
           ),
