@@ -99,6 +99,7 @@ flutter:
     - assets/center.png
     - assets/logoblue.png
     - assets/ottbar.png
+    - assets/lovesollogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -111,6 +112,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Shinhan
+      fonts:
+        - asset: assets/fonts/OneShinhanBold.ttf
+        - asset: assets/fonts/OneShinhanMedium.ttf
+        - asset: assets/fonts/OneShinhanLight.ttf
     - family: Pretendard
       fonts:
         - asset: assets/fonts/Pretendard-Thin.ttf
@@ -131,6 +137,7 @@ flutter:
           weight: 800
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
