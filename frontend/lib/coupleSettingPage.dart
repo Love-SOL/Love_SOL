@@ -60,9 +60,9 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': userId,
+          'senderId': userId,
           "receiverId": receiverId,
-          "aniversary": aniversary,
+          "anniversary": aniversary,
           "day": day,
           "amount": amount
         }),

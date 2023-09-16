@@ -103,9 +103,8 @@ public class CoupleController {
 
         Couple couple = coupleService.getCoupleInfoByUserId(sender.getId());
         couple.setAnniversary(connectNotificationReqDto.getAnniversary());
-
         noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
-
+        coupleService.saveCouple(couple);
         Map<String, String> data = new HashMap<>();
         data.put("kind",Integer.toString(kind));
         data.put("senderId",Long.toString(sender.getUserId()));
@@ -123,7 +122,6 @@ public class CoupleController {
         if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
         }
-        //TODO : 여기서는 이제 승인이 되었으닌깐  subOwner의 자동이체 날짜와 금액을 저장해야하한다.
         User subOwner = userService.getUserByUserId(coupleRequestDto.getSubOnwerId());
         User owner = userService.getUserByUserId(ownerId);
 
