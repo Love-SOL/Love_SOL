@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -122,9 +123,6 @@ public class DateLogServiceImpl implements DateLogService{
         for (DateLog dateLog : dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)) {
             LocalDateTime dateAt = dateLog.getDateAt().atStartOfDay();
             LocalDateTime endAt = dateLog.getDateAt().atTime(LocalTime.MAX);
-
-            System.out.println("dateAt = " + dateAt);
-            System.out.println("endAt = " + endAt);
 
             List<Transaction> transactionList = transactionRepository.findByAccountAccountNumberAndTransactionAtBetweenAndTransactionType(commonAccount, dateAt, endAt , 0);
             int totalAmount = 0;
