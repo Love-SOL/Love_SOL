@@ -97,8 +97,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    userId = (prefs.getInt('userId') ?? '').toString();
-    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+    userId = await (prefs.getInt('userId') ?? '').toString();
+    coupleId = await (prefs.getInt('coupleId') ?? '').toString();
+    if (coupleId != '') {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CouplePage(),
+      ));
+    }
   }
 
   Future<void> fetchAccountData() async {
