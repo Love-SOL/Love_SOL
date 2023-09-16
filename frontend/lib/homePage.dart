@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'myConsumePage.dart';
+import 'loginPage.dart';
 import 'myAccountPage.dart';
 import 'package:intl/intl.dart';
 import './widget/BottomNav.dart';
@@ -190,8 +191,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     return accountNumber.substring(0, 3) + '-' +
-        accountNumber.substring(3, 6) + '-' +
-        accountNumber.substring(6, 12);
+          accountNumber.substring(3, 6) + '-' +
+          accountNumber.substring(6, 12);
   }
 
   @override
@@ -200,9 +201,8 @@ class _HomePageState extends State<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-
       appBar: AppBar(
-        automaticallyImplyLeading : false,
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
         iconTheme: IconThemeData(
@@ -211,7 +211,9 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
+            onPressed: () {
+              _showOptionsDialog(context);
+            },
           ),
           IconButton(
             icon: Image.asset('assets/bellicon.png'),
@@ -465,7 +467,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 16),
                         Expanded(
                           child: Align(
-                            alignment: Alignment.center, // 가운데 정렬
+                            alignment: Alignment.center,
                             child: AspectRatio(
                               aspectRatio: 1.3,
                               child: sectionList.isNotEmpty
@@ -492,135 +494,78 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: buildBottomNavigationBar(context, 2)
     );
   }
-}
 
-class HomePage2 extends StatefulWidget {
-  @override
-  _HomePage2State createState() => _HomePage2State();
-}
-
-class _HomePage2State extends State<HomePage2> {
-  int _selectedPageIndex = 0;
-
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
+  void _showOptionsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('My Page'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
-              );
-            },
-          ),
-        ],
-        title: Text(
-          "홈",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.all(24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () => _selectPage(0),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5, // 그림자 크기
-                      primary: _selectedPageIndex == 0
-                          ? Colors.grey
-                          : Color(0xFF0046FF),
-                    ),
-                    child: Text(
-                      '개인',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _selectedPageIndex == 0
-                            ? Colors.white
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
                 ),
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () => _selectPage(1),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5, // 그림자 크기
-                      primary: _selectedPageIndex == 1
-                          ? Colors.grey
-                          : Color(0xFF0046FF),
-                    ),
-                    child: Text(
-                      '커플',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _selectedPageIndex == 1
-                            ? Colors.white
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
+                child: Text('로그아웃'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('정산하기'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Container(
+            width: double.maxFinite,
+            height: 300,
+            child: ListView(
+              children: [
+                ListTile(
+                  title: Text('알림 1'),
+                  subtitle: Text('알림 내용 1'),
+                ),
+                ListTile(
+                  title: Text('알림 2'),
+                  subtitle: Text('알림 내용 2'),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
-          ),
-
-        ],
-      ),
-        bottomNavigationBar: buildBottomNavigationBar(context, 0)
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -632,6 +577,7 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   List<Map<String, dynamic>> accountData = [];
+  Map<String, dynamic> loveBoxData = {};
   String userId = '';
 
   @override
@@ -643,6 +589,26 @@ class _PersonalPageState extends State<PersonalPage> {
   Future<void> _loadData() async {
     await _loadUserData();
     await fetchAccountData(); // 초기 데이터 로드
+    await fetchLoveBoxData();
+  }
+
+  Future<void> fetchLoveBoxData() async {
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/couple/" + userId));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    print(responseBody);
+    print("여기서 체크");
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
+      setState(() {
+        loveBoxData = Map<String, dynamic>.from(responseBody['data'][0]);
+      });
+      print(loveBoxData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
   }
 
   Future<void> _loadUserData() async {
@@ -667,34 +633,101 @@ class _PersonalPageState extends State<PersonalPage> {
       throw Exception('API 요청 실패');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: CustomAppBar(
+      appBar: CustomAppBar(
         title: "내 계좌",
-    ),
-    body:
-      Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child:
-        Container(
-          child: ListView.builder(
-            itemCount: accountData.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  buildAccountCard(accountData[index], context),
-                  SizedBox(height: 10.0),
-                ],
-              );
-            },
-          ),
+      ),
+      body:Container(
+        color: Color(0xFFF7F7F7),
+        padding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Expanded(
+              flex : 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFE4ECFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'LOVE BOX',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      if(loveBoxData.isNotEmpty)
+                        buildAccountCard(loveBoxData, context),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:15),
+            Expanded(
+              flex: 5,
+              child: InkWell(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE4ECFF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child:
+                    Container(
+                      child: ListView.builder(
+                        itemCount: accountData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: [
+                              buildAccountCard(accountData[index], context),
+                              SizedBox(height: 10.0),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:15),
+
+          ],
         ),
       ),
       bottomNavigationBar: buildBottomNavigationBar(context, 0),
     );
+
   }
 }
 
@@ -730,6 +763,9 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
   }
 
   String formatAccountNumber(String accountNumber) {
+    if (accountNumber.length == 14) {
+      return "";
+    }
     if (accountNumber.length != 12) {
       return "Invalid account number";
     }
@@ -763,7 +799,8 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+              Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -782,7 +819,8 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                 ),
               ],
             ),
-            IconButton(
+            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+              IconButton(
               onPressed: () {
                 _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
               },
@@ -946,7 +984,7 @@ class _CouplePageState extends State<CouplePage> {
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    int statusCode = responseBody['statusCode'];
+    int statusCode = responseBody['status'];
 
     if (statusCode == 200) {
       setState(() {

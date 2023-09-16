@@ -21,9 +21,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
   @override
   void initState() {
     super.initState();
-
-    // 페이지 초기화 시 createLoveBox 함수 호출
-    createLoveBox();
+    loadData();
   }
 
   Future<void> loadData() async {
@@ -54,15 +52,17 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
 
   Future<void> sendCoupleNotice() async {
     try {
+      print("userId를 찾는다");
+      print(userId);
       final response = await http.post(
         Uri.parse('http://10.0.2.2:8080/api/couple/connect'),
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': userId,
+          'senderId': userId,
           "receiverId": receiverId,
-          "aniversary": aniversary,
+          "anniversary": aniversary,
           "day": day,
           "amount": amount
         }),

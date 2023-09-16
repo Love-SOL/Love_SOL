@@ -39,7 +39,7 @@ public class UserScheduler {
     /*
      * 1. 금일로 설정된 인원들에 한정하여 입금을 시켜줘야한다.
      * */
-    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     public void deposit() {
         int day = LocalDateTime.now().getDayOfMonth();
         List<User> userList = userService.getAllUserByDepositAt(day);

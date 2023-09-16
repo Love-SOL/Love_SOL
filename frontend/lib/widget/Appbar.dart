@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../loginPage.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   final String title;
@@ -153,6 +154,80 @@ class NoticeResDto {
       body: json['body'],
       createAt: DateTime.parse(json['createAt']),
       senderName: json['senderName'],
+    );
+  }
+
+  void _showOptionsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('My Page'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('로그아웃'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('정산하기'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Container(
+            width: double.maxFinite,
+            height: 300,
+            child: ListView(
+              children: [
+                ListTile(
+                  title: Text('알림 1'),
+                  subtitle: Text('알림 내용 1'),
+                ),
+                ListTile(
+                  title: Text('알림 2'),
+                  subtitle: Text('알림 내용 2'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

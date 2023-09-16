@@ -63,7 +63,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.favorite),
-        label: '커플',
+        label: '러브박스',
       ),
     ],
   );
