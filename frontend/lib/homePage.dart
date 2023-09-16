@@ -832,7 +832,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
     child: Container(
       width: double.infinity,
       // height: 150.0,
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+      margin: EdgeInsets.only(right: 16, bottom: 10),
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
