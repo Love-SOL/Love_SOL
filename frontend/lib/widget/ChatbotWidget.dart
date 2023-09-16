@@ -144,7 +144,13 @@ class _ChatBotAppState extends State<ChatBotApp> {
                   _controller.clear();
                 }
               },
-              decoration: InputDecoration(hintText: '궁금한 점을 입력하세요'),
+              decoration: InputDecoration(
+                hintText: '궁금한 점을 입력하세요',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors
+                      .deepPurple), // Change this color to the color you want
+                ),
+              ),
             ),
           ),
         ],
