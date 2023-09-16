@@ -115,7 +115,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     } else {
       scheduleType = 0;
     }
-
+    print('커플아이디 확인');
+    print(coupleId);
     try {
       final response = await http.post(
         Uri.parse('http://10.0.2.2:8080/api/schedule/' + coupleId),
