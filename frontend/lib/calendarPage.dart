@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'weekdayswidget.dart';
 import 'dart:core';
 import './widget/DiaryWidget.dart';
 import './widget/CalendarWidget.dart';
@@ -10,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'widget/BottomNav.dart';
+import 'widget/Appbar.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -129,67 +129,11 @@ class _CalendarPageState extends State<CalendarPage> {
     // final dDay = calculateDDay(dDayDate); // 디데이 계산
     return WillPopScope(
       onWillPop: _onBackPressed, // 뒤로 가기 버튼을 눌렀을 때 실행될 함수
-      child :Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color(0xFFF7F7F7),
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Color(0XFF0046FF),
+      child : Scaffold(
+          appBar: CustomAppBar(
+          title: "캘린더",
           ),
-          actions: [
-            IconButton(
-              icon: Image.asset('assets/personicon.png'),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Image.asset('assets/bellicon.png'),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('알림'),
-                      content: Container(
-                        width: double.maxFinite,
-                        height: 300,
-                        child: ListView(
-                          children: [
-                            ListTile(
-                              title: Text('알림 1'),
-                              subtitle: Text('알림 내용 1'),
-                            ),
-                            ListTile(
-                              title: Text('알림 2'),
-                              subtitle: Text('알림 내용 2'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('닫기'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ],
-          title: Text(
-            "캘린더",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          centerTitle: true,
-        ),
-        body: Center(
+          body:Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

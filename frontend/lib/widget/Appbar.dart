@@ -11,6 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading : false,
       backgroundColor: Color(0xFFF7F7F7),
       elevation: 0,
       iconTheme: IconThemeData(
@@ -60,7 +61,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
       title: Padding(
-        padding: const EdgeInsets.only(top: 12.0),
+        padding: const EdgeInsets.only(top: 0),
         child: Text(
           title,
           style: TextStyle(

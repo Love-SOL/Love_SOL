@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './widget/ChatbotWidget.dart';
 import './widget/BottomNav.dart';
 import 'package:http/http.dart' as http;
+import './widget/Appbar.dart';
 
 class PetPage extends StatefulWidget {
   @override
@@ -58,27 +59,10 @@ class _PetPageState extends State<PetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        title: Text(
-          "펫",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {
-            },
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-            },
-          ),
-        ],
-      ),
-      body: Center(
+    appBar: CustomAppBar(
+    title: "펫",
+    ),
+    body:Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

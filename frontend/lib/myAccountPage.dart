@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import './widget/BottomNav.dart';
+import './widget/Appbar.dart';
 
 class MyAccountPage extends StatefulWidget {
   final String accountNumber;
@@ -115,64 +116,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-        title: Text(
-          "거래내역조회",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: "계좌 내역",
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
@@ -382,47 +327,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
                             },
                           ),
                         )
-                        // Expanded(
-                        //   child: ListView.builder(
-                        //     itemBuilder: (BuildContext context, int index) {
-                        //       return Column(
-                        //         children: [
-                        //           Row(
-                        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //             children: [
-                        //               Row(
-                        //                 children: [
-                        //                   SizedBox(width: 8),
-                        //                   Text(
-                        //                     '가게이름',
-                        //                     style: TextStyle(
-                        //                       fontSize: 18,
-                        //                       fontWeight: FontWeight.bold,
-                        //                       color: Colors.black,
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               ),
-                        //               Text(
-                        //                 '원',
-                        //                 style: TextStyle(
-                        //                   fontSize: 18,
-                        //                   fontWeight: FontWeight.normal,
-                        //                   color: Colors.black,
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //           Divider(
-                        //             color: Colors.grey,
-                        //             thickness: 1,
-                        //           ),
-                        //           SizedBox(height:16),
-                        //         ],
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
