@@ -153,7 +153,7 @@ class SignUpPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              flex: 7,
+              flex: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,7 +208,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
