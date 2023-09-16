@@ -14,103 +14,91 @@
 
 ---
 ## 🎉 프로젝트 기획
-![](https://hackmd.io/_uploads/SyI77tXyT.png)
-![](https://hackmd.io/_uploads/B1JS7Kmya.png)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/e829b45a-af09-411e-9b9f-6a5880c73c33)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/6f92bc6c-e123-4b5b-a7aa-8a64c89fc537)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/9a03fffe-e4dc-4543-a7a0-2f95158569a6)
 
 
 ---
 ## 🔑 주요 기능
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/835704ab-f8e6-47fb-823e-d3a09b42af42)
+
 
 ---
 ## 🖥 서비스 화면
 
 
 ### 회원가입
-![image](https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec)
-![image](https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec)
-![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/82c89a2a-2aa1-4a33-b188-b2556ad5e26f)
-![image]([https://github.com/SSuSG/PinRecord_Backend/assets/33506590/c150fbf6-66c3-4dd0-9b1d-18292f7c79ec](https://github.com/Love-SOL/Love_SOL/assets/33506590/fdb45009-345b-4f69-b338-1260c5127794))
-
-
+![회원가입1](https://github.com/Love-SOL/Love_SOL/assets/33506590/a8e54da9-0fee-41d5-bafe-c131f50044dc)
+![회원가입2](https://github.com/Love-SOL/Love_SOL/assets/33506590/389c8f6b-4cee-4c0c-8169-fb86aaafbfcf)
+![회원가입인증발송](https://github.com/Love-SOL/Love_SOL/assets/33506590/b22de48b-0990-4392-b0ba-53d18511940f)
+![회원가입인증성공](https://github.com/Love-SOL/Love_SOL/assets/33506590/bfaf0d88-0296-442e-b130-2e3ad5462e39)
 
 
 ### 로그인
+![로그인화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/26832fc9-16be-424c-848e-bddab0f7432c)
+![간편비번입력](https://github.com/Love-SOL/Love_SOL/assets/33506590/baf0eb86-16b0-40f5-a1ec-ff6e7e677cca)
+![간편비밀번호](https://github.com/Love-SOL/Love_SOL/assets/33506590/1d339b21-5c6b-4101-b371-8571bdea0667)
 
-![](https://hackmd.io/_uploads/BkGNz5mkT.png)
-
-![](https://hackmd.io/_uploads/rJA_M9XyT.png)
-
-![](https://hackmd.io/_uploads/HyR_M97ka.png)
-
-
+### 홈 화면
+![홈화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/42678b09-8762-4901-a23e-34df9a67a72d)
 
 ### 일정 공유
-
-![](https://hackmd.io/_uploads/B1F3ZcXka.png)
-
-![](https://hackmd.io/_uploads/HyvaZcQJT.png)
-
-![](https://hackmd.io/_uploads/rJDab5m1T.png)
-![](https://hackmd.io/_uploads/BJwTZ9XkT.png)
+![데이트로그조회](https://github.com/Love-SOL/Love_SOL/assets/33506590/a83e2952-f265-42c8-8245-6fdf41656d4b)
+![일정추가2](https://github.com/Love-SOL/Love_SOL/assets/33506590/4781a08d-2c71-4f18-8603-b1ef6baf7711)
+![일정추가1](https://github.com/Love-SOL/Love_SOL/assets/33506590/3994caf7-9c03-4901-9b22-9b6b3187a425)
+![일정추가](https://github.com/Love-SOL/Love_SOL/assets/33506590/9fd23a4e-8e9f-4560-988a-a10e775aacc2)
+![알리뜨는거화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/61edd830-f444-42e3-9940-8dd3331a225a)
 
 
-
-
-
+### 디데이 설정
+![디데이날짜설정](https://github.com/Love-SOL/Love_SOL/assets/33506590/ccc13883-4127-4a7f-9a10-ec48fdfbe62c)
 
 ### 데이트 일기
-
-![](https://hackmd.io/_uploads/ryxJfq7Ja.png)
-
-![](https://hackmd.io/_uploads/Bkm1M57kT.png)
-
-![](https://hackmd.io/_uploads/SyxTfc71p.png)
-
-![](https://hackmd.io/_uploads/rympz57JT.png)
+![일기캘린더조회](https://github.com/Love-SOL/Love_SOL/assets/33506590/ef1b75ea-61ba-4a8d-a32a-a636bc18edf2)
+![일기작성](https://github.com/Love-SOL/Love_SOL/assets/33506590/5f152efe-3bac-4307-89b3-1a594bcd4d72)
+![앨범조회](https://github.com/Love-SOL/Love_SOL/assets/33506590/17b8830d-ae73-4966-902e-e4d142947dab)
 
 
+### 내 계좌
+![내계좌화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/f0f45cc4-865c-4464-babb-57c50903678a)
 
 
 ### 계좌 거래 내역 조회
-
-![](https://hackmd.io/_uploads/ByOuMqm1T.png)
-
+![계좌거래내역화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/ac962cc8-c2af-48b4-a57f-5e367f9e205a)
 
 ### 카테고리별 소비 그래프
-
-![](https://hackmd.io/_uploads/BkyBf9Q1T.png)
-
+![카테고리별소비내역](https://github.com/Love-SOL/Love_SOL/assets/33506590/fd51905a-7422-4c3a-8778-3580ba52140f)
 
 ### 펫
+![펫챗봇](https://github.com/Love-SOL/Love_SOL/assets/33506590/f2ac32e5-8a58-4e37-9400-84d99362ce7d)
 
 
 ### 러브박스
-
-![](https://hackmd.io/_uploads/H1jSf9Q1p.png)
-
-![](https://hackmd.io/_uploads/HkAHM9m1p.png)
-
-![](https://hackmd.io/_uploads/ryt8M9QJT.png)
-
-![](https://hackmd.io/_uploads/H1sUMqmk6.png)
-
-![](https://hackmd.io/_uploads/rk4DMq7kp.png)
-
-![](https://hackmd.io/_uploads/HkBDzq7yp.png)
+![러브박스전환'](https://github.com/Love-SOL/Love_SOL/assets/33506590/485b969d-e1aa-4dc1-866b-290a1a24e66b)
+![러브박스생성](https://github.com/Love-SOL/Love_SOL/assets/33506590/02296bdf-38b0-496f-af80-b68df24b0339)
+![커플통장초대수락](https://github.com/Love-SOL/Love_SOL/assets/33506590/a5e039a0-b713-4bf0-951b-c5f37b38139d)
+![러브박스화면3](https://github.com/Love-SOL/Love_SOL/assets/33506590/75ce13f7-a710-49b4-b088-102a6b8539fb)
+![러브박스화면2](https://github.com/Love-SOL/Love_SOL/assets/33506590/a6dea09b-9ea1-43eb-b462-34da371a6d26)
+![러브박스화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/092513bb-eab5-460a-9a6f-6e6d6a5139c6)
 
 
 ### 알림
-![](https://hackmd.io/_uploads/BJDtWqm16.png)
+![알림함](https://github.com/Love-SOL/Love_SOL/assets/33506590/74670fab-257c-493e-b04d-b10e4ce6ded4)
 
+### 기타
+![옵션](https://github.com/Love-SOL/Love_SOL/assets/33506590/f9c6a8ff-73d4-4afe-924b-51d8987dcc1e)
 
 
 ### ERD
-![](https://hackmd.io/_uploads/Hy6d-KXk6.png)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/8b888e67-6aa3-42b7-bd92-c8d561a2ce11)
+
 
 
 ### API
-![](https://hackmd.io/_uploads/BJnj-FQyp.png)
-![](https://hackmd.io/_uploads/rkfpbKmkp.png)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/21cd870b-a300-4550-bd45-a8e5ec38961f)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/ac5eec1c-2717-4ecb-a514-25a037a10c4f)
+
 
 
 ### FIGMA
