@@ -171,9 +171,32 @@ public class CoupleController {
 
     @PostMapping("/wire/{userId}")
     public ResponseResult sendAmount(@PathVariable long userId, @RequestBody @Valid SendCoupleAmountRequestDto requestDto){
+        LocalDateTime current = LocalDateTime.now();
         User user = userService.getUserByUserId(userId);
         Couple couple = coupleService.getCoupleInfoByCouplId(requestDto.getCouplId());
-        
+        transactionService.registTransactionInfo(Transaction.builder()
+                        .branchName("기타")
+                        .transactionAt(current)
+                        .depositAmount(0)
+                        .content("LoveSol")
+                        .withdrawalAmount(requestDto.getAmount())
+                        .account(accountService.findAccountByAccountNumber(user.getPersonalAccount()))
+                .build());
+
+        transactionService.registTransactionInfo(Transaction.builder()
+                .branchName("기타")
+                .transactionAt(current)
+                .depositAmount(requestDto.getAmount())
+                .content("LoveSol")
+                .withdrawalAmount(0)
+                .account(accountService.findAccountByAccountNumber(couple.getCommonAccount()))
+                .build());
+        Account personAccount = accountService.findAccountByAccountNumber(user.getPersonalAccount());
+        Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
+        personAccount.setBalance(personAccount.getBalance()- requestDto.getAmount());
+        coupleAccount.setBalance(coupleAccount.getBalance()+requestDto.getAmount());
+        accountService.accountSave(personAccount);
+        accountService.accountSave(coupleAccount);
 //        return Res
         return ResponseResult.successResponse;
     }
