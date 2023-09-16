@@ -60,7 +60,12 @@ Future<void> shareCouple(String receiver, String senderId, int check) async {
 Future<void> initializeFirebase() async {
   final FirebaseOptions firebaseOptions = DefaultFirebaseOptions.currentPlatform;
 
-  Future<void> _showConfirmationDialog(String receiver, String senderId) async {
+  Future<void> _saveCoupleData(int coupleId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('coupleId', coupleId);
+  }
+
+  Future<void> _showConfirmationDialog(String receiver, String senderId, String coupleId) async {
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
       builder: (context) {
@@ -71,6 +76,7 @@ Future<void> initializeFirebase() async {
             TextButton(
               onPressed: () async {
                 await shareCouple(receiver, senderId, 0);
+                await _saveCoupleData(coupleId as int);
                 Navigator.of(context).pop();
               },
               child: Text('예'),
@@ -106,7 +112,7 @@ Future<void> initializeFirebase() async {
     final kind = message.data["kind"];
     if (kind == "0") {
       print(message.data);
-      _showConfirmationDialog(message.data["receiverId"], message.data["senderId"]);
+      _showConfirmationDialog(message.data["receiverId"], message.data["senderId"], message.data["coupleId"]);
     }
     // FCM 메시지를 푸시 알림으로 표시
     FlutterLocalNotification.showNotification(
@@ -123,7 +129,7 @@ Future<void> initializeFirebase() async {
     final kind = message.data["kind"];
     if (kind == "0") {
       print(message.data);
-      _showConfirmationDialog(message.data["receiverId"], message.data["senderId"]);
+      _showConfirmationDialog(message.data["receiverId"], message.data["senderId"], message.data["coupleId"]);
     }
   });
 
