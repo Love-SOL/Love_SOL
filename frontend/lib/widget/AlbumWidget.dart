@@ -316,7 +316,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '댓글 작성자', // 댓글 작성자의 이름 또는 닉네임 등을 여기에 표시할 수 있습니다.
+                        commentList[index]["id"],
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
@@ -328,12 +328,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                         style: TextStyle(fontSize: 14.0),
                       ),
                     ],
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.favorite), // 댓글에 좋아요 아이콘 등을 표시할 수 있습니다.
-                    onPressed: () {
-                      // 좋아요 버튼을 눌렀을 때 실행할 동작을 여기에 추가할 수 있습니다.
-                    },
                   ),
                 );
               },
@@ -349,20 +343,14 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                   decoration: InputDecoration(
                     hintText: '댓글 추가...',
                   ),
-                  onChanged: (value) {
-                    content = value;
+                  onSubmitted: (message) async {
+                    if (message.isNotEmpty) {
+                      await writeComment(imageId, message);
+                      await fetchAlbumData(dateLogId);
+                      commentController.clear();
+                    }
                   },
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await writeComment(imageId, content);
-                  await fetchAlbumData(dateLogId);
-                  setState(() {
-                    content = ""; // 댓글 작성 후 content 변수 초기화
-                  });
-                },
-                child: Text('댓글 작성'),
               ),
             ],
           ),
