@@ -127,10 +127,12 @@ public class CoupleController {
         if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
         }
-        User subOwner = userService.getUserByUserId(coupleRequestDto.getSubOnwerId());
+        User subOwner = userService.getUserById(coupleRequestDto.getSubOnwerId());
         User owner = userService.getUserByUserId(ownerId);
 
         userService.UpdateDepositInfo(UpdateUserAccountInfoDto.builder().depositAt(owner.getDepositAt()).amount(owner.getAmount()).id(subOwner.getId()).build());
+
+
         return ResponseResult.successResponse;
     }
 
