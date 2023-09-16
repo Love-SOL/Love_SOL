@@ -19,6 +19,6 @@ public class NoticeResDto {
     private String title;
     private String body;
     private LocalDateTime createAt;
-    private String SenderName;
+    private String senderName;
 
 }
