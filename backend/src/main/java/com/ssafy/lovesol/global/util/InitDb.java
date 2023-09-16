@@ -22,10 +22,10 @@ public class InitDb {
 
     private final InitService initService;
 
-    // @PostConstruct
-    // public void init() {
-    //     initService.UserInit();
-    // }
+    @PostConstruct
+    public void init() {
+        initService.UserInit();
+    }
 
     @Component
     @Transactional
@@ -43,7 +43,7 @@ public class InitDb {
                 .depositAt(0)
                 .name("박신한")
                 .personalAccount("110556128939")
-                .phoneNumber("01011112222")
+                .phoneNumber("01099509587")
                 .simplePassword("123456")
                 .fcmToken("")
                 .build();
@@ -79,7 +79,7 @@ public class InitDb {
                 .accountNumber("110556128939")
                 .balance(100000)
                 .name("박신한")
-                .userId("c1aa4bf6a27dfe51995d6044e9363e5b07b2c218e662362fbfaee6b271c117dd")
+                .userId("12078ecd1458f3d2acaf9414137c5a853668d1f7b2d7527c7c249c00f270cfe8")
                 .bankCode(88)
                 .type(0)
                 .build();
@@ -88,7 +88,7 @@ public class InitDb {
                 .accountNumber("110556128939-1")
                 .balance(100000)
                 .name("박신한")
-                .userId("c1aa4bf6a27dfe51995d6044e9363e5b07b2c218e662362fbfaee6b271c117dd")
+                .userId("12078ecd1458f3d2acaf9414137c5a853668d1f7b2d7527c7c249c00f270cfe8")
                 .bankCode(88)
                 .type(1)
                 .build();
