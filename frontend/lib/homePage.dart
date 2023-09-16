@@ -163,6 +163,16 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
+  String formatAccountNumber(String accountNumber) {
+    if (accountNumber.length != 12) {
+      return "Invalid account number";
+    }
+
+    return accountNumber.substring(0, 3) + '-' +
+        accountNumber.substring(3, 6) + '-' +
+        accountNumber.substring(6, 12);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -344,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                                   Opacity(
                                     opacity: 0.4,
                                     child: Text(
-                                      '${accountData["accountNumber"] == null ? "" : accountData["accountNumber"]}',
+                                      '${accountData["accountNumber"] == null ? "" : formatAccountNumber(accountData["accountNumber"])}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
