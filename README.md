@@ -13,6 +13,11 @@
 
 
 ---
+## ❤ 팀원
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/b432e725-86a4-416a-b762-7da6eb3e7428)
+
+
+---
 ## 🎉 프로젝트 기획
 ![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/e829b45a-af09-411e-9b9f-6a5880c73c33)
 ![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/6f92bc6c-e123-4b5b-a7aa-8a64c89fc537)
