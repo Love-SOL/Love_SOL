@@ -48,6 +48,7 @@
 ![일정추가2](https://github.com/Love-SOL/Love_SOL/assets/33506590/4781a08d-2c71-4f18-8603-b1ef6baf7711)
 ![일정추가1](https://github.com/Love-SOL/Love_SOL/assets/33506590/3994caf7-9c03-4901-9b22-9b6b3187a425)
 ![일정추가](https://github.com/Love-SOL/Love_SOL/assets/33506590/9fd23a4e-8e9f-4560-988a-a10e775aacc2)
+![image](https://github.com/Love-SOL/Love_SOL/assets/33506590/ca908ede-1d3b-4f31-b519-facc4d39752a)
 ![알리뜨는거화면](https://github.com/Love-SOL/Love_SOL/assets/33506590/61edd830-f444-42e3-9940-8dd3331a225a)
 
 
