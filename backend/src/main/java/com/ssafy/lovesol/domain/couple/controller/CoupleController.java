@@ -65,7 +65,7 @@ public class CoupleController {
     public SingleResponseResult<Couple> getCoupleInfo(@PathVariable String userId){
         log.info("CoupleController -> 커플 통장 정보 조회 ");
         Couple couple = coupleService.getCoupleInfoByUserId(userId);
-        return new SingleResponseResult<Couple>(couple);
+        return new SingleResponseResult<>(couple);
     }
 
 

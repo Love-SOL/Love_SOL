@@ -70,6 +70,7 @@ public class TransactionServiceImpl  implements TransactionService{
             if (branchName.equals("커피숍")) category = 4;
             if (branchName.equals("쇼핑")) category = 7;
             if (branchName.equals("온라인")) category = 10;
+            if (branchName.equals("기타")) category = 10;
         }
         return category;
     }

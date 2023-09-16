@@ -102,7 +102,12 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public List<GetUserAccountsResponseDto> getMyAccounts(Long userId,int type) throws NoSuchAlgorithmException {
+
         User user = userRepository.findById(userId).orElseThrow(NotExistUserException::new);
+        //여기서는 계좌 목록 조회
+        Map<String, String> data = new HashMap<>();
+        data.put("실명번호",HashEncrypt(user.getName()+user.getPhoneNumber()));
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data, "/account");
         // 입력 데이터
         String dataToHash = user.getName() + user.getPhoneNumber();
         String HashedData = HashEncrypt(dataToHash);
@@ -133,6 +138,9 @@ public class AccountServiceImpl implements AccountService{
             log.info("not found Account");
             return null;
         }
+        Map<String, String> data = new HashMap<>();
+        data.put("계좌번호",result.get().getAccountNumber());
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data, "/search/transaction");
         return result.get().getTransactionList();
     }
 
@@ -145,6 +153,9 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account findAccountByAccountNumber(String accountNumber) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        Map<String, String> data = new HashMap<>();
+        data.put("계좌번호",account.get().getAccountNumber());
+        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data, "/account/deposit/detail");
         if(account.isPresent()) return account.get();
         return null;
     }
