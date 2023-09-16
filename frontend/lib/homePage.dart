@@ -10,6 +10,7 @@ import 'myConsumePage.dart';
 import 'myAccountPage.dart';
 import 'package:intl/intl.dart';
 import './widget/BottomNav.dart';
+import './widget/Appbar.dart';
 
 
 void main() {
@@ -199,6 +200,9 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
@@ -527,14 +531,6 @@ class _HomePage2State extends State<HomePage2> {
                         ],
                       ),
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
                   );
                 },
               );
@@ -661,66 +657,11 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-        title: Text(
-          "홈",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Padding(
+        appBar: CustomAppBar(
+        title: "내 계좌",
+    ),
+    body:
+      Padding(
         padding: const EdgeInsets.only(top: 20),
         child:
         Container(
@@ -1182,64 +1123,8 @@ class _CouplePageState extends State<CouplePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF7F7F7),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/personicon.png'),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/bellicon.png'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('알림'),
-                    content: Container(
-                      width: double.maxFinite,
-                      height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-        title: Text(
-          "홈",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: "러브박스",
       ),
       body:
       Align(
