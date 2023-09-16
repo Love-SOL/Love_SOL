@@ -527,6 +527,7 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   List<Map<String, dynamic>> accountData = [];
+  Map<String, dynamic> loveBoxData = {};
   String userId = '';
 
   @override
@@ -538,6 +539,26 @@ class _PersonalPageState extends State<PersonalPage> {
   Future<void> _loadData() async {
     await _loadUserData();
     await fetchAccountData(); // 초기 데이터 로드
+    await fetchLoveBoxData();
+  }
+
+  Future<void> fetchLoveBoxData() async {
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/account/couple/" + userId));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    print(responseBody);
+    print("여기서 체크");
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
+      setState(() {
+        loveBoxData = Map<String, dynamic>.from(responseBody['data'][0]);
+      });
+      print(loveBoxData);
+    } else {
+      throw Exception('API 요청 실패');
+    }
   }
 
   Future<void> _loadUserData() async {
@@ -604,6 +625,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           color: Colors.black,
                         ),
                       ),
+                      if(loveBoxData.isNotEmpty)
+                        buildAccountCard(loveBoxData, context),
                     ],
                   ),
                 ),
@@ -690,6 +713,9 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
   }
 
   String formatAccountNumber(String accountNumber) {
+    if (accountNumber.length == 14) {
+      return "";
+    }
     if (accountNumber.length != 12) {
       return "Invalid account number";
     }
@@ -723,7 +749,8 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+              Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -742,7 +769,8 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                 ),
               ],
             ),
-            IconButton(
+            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+              IconButton(
               onPressed: () {
                 _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
               },
@@ -895,7 +923,7 @@ class _CouplePageState extends State<CouplePage> {
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    int statusCode = responseBody['statusCode'];
+    int statusCode = responseBody['status'];
 
     if (statusCode == 200) {
       setState(() {
