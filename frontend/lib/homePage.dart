@@ -99,11 +99,6 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     userId = await (prefs.getInt('userId') ?? '').toString();
     coupleId = await (prefs.getInt('coupleId') ?? '').toString();
-    if (coupleId != '') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => CouplePage(),
-      ));
-    }
   }
 
   Future<void> fetchAccountData() async {
@@ -663,46 +658,9 @@ class _PersonalPageState extends State<PersonalPage> {
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
+            SizedBox(height:10),
             Expanded(
-              flex : 3,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFFA47DE5),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'LOVE BOX',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      if(loveBoxData.isNotEmpty)
-                        buildAccountCard(loveBoxData, context),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height:15),
-            Expanded(
-              flex: 5,
+              flex: 3,
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
@@ -714,8 +672,17 @@ class _PersonalPageState extends State<PersonalPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFA47DE5),
-                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFA47DE5), // 시작 색상
+                        Color(0xFFEEE1FF), // 종료 색상
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -726,19 +693,20 @@ class _PersonalPageState extends State<PersonalPage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(25),
+                    padding: const EdgeInsets.all(0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'LOVE BOX',
+                          '러브박스',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
+                        SizedBox(height:10),
                         if (loveBoxData.isNotEmpty)
                           buildAccountCard(loveBoxData, context),
                       ],
@@ -753,8 +721,8 @@ class _PersonalPageState extends State<PersonalPage> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE4ECFF),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -1335,7 +1303,7 @@ class _CouplePageState extends State<CouplePage> {
                 child: Container(
                   width: double.infinity,
                   margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(0),
                   decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -1358,7 +1326,7 @@ class _CouplePageState extends State<CouplePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(25),
+                    padding: const EdgeInsets.all(0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
