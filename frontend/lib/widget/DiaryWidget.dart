@@ -112,7 +112,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
     return Column(
       children: <Widget>[
         _buildHeader(),
-        SizedBox(height: 30),
+
         _buildWeekDays(),
         SizedBox(height: 20),
         Expanded(
@@ -124,7 +124,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -175,7 +175,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
       'Sun'];
 
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(left:20, right:20, bottom:10, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: weekDayAbbreviations.map((day) {
