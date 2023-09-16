@@ -449,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 16),
                         Expanded(
                           child: Align(
-                            alignment: Alignment.center, // 가운데 정렬
+                            alignment: Alignment.center,
                             child: AspectRatio(
                               aspectRatio: 1.3,
                               child: sectionList.isNotEmpty
@@ -651,34 +651,99 @@ class _PersonalPageState extends State<PersonalPage> {
       throw Exception('API 요청 실패');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: CustomAppBar(
+      appBar: CustomAppBar(
         title: "내 계좌",
-    ),
-    body:
-      Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child:
-        Container(
-          child: ListView.builder(
-            itemCount: accountData.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  buildAccountCard(accountData[index], context),
-                  SizedBox(height: 10.0),
-                ],
-              );
-            },
-          ),
+      ),
+      body:Container(
+        color: Color(0xFFF7F7F7),
+        padding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Expanded(
+              flex : 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFE4ECFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'LOVE BOX',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:15),
+            Expanded(
+              flex: 5,
+              child: InkWell(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE4ECFF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child:
+                    Container(
+                      child: ListView.builder(
+                        itemCount: accountData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: [
+                              buildAccountCard(accountData[index], context),
+                              SizedBox(height: 10.0),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:15),
+
+          ],
         ),
       ),
       bottomNavigationBar: buildBottomNavigationBar(context, 0),
     );
+
   }
 }
 

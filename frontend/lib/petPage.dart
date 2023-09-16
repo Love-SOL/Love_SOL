@@ -14,7 +14,7 @@ class PetPage extends StatefulWidget {
 
 class _PetPageState extends State<PetPage> {
   String chatBotResponse = '안녕! 난 럽쏠이야, 데이트 장소 추천해줄게!';
-  String petImage = "assets/bear1.gif";
+  String petImage = "assets/bear4.gif";
   Map<String, dynamic> petData = {};
 
   @override
