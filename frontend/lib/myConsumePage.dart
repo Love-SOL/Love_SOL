@@ -138,7 +138,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFA47DE5),
+                    color: Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -160,7 +160,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 16),
@@ -191,7 +191,7 @@ class _MyConsumePage extends State<MyConsumePage> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: Color(0xFFA47DE5),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -213,7 +213,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                       SizedBox(height:50),
@@ -233,7 +233,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                                         Icon(
                                           categoryIcons[category],
                                           size: 24,
-                                          color: Colors.black,
+                                          color: Colors.white,
                                         ),
                                         SizedBox(width: 8),
                                         Text(
@@ -241,7 +241,7 @@ class _MyConsumePage extends State<MyConsumePage> {
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ],
@@ -250,8 +250,8 @@ class _MyConsumePage extends State<MyConsumePage> {
                                       '$amount 원',
                                       style: TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],

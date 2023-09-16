@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 130,
+            top: 92,
             left: 0,
             right: 0,
             child: Center(
@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
                     'assets/logincenterbox.png',
                     fit: BoxFit.contain,
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 80),
                   Container(
                     child: Stack(
                       alignment: Alignment.centerLeft,
