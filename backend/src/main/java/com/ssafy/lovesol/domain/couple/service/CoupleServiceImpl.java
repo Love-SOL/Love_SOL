@@ -193,7 +193,7 @@ public class CoupleServiceImpl implements CoupleService{
         if(coupleDto.getCheck()==0){
             //여기서 러브박스 생성해주고 할당
             User owner = couple.getOwner();
-            User subOwner = userService.getUserByUserId(coupleDto.getSubOnwerId());
+            User subOwner = userService.getUserById(coupleDto.getSubOnwerId());
             Account loveBox = Account.builder()
                     .name(owner.getName())
                     .accountNumber(owner.getPersonalAccount()+"-1")
