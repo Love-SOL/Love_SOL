@@ -283,7 +283,12 @@ public class CoupleController {
         }
         dateLog.setMileage(total);
         dateLogService.updateDateLog(dateLog);
-        if(couple.getPet()!=  null){petService.gainExp(couple.getCoupleId(), total);}
+        if(couple.getPet()!=  null){petService.gainExp(couple.getCoupleId(), total);
+            if(couple.getPet().getLevel()<3){
+            couple.getPet().levelUp();
+            }
+            petService.updatePet(couple.getPet());
+        }
 
         return ResponseResult.successResponse;
     }
