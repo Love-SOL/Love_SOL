@@ -41,6 +41,7 @@ public class Pet {
 
     public void levelUp() {
         this.level++;
+        this.kind++;
     }
 
     public static Pet create(String petName, int kind, Couple couple) {

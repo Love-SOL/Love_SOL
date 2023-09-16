@@ -192,6 +192,10 @@ class _HomePageState extends State<HomePage> {
         // amount를 double로 변환
         title: item.category,
         radius: 50,
+        titleStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )
       );
     }).toList();
   }
@@ -1341,7 +1345,7 @@ class _CouplePageState extends State<CouplePage> {
                         Image.asset(
                           'assets/lovebox.png',
                           width: 100,
-                          height: 100,
+                          height: 50,
                         ),
                         if (loveBoxData.isNotEmpty)
                           buildAccountCard(loveBoxData, context),

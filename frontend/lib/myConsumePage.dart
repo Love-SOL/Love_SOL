@@ -101,6 +101,10 @@ class _MyConsumePage extends State<MyConsumePage> {
       value: data.rate.toDouble(),
       title: data.category,
       radius: 50,
+        titleStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )
     );
   }
 
@@ -117,6 +121,10 @@ class _MyConsumePage extends State<MyConsumePage> {
         value: item.rate.toDouble(), // amount를 double로 변환
         title: item.category,
         radius: 50,
+        titleStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )
       );
     }).toList();
   }
