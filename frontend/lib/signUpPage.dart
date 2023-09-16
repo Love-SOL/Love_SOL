@@ -37,15 +37,21 @@ class SignUpPage extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               title: Text('알림'),
               content: Text('성공적으로 인증번호를 발송하였습니다.'),
               actions: <Widget>[
-                TextButton(
-                  child: Text('확인'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Alert 창 닫기
-                  },
-                ),
+                ElevatedButton(
+                onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+            primary: Color(0xFF0046FF),
+            ),
+            child: Text('아니오'),
+                )
               ],
             );
           },
