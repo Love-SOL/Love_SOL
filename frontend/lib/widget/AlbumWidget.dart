@@ -28,6 +28,8 @@ class _AlbumWidgetState extends State<AlbumWidget> {
   File? image0;
   String content = "";
   bool isExpanded = false;
+  bool isExpandedComment = false;
+
   @override
   void initState() {
     super.initState();
@@ -197,14 +199,6 @@ class _AlbumWidgetState extends State<AlbumWidget> {
     print(imageList);
   }
 
-// 이미지를 표시하는 위젯
-  Widget _buildImageWidget() {
-    print(image0);
-    return image0 != null
-        ? Image.file(image0!, key: UniqueKey())
-        : SizedBox.shrink(); // 이미지가 없는 경우 빈 위젯 반환
-  }
-
 // 이미지 업데이트 함수
   void _updateImage(XFile? image) {
     if (image != null) {
@@ -282,6 +276,89 @@ class _AlbumWidgetState extends State<AlbumWidget> {
       ],
     );
   }
+  Widget _buildCommentSelectionText(int imageId, List commentList) {
+    return Column(
+      children: [
+        if (commentList.isEmpty) // commentList가 비어있을 때
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text(
+              '댓글이 없습니다.',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          )
+        else // commentList가 비어있지 않을 때
+          Container(
+            child: ListView.builder(
+              shrinkWrap: true, // shrinkWrap을 true로 설정
+              physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+              itemCount: commentList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile( // 배경색을 흰색으로 설정
+                  contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.black, // 테두리 색상 설정
+                        width: 2.0, // 테두리 두께 설정
+                      ),
+                    ),
+                    child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage("assets/bear3.png"),
+                    radius: 24.0,
+                    foregroundColor: Colors.black,
+                    ),
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        commentList[index]["id"],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      SizedBox(height: 4.0),
+                      Text(
+                        commentList[index]["content"], // 댓글 내용
+                        style: TextStyle(fontSize: 14.0),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: commentController,
+                  decoration: InputDecoration(
+                    hintText: '댓글 추가...',
+                  ),
+                  onSubmitted: (message) async {
+                    if (message.isNotEmpty) {
+                      await writeComment(imageId, message);
+                      await fetchAlbumData(dateLogId);
+                      commentController.clear();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
 
 
   @override
@@ -357,15 +434,19 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                             color: Colors.grey,
                             thickness: 1,
                           ),
-                          ListTile(
-                            title: Text(
-                                imageItem["commentList"].length != 0 ? imageItem["commentList"][0]["content"] : "댓글이 없습니다."
-                            ),
-                            onTap: () {
-                              _showCommentsModal(context, imageItem);
+                          ExpansionTile(
+                            title: Text('댓글 보기'),
+                            onExpansionChanged: (expanded) {
+                              // ExpansionTile이 열리거나 닫힐 때 호출되는 콜백 함수
+                              setState(() {
+                                isExpandedComment = expanded;
+                              });
                             },
-                          ),
-                          // Add other non-scrollable widgets here
+                            initiallyExpanded: false,
+                            children: [
+                              if (isExpandedComment) _buildCommentSelectionText(imageItem["imageId"], imageItem["commentList"]),
+                            ],
+                          )
                         ],
                       ),
                     );

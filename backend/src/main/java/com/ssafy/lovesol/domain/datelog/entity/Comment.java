@@ -29,16 +29,20 @@ public class Comment {
     @Column(nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
+    private String id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 
-    public static Comment write(Image image, String content, LocalDateTime createAt, Long userId) {
+    public static Comment write(Image image, String content, LocalDateTime createAt, Long userId, String id) {
         return Comment.builder()
                 .image(image)
                 .content(content)
                 .createAt(createAt)
                 .userId(userId)
+                .id(id)
                 .build();
     }
 
@@ -52,6 +56,7 @@ public class Comment {
                 .content(content)
                 .createAt(createAt)
                 .userId(userId)
+                .id(id)
                 .build();
     }
 
