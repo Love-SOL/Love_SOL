@@ -259,14 +259,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             onShowDiaryChanged: _changeShowDiary, // 콜백 함수를 전달
                           ),
                         ),
-
-                      if (showAlbum && dateLogId != 0)
-                        Container(
-                          width: double.infinity,
-                          decoration: commonBoxDecoration,
-                          child: AlbumWidget(dateLogId: dateLogId),
-                        ),
-                      if (showAlbum && dateLogId == 0)
+                      if (showAlbum)
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
