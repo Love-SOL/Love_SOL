@@ -2,10 +2,7 @@ package com.ssafy.lovesol.domain.user.entity;
 
 import com.ssafy.lovesol.domain.user.dto.response.LoginResponseDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @Builder
 @Getter
 @NoArgsConstructor
