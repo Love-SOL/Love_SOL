@@ -24,4 +24,5 @@ public interface DateLogRepository extends JpaRepository<DateLog,Long> {
     Optional<DateLog> findByCoupleAndDateAt(Couple couple, LocalDate createAt);
 
     List<DateLog> findByCouple(Couple couple);
+    void deleteAllByCouple(Couple couple);
 }
