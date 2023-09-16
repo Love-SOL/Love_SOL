@@ -1161,7 +1161,6 @@ class _CouplePageState extends State<CouplePage> {
                   Row(
                     children: [
                       Container(
-                        height: 200,
                         width: 5,
                         decoration: BoxDecoration(
                           color: Color(0xFFE6DFFF),
