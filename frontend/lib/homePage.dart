@@ -740,12 +740,17 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('커플통장으로 전환하시겠습니까?'),
+          title: Text(
+            '커플통장으로 전환하시겠습니까?',
+            style: TextStyle(
+              fontSize: 18.0,  // 원하는 크기로 설정
+            ),
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
               child: Text('예'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -755,12 +760,18 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                   ),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
             ),
-            TextButton(
-              child: Text('아니오'),
+            ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFDADADA),
+              ),
+              child: Text('아니오'),
             ),
           ],
         );
