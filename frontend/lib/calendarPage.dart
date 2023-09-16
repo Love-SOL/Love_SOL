@@ -37,7 +37,6 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchDDayData();
-
   }
 
   Future<void> _loadUserData() async {
