@@ -48,7 +48,7 @@ class SignUpPage extends StatelessWidget {
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
-            primary: Color(0xFF0046FF),
+            primary: Color(0xFFA47DE5),
             ),
             child: Text('확인'),
                 )
@@ -102,7 +102,7 @@ class SignUpPage extends StatelessWidget {
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
-            primary: Color(0xFF0046FF),
+            primary: Color(0xFFA47DE5),
             ),
             child: Text('확인')
                 )
@@ -127,7 +127,7 @@ class SignUpPage extends StatelessWidget {
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
-            primary: Color(0xFF0046FF),
+            primary: Color(0xFFA47DE5),
             ),
             child: Text('확인')
                 )
@@ -268,7 +268,7 @@ class SignUpPage extends StatelessWidget {
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF0046FF),
+                            primary: Color(0xFFA47DE5),
                             ),
                             child: Text('확인')
                                 )
@@ -283,7 +283,7 @@ class SignUpPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0046FF),
+                      backgroundColor: Color(0xFFA47DE5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),

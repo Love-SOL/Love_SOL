@@ -83,7 +83,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0046FF),
+                  primary: Color(0xFFA47DE5),
                 ),
                 child: Text('로그아웃'),
               ),
@@ -93,7 +93,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0046FF),
+                  primary: Color(0xFFA47DE5),
                 ),
                 child: Text('정산하기'),
               ),
@@ -113,7 +113,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
         iconTheme: IconThemeData(
-          color: Color(0XFF0046FF),
+          color: Color(0XFFA47DE5),
         ),
         actions: [
           IconButton(
@@ -153,7 +153,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF0046FF),
+                          primary: Color(0xFFA47DE5),
                         ),
                         child: Text('닫기'),
                       ),

@@ -85,7 +85,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
       appBar: AppBar(
         backgroundColor: Color(0XFFF7F7F7),
         elevation: 0,
-        iconTheme: IconThemeData(color: Color(0XFF0046FF)),
+        iconTheme: IconThemeData(color: Color(0XFFA47DE5)),
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
@@ -132,7 +132,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0XFF0046FF), // 버튼 배경색
+                        primary: Color(0XFFA47DE5), // 버튼 배경색
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),

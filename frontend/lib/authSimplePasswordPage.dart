@@ -16,7 +16,7 @@ class AuthSimplePasswordPage extends StatefulWidget {
 class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   String pin = "";
   int maxPinLength = 6;
-  List<Color> circleColors = List.generate(6, (index) => Color(0XFFD9D9D9));
+  List<Color> circleColors = List.generate(6, (index) => Colors.white);
 
   Future<bool> sendToBackend(int userId, String pin) async {
     try {
@@ -71,7 +71,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('알림'),
-                  content: Text('간편 비밀번호 인증에 실패하였습니다.'),
+                  content: Text('간편 비밀번호 인증에 실패했어요!'),
                   actions: <Widget>[
                     TextButton(
                       child: Text('확인'),
@@ -104,7 +104,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0XFF0046FF),
+        backgroundColor: Color(0XFFA47DE5),
         elevation: 0,
       ),
       body: Stack(

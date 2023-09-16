@@ -17,7 +17,7 @@ class SimplePasswordPage extends StatefulWidget {
 class _SimplePasswordPageState extends State<SimplePasswordPage> {
   String pin = "";
   int maxPinLength = 6;
-  List<Color> circleColors = List.generate(6, (index) => Color(0XFFD9D9D9));
+  List<Color> circleColors = List.generate(6, (index) => Colors.white);
 
   Future<bool> sendToBackend(int userId, String pin) async {
     try {
@@ -105,7 +105,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0XFF0046FF),
+        backgroundColor: Color(0XFFA47DE5),
         elevation: 0,
       ),
       body: Stack(
