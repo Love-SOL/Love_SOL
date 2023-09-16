@@ -62,6 +62,26 @@ class _CustomAppBarState extends State<CustomAppBar> {
     }
   }
 
+  Future<void> doFareWall() async {
+    final response = await http.post(Uri.parse("http://10.0.2.2:8080/api/couple/farewall/$coupleId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    print(statusCode);
+    if (statusCode == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove("coupleId");
+      coupleId = (prefs.getInt('coupleId') ?? '').toString();
+      print('헤어져');
+      print(coupleId);
+
+    } else {
+      throw Exception("API 요청 실패");
+    }
+  }
+
   void _showOptionsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -90,6 +110,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
+                  doFareWall();
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(

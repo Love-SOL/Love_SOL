@@ -255,10 +255,8 @@ public class CoupleController {
             return ResponseResult.successResponse;}
         Optional<DateLog> dateLogFind = dateLogService.getDateLogforScheduler(couple,curDay);
         DateLog dateLog;
-        log.info("여기까지 오긴 오냐?");
-        //여기선 데이트로그를 만들어 줘야한다.
+
         dateLog = dateLogFind.orElseGet(() -> dateLogService.getDateLogForupdate(dateLogService.createDateLog(couple.getCoupleId(), curDay)));
-        //            if(dateLog.)
         int total = 0;
         for(int j = 0 ; j < transactionList.size();j++) {
             total += (int) (transactionList.get(j).getWithdrawalAmount() * 0.01);

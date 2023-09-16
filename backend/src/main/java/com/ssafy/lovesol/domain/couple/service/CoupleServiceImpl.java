@@ -13,6 +13,7 @@ import com.ssafy.lovesol.domain.couple.dto.response.DDayResponseDto;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
+import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.UserService;
 import com.ssafy.lovesol.global.exception.NotExistCoupleException;
@@ -40,6 +41,7 @@ public class CoupleServiceImpl implements CoupleService{
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final DateLogRepository dateLogRepository;
     @Override
     public long createCouple(CoupleCreateRequestDto coupleDto) {
         log.info("후보2");
@@ -68,7 +70,7 @@ public class CoupleServiceImpl implements CoupleService{
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public boolean cutCouple(long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).get();
         Account commonAccount = accountRepository.findByAccountNumber(couple.getCommonAccount()).get();
@@ -146,7 +148,7 @@ public class CoupleServiceImpl implements CoupleService{
         transactionService.registTransactionInfo(withdrawal);
 
         //이제부터 여기서 해야하는 거는
-
+        dateLogRepository.deleteAllByCouple(couple);
         coupleRepository.delete(couple);
         accountRepository.delete(commonAccount);
 

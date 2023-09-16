@@ -948,25 +948,32 @@ class _CouplePageState extends State<CouplePage> {
   String scheduleDDay = '';
   Map<String, dynamic> petData = {};
   Map<String, dynamic> loveBoxData = {};
-  Map<String, dynamic> scheduleData = {
-    'content': '약속 없음',  // String 값
-    'remainingDay': 0,              // int 값
-    'date': DateTime.now()           // DateTime 객체
-  };
+  Map<String, dynamic> scheduleData = {};
   bool isPaid = false;
   void initState(){
     super.initState();
-    _loadUserData();
-    _loadAnniversaryData();
-    _loadScheduleData();
-    _loadPetData();
-    fetchLoveBoxData();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadUserData();
+    await _loadAnniversaryData();
+    await _loadScheduleData();
+    await _loadPetData();
+    await fetchLoveBoxData();
   }
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     userId = (prefs.getInt('userId') ?? '').toString();
     coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
+  Future<void> _refreshCoupleInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final coupleId = prefs.getInt("coupleId");
+    final response = await http.post(Uri.parse("http://10.0.2.2:8080/api/couple/refresh/$coupleId"));
+    _loadData();
   }
 
   Future<void> _loadAnniversaryData() async {
@@ -1117,7 +1124,7 @@ class _CouplePageState extends State<CouplePage> {
                         alignment: Alignment.center,
                         children: [
                           Icon(Icons.favorite, color: Color(0xFFFF0000), size: 100.0),
-                          Text("+" + dday, style: TextStyle(color: Colors.white , fontSize: 18)),
+                          Text(scheduleData.isNotEmpty ? "+" + dday : "ㅜ_ㅜ", style: TextStyle(color: Colors.white , fontSize: 18)),
                         ],
                       ),
                       SizedBox(width: 15), // 이미지와 텍스트 사이 간격 조절
@@ -1125,7 +1132,7 @@ class _CouplePageState extends State<CouplePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            scheduleData["content"],
+                            scheduleData.isNotEmpty ? scheduleData["content"] : "아직 약속이 없어요",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -1134,7 +1141,7 @@ class _CouplePageState extends State<CouplePage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요', // Exp 텍스트 추가
+                            scheduleData.isNotEmpty ? '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요' : "이번 주말 데이트 어때요?", // Exp 텍스트 추가
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFFA47DE5),
@@ -1356,10 +1363,25 @@ class _CouplePageState extends State<CouplePage> {
                       crossAxisAlignment: CrossAxisAlignment.start, // Align to the start (left side)
                       mainAxisAlignment: MainAxisAlignment.start, // Align to the start (top side)
                       children: [
-                        Image.asset(
-                          'assets/lovebox.png',
-                          width: 100,
-                          height: 50,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 좌우로 나란히 정렬
+                          children: [
+                            Image.asset(
+                              'assets/lovebox.png',
+                              width: 100,
+                              height: 50,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await _refreshCoupleInfo();
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                size: 27, // 아이콘 크기 조절
+                                color: Colors.white, // 아이콘 색상 설정
+                              ),
+                            ),
+                          ],
                         ),
                         if (loveBoxData.isNotEmpty)
                           buildAccountCard(loveBoxData, context),
