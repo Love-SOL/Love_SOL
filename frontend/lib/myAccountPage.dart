@@ -102,6 +102,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
     return amount.substring(0, amount.length-2);
   }
 
+  String formatAccountNumber(String accountNumber) {
+    if (accountNumber.length != 12) {
+      return "Invalid account number";
+    }
+
+    return accountNumber.substring(0, 3) + '-' +
+        accountNumber.substring(3, 6) + '-' +
+        accountNumber.substring(6, 12);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,7 +219,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${accountData['accountType'] == 0 ? "주 계좌" : " 커플 통장" }", // Display account type here
+                                    "${accountData['type'] == 0 ? "주 계좌" : "커플 통장" }", // Display account type here
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -219,7 +229,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                   Opacity(
                                     opacity: 0.4,
                                     child: Text(
-                                      '${accountData["accountNumber"] == null ? "0" : accountData["accountNumber"]}',
+                                      '${accountData["accountNumber"] == null ? "0" : formatAccountNumber(accountData["accountNumber"])}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -340,7 +350,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         ],
                                       ),
                                       Text(
-                                        '$transactionSign${transaction.transactionAmount}원',  // 거래액 앞에 +/- 기호 동적 추가
+                                        '$transactionSign${formatCurrency(transaction.transactionAmount.toString())}원',  // 거래액 앞에 +/- 기호 동적 추가
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.normal,
