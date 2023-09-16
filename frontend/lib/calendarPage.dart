@@ -260,12 +260,21 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         ),
 
-                      if (showAlbum)
+                      if (showAlbum && dateLogId != 0)
                         Container(
                           width: double.infinity,
                           decoration: commonBoxDecoration,
                           child: AlbumWidget(dateLogId: dateLogId),
                         ),
+                      if (showAlbum && dateLogId == 0)
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Color(0XFFE6DFFF), // 배경색을 보라색으로 설정
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: AlbumWidget(dateLogId: dateLogId),
+                        )
                     ],
                   ),
                 )

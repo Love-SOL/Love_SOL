@@ -233,7 +233,11 @@ class _AlbumWidgetState extends State<AlbumWidget> {
                 alignment: Alignment.center,
                 children: [
                   if (image0 == null)
-                    Icon(Icons.add_photo_alternate, size: 50),
+                    Icon(
+                      Icons.add_photo_alternate,
+                      size: 50,
+                      color: Color(0XFFA47DE5), // 아이콘의 색상을 연보라색으로 설정
+                    ),
                   if (image0 != null)
                     Image.file(
                       image0!,
@@ -248,31 +252,34 @@ class _AlbumWidgetState extends State<AlbumWidget> {
         ),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: TextField(
-            onChanged: (value) {
-              content = value;
-            },
-            decoration: InputDecoration(labelText: '댓글을 입력해주세요'),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () async {
-              await uploadImage(dateLogId, image0!, content);
-              await fetchAlbumData(dateLogId);
-              setState(() {
-                isExpanded = false;
-              });
-            },
-            style: IconButton.styleFrom(
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) {
+                    content = value;
+                  },
+                  decoration: InputDecoration(labelText: '내용을 입력해주세요'),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.send),
+                onPressed: () async {
+                  await uploadImage(dateLogId, image0!, content);
+                  await fetchAlbumData(dateLogId);
+                  setState(() {
+                    isExpanded = false;
+                    image0 = null;
+                  });
+                },
+              ),
+            ],
           ),
         ),
       ],
     );
   }
+
   Widget _buildCommentSelectionText(int imageId, List commentList) {
     return Column(
       children: [
