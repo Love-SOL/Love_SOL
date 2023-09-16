@@ -96,7 +96,6 @@ public class DateLogServiceImpl implements DateLogService{
         // 데이트 일기에마일리지(exp)를 적립한다.
         dateLog.accumulateMileage(10);
         // TODO: 펫에게 마일리지를 적립한다.
-
     }
 
     @Override
