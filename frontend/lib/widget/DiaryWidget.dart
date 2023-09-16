@@ -249,7 +249,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isDate ? Colors.blue : Colors.transparent,
+                color: isDate ? Color(0xFF0466FF) : Colors.transparent,
               ),
               child: Column(
                 children: [

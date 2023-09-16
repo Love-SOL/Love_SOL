@@ -117,7 +117,7 @@ public class CoupleController {
 
     @Operation(summary = "Couple connection step x", description = "사용자가 커플 연결을 신청합니다." )
     @PostMapping("/share/{ownerId}")
-    public ResponseResult connectCouple(@PathVariable long ownerId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto) throws NoSuchAlgorithmException {
+    public ResponseResult connectCouple(@PathVariable(value = "ownerId") long ownerId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto) throws NoSuchAlgorithmException {
         log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
         if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
