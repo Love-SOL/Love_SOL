@@ -1181,17 +1181,17 @@ class _CouplePageState extends State<CouplePage> {
                           Text(
                             petData["name"],
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 15),
                           Text(
-                            'EXP: ${petData["exp"]}', // Exp 텍스트 추가
+                            '추억 포인트: ${petData["exp"]}', // Exp 텍스트 추가
                             style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
+                              fontSize: 16,
+                              color: Color(0xFFA47DE5),
                             ),
                           ),
                         ],
