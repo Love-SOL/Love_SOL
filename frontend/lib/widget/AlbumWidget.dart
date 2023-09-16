@@ -281,7 +281,7 @@ class _AlbumWidgetState extends State<AlbumWidget> {
             padding: const EdgeInsets.all(16.0),
             alignment: Alignment.center,
             child: Text(
-              '댓글이 없습니다.',
+              '댓글이 없어요.',
               style: TextStyle(fontSize: 16.0),
             ),
           )

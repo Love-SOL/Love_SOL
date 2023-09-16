@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'assets/loginbackground.png',
+            'assets/spbackground.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -151,7 +151,7 @@ class LoginPage extends StatelessWidget {
                               width: 270,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: Color(0xFF0046FF),
+                                color: Color(0xFFA47DE5),
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(

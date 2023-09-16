@@ -67,7 +67,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           print(schedule.content); // 예: 일정 내용만 출력
 
           if (schedule.scheduleType == 'MAIN_OWNER_SCHEDULE') {
-            eventColor = Color(0xFF0046FF);
+            eventColor = Color(0xFFA47DE5);
           } else if (schedule.scheduleType == 'SUB_OWNER_SCHEDULE') {
             eventColor = Color(0xFFF90000);
           } else {
@@ -356,7 +356,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     );
                   }).toList()
                 else
-                  Text('일정이 없습니다.'),
+                  Text('일정이 없어요.'),
                 SizedBox(height: 20),
               ],
             ),
@@ -367,7 +367,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 _showCategoryDialog(eventDate);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF0466FF),
+                backgroundColor: Color(0xFFA47DE5),
                 shadowColor: Colors.grey,
                 minimumSize: Size(double.infinity, 40),
                 shape: RoundedRectangleBorder(
@@ -409,7 +409,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 ElevatedButton(
                   onPressed: () async {
                     if (selectedCategory == 'MAIN_OWNER_SCHEDULE') {
-                      eventColor = Color(0xFF0046FF);
+                      eventColor = Color(0xFFA47DE5);
                     } else if (selectedCategory == 'SUB_OWNER_SCHEDULE') {
                       eventColor = Color(0xFFF90000);
                     } else {
@@ -437,7 +437,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0466FF),
+                    backgroundColor: Color(0xFFA47DE5),
                     shadowColor: Colors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -481,7 +481,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       backgroundColor: Colors.transparent,
                       child: Icon(
                         Icons.circle,
-                        color: Color(0xFF0046FF),
+                        color: Color(0xFFA47DE5),
                       )
                     ),
                     SizedBox(width: 10),
@@ -532,7 +532,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       backgroundColor: Colors.transparent,
                       child:
                           Icon(
-                        Icons.circle,
+                        Icons.favorite,
                         color: Color(0xFF9E00FF),
                       )
                     ),

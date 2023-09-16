@@ -43,10 +43,10 @@ class _HomePageState extends State<HomePage> {
   String coupleId = "";
 
   Map<String, Color> categoryColors = {
-    '식당': Color(0xFF0245AC),
-    '쇼핑': Color(0xFF336BFF),
-    '커피숍': Color(0xFF80A3FF),
-    '온라인': Color(0xFFCCDAFF),
+    '식당': Color(0xFF7928FF),
+    '쇼핑': Color(0xFF914FFF),
+    '커피숍': Color(0xFFA47DE5),
+    '온라인': Color(0xFFCFBEED),
     '기타': Color(0xFFE6EDFF),
   };
 
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Color(0xFFF7F7F7),
           elevation: 0,
           iconTheme: IconThemeData(
-            color: Color(0XFF0046FF),
+            color: Color(0XFFA47DE5),
           ),
           actions: [
             IconButton(
@@ -263,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF0046FF),
+                            primary: Color(0xFFA47DE5),
                           ),
                           child: Text('닫기'),
                         ),
@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           title: Padding(
-            padding: const EdgeInsets.only(top: 12.0),
+            padding: const EdgeInsets.all(30),
             child: Image.asset('assets/lovesollogo.png'),
           ),
           centerTitle: true,
@@ -327,7 +327,7 @@ class _HomePageState extends State<HomePage> {
                               '전체보기 >',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Color(0xFF0046FF),
+                                color: Color(0xFFA47DE5),
                               ),
                             ),
                           ),
@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFFE4ECFF),
+                      color: Color(0xFFA47DE5),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(0),
                                   child: Image.asset(
-                                    'assets/shinhanlogo.png',
+                                    'assets/pet5.gif',
                                     width: 50,
                                     height: 50,
                                   ),
@@ -393,7 +393,7 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                       ),
                                     ),
                                     Opacity(
@@ -405,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                                             accountData["accountNumber"])}',
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.black,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
@@ -424,7 +424,7 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ]
@@ -435,18 +435,28 @@ class _HomePageState extends State<HomePage> {
                                 ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFF0046FF),
+                                    primary: Color(0xFFFFFFFF),
                                   ),
-                                  child: Text('이체'),
+                                  child: Text('입금',
+                                  style:
+                                  TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFA47DE5)
+                                  ),
+                                ),
                                 ),
                                 SizedBox(width: 16),
                                 // Add spacing between buttons
                                 ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFF0046FF),
+                                    primary: Color(0xFFFFFFFF),
                                   ),
-                                  child: Text('결제'),
+                                  child: Text('결제',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFA47DE5)
+                                  ),),
                                 ),
                               ],
                             ),
@@ -512,7 +522,7 @@ class _HomePageState extends State<HomePage> {
                                     centerSpaceRadius: 40,
                                   ),
                                 )
-                                    : Center(child: Text("소비 내역이 없습니다",
+                                    : Center(child: Text("소비 내역이 없어요!",
                                     style: TextStyle(fontSize: 20))),
                               ),
                             ),
@@ -551,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0046FF),
+                  primary: Color(0xFFA47DE5),
                 ),
                 child: Text('로그아웃'),
               ),
@@ -561,7 +571,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0046FF),
+                  primary: Color(0xFFA47DE5),
                 ),
                 child: Text('정산하기'),
               ),
@@ -653,7 +663,7 @@ class _PersonalPageState extends State<PersonalPage> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE4ECFF),
+                  color: Color(0xFFA47DE5),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -692,7 +702,7 @@ class _PersonalPageState extends State<PersonalPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFE4ECFF),
+                    color: Color(0xFFA47DE5),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -761,7 +771,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFFA47DE5),
               ),
             ),
             ElevatedButton(
@@ -822,7 +832,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/shinhanlogo.png', // 이미지 파일 경로
+                  'assets/pet5.gif', // 이미지 파일 경로
                   width: 30.0, // 이미지의 너비
                   height: 30.0, // 이미지의 높이
                 ),
@@ -864,7 +874,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFFA47DE5),
               ),
               child: Text('이체'),
             ),
@@ -873,7 +883,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFFA47DE5),
               ),
               child: Text('결제'),
             ),
@@ -1021,8 +1031,8 @@ class _CouplePageState extends State<CouplePage> {
         margin: EdgeInsets.only(left:16, right:16, top: 16),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
+          color: Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -1041,6 +1051,7 @@ class _CouplePageState extends State<CouplePage> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+
                 ),
               ),
             ),
@@ -1085,7 +1096,7 @@ class _CouplePageState extends State<CouplePage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            '다음 일정까지: ${scheduleData["remainingDay"]}일 남았습니다', // Exp 텍스트 추가
+                            '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요', // Exp 텍스트 추가
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,
@@ -1202,7 +1213,7 @@ class _CouplePageState extends State<CouplePage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                primary: Color(0xFFA47DE5),
               ),
               child: Text('확인'),
             ),
@@ -1258,11 +1269,20 @@ class _CouplePageState extends State<CouplePage> {
               flex : 1,
               child: Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(left:16, right:16, top: 16),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Color(0xFFF7F7F7),
-                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFFA47DE5), // 시작 색상
+                      Color(0xFFEEE1FF), // 종료 색상
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -1273,19 +1293,21 @@ class _CouplePageState extends State<CouplePage> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      SizedBox(height:5),
                       Text(
                         'LOVE BOX',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Color(0xFFFFFFFF),
                         ),
                       ),
+                      SizedBox(height:20),
                       if(loveBoxData.isNotEmpty)
                         buildAccountCard(loveBoxData, context),
                     ],
