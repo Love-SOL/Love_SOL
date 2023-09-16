@@ -38,9 +38,10 @@ public class DateLog {
     @OneToMany(mappedBy = "dateLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
 
-    public DateLogForCalenderResponseDto toDateLogForCalenderResponseDto(){
+    public DateLogForCalenderResponseDto toDateLogForCalenderResponseDto(int totalAmount){
         return DateLogForCalenderResponseDto.builder()
                 .dateLogId(dateLogId)
+                .totalAmount(totalAmount)
                 .dateAt(dateAt)
                 .build();
     }

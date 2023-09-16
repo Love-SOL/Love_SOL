@@ -228,6 +228,10 @@ class _DiaryWidgetState extends State<DiaryWidget> {
               dto.dateAt.month == eventDate.month &&
               dto.dateAt.day == eventDate.day
           );
+
+
+          String amount = "";
+
           if (isDate) {
             // isDate가 true인 경우 해당 날짜의 dateLogId를 찾아서 저장
             dateLogId = dateLogSet
@@ -236,7 +240,14 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                 dto.dateAt.month == eventDate.month &&
                 dto.dateAt.day == eventDate.day)
                 .dateLogId;
+
+            amount = dateLogSet
+                .firstWhere((dto) =>
+            dto.dateAt.year == eventDate.year &&
+                dto.dateAt.month == eventDate.month &&
+                dto.dateAt.day == eventDate.day).totalAmount;
           }
+
           return GestureDetector(
             onTap: isDate
                 ? () {
@@ -260,6 +271,16 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                       color: isDate ? Colors.white : Color(0xFF69695D),
                     ),
                   ),
+                  isDate
+                      ? Text(
+                    amount + "원",
+                    style: TextStyle(
+                      fontSize:12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  )
+                      : SizedBox.shrink(),
                 ],
               ),
             ),
@@ -276,13 +297,15 @@ class _DiaryWidgetState extends State<DiaryWidget> {
 class DateLogForCalendarResponseDto {
   final int dateLogId;
   final DateTime dateAt;
+  final String totalAmount;
 
-  DateLogForCalendarResponseDto({required this.dateLogId, required this.dateAt});
+  DateLogForCalendarResponseDto({required this.dateLogId, required this.dateAt , required this.totalAmount});
 
   factory DateLogForCalendarResponseDto.fromJson(Map<String, dynamic> json) {
     return DateLogForCalendarResponseDto(
       dateLogId: json['dateLogId'],
       dateAt: DateTime.parse(json['dateAt']),
+      totalAmount: json['totalAmount'].toString()
     );
   }
 

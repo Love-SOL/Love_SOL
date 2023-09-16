@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.lovesol.domain.bank.entity.Transaction;
+import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.datelog.dto.request.InsertImageDto;
@@ -13,8 +15,11 @@ import com.ssafy.lovesol.domain.datelog.dto.response.ImageResponseDto;
 import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.repository.DateLogRepository;
+import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.global.exception.NotExistCoupleException;
 import com.ssafy.lovesol.global.exception.NotExistDateLogException;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
+import com.ssafy.lovesol.global.response.ResponseResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,6 +45,8 @@ public class DateLogServiceImpl implements DateLogService{
     private String bucket;
     final private DateLogRepository dateLogRepository;
     final private CoupleRepository coupleRepository;
+    final private TransactionRepository transactionRepository;
+
     @Override
     public Long createDateLog(Long coupleId, LocalDate dateAt) {
         // 커플 정보가 존재하는지 검사한다.
@@ -112,9 +117,27 @@ public class DateLogServiceImpl implements DateLogService{
     @Override
     public List<DateLogForCalenderResponseDto> getDateLogList(Long coupleId, int year, int month) {
         log.info("DateLogServiceImpl_getDateLogList || 데이트 일기 조회");
-        return dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)
-            .stream().map(dateLog -> dateLog.toDateLogForCalenderResponseDto())
-            .collect(Collectors.toList());
+        String commonAccount = coupleRepository.findById(coupleId).get().getCommonAccount();
+        List<DateLogForCalenderResponseDto> dateLogForCalenderResponseDtoArrayList = new ArrayList<>();
+
+        for (DateLog dateLog : dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)) {
+            LocalDateTime dateAt = dateLog.getDateAt().atStartOfDay();
+            LocalDateTime endAt = dateLog.getDateAt().atTime(LocalTime.MAX);
+
+            System.out.println("dateAt = " + dateAt);
+            System.out.println("endAt = " + endAt);
+
+            List<Transaction> transactionList = transactionRepository.findByAccountAccountNumberAndTransactionAtBetweenAndTransactionType(commonAccount, dateAt, endAt , 0);
+            int totalAmount = 0;
+            for (Transaction transaction : transactionList) {
+                totalAmount += transaction.getWithdrawalAmount();
+            }
+            if(totalAmount == 0) continue;
+
+            dateLogForCalenderResponseDtoArrayList.add(dateLog.toDateLogForCalenderResponseDto(totalAmount));
+        }
+
+        return dateLogForCalenderResponseDtoArrayList;
     }
 
     @Override
@@ -129,5 +152,10 @@ public class DateLogServiceImpl implements DateLogService{
             }
         }
         return imageList;
+    }
+
+    public Couple getDatelogCouple(Long dateLogId) {
+        DateLog datelog = dateLogRepository.findById(dateLogId).get();
+        return datelog.getCouple();
     }
 }

@@ -9,6 +9,9 @@ import com.ssafy.lovesol.domain.datelog.entity.DateLog;
 import com.ssafy.lovesol.domain.datelog.entity.Image;
 import com.ssafy.lovesol.domain.datelog.service.DateLogService;
 import com.ssafy.lovesol.domain.datelog.service.ImageService;
+import com.ssafy.lovesol.domain.user.entity.User;
+import com.ssafy.lovesol.global.fcm.Service.FCMNotificationService;
+import com.ssafy.lovesol.global.fcm.dto.request.FcmRequestDto;
 import com.ssafy.lovesol.global.response.ListResponseResult;
 import com.ssafy.lovesol.global.response.ResponseResult;
 import com.ssafy.lovesol.global.response.SingleResponseResult;
@@ -28,7 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @ApiResponses({
@@ -43,6 +48,8 @@ import java.util.Optional;
 public class DateLogController {
     final private DateLogService dateLogService;
     final private ImageService imageService;
+
+    private final FCMNotificationService fcmNotificationService;
     /**
      * 데이트 일기를 생성하는 API
      * 해당 날짜의 데이트 일기를 생성한다.
@@ -87,7 +94,17 @@ public class DateLogController {
         // 데이트 로그에 이미지를 삽입한다.
         dateLogService.insertImage(Long.parseLong(dateLogId), image, content);
         // TODO: 일기 작성 알림을 보낸다.
-
+        //여기서 커플 객채를 만들어줘야한다.
+        String titleInit= "일기가 작성됐어요";
+        String bodyInit= "지금 바로 확인해보세요!";
+        log.info("DateLogService -> 이미지 삽입 fcm 전송");
+        Couple couple = dateLogService.getDatelogCouple(Long.parseLong(dateLogId));
+        User owner = couple.getOwner();
+        User subOwner = couple.getSubOwner();
+        Map<String, String> data = new HashMap<>();
+        data.put("kind", "1");
+        fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(owner.getUserId()).title(titleInit).body(bodyInit).build(), data);
+        fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(subOwner.getUserId()).title(titleInit).body(bodyInit).build(), data);
         return ResponseResult.successResponse;
     }
 
