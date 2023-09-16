@@ -369,11 +369,16 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 _showCategoryDialog(eventDate);
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+                backgroundColor: Color(0xFF0466FF),
+                shadowColor: Colors.grey,
                 minimumSize: Size(double.infinity, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               child: Text('+ 일정을 추가하세요'),
             ),
+
             SizedBox(height: 10),
           ],
         );
@@ -388,17 +393,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(
-            DateFormat('yyyy년 MM월 dd일').format(eventDate),
-            style: TextStyle(fontSize: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
           ),
+          // title: Text(
+          //   DateFormat('yyyy년 MM월 dd일').format(eventDate),
+          //   style: TextStyle(fontSize: 16),
+          // ),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                   controller: titleController,
-                  decoration: InputDecoration(labelText: '일정 제목'),
+                  decoration: InputDecoration(hintText: '할 일을 입력하세요'),
                 ),
+                SizedBox(height:10),
                 ElevatedButton(
                   onPressed: () async {
                     if (selectedCategory == 'MAIN_OWNER_SCHEDULE') {
@@ -430,19 +439,18 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0466FF),
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   child: Text('일정 추가'),
                 ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('취소'),
-            ),
-          ],
         );
       },
     );
@@ -474,19 +482,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      radius: 10.0,
-                      child: selectedCategory == 'MAIN_OWNER_SCHEDULE'
-                          ? Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 20.0,
+                      child: Icon(
+                        Icons.circle,
+                        color: Color(0xFF0046FF),
                       )
-                          : null,
                     ),
                     SizedBox(width: 10),
                     Text('주 관리자'),
                   ],
                 ),
+              ),
+              Divider(
+                height: 1,
+                color: Colors.grey,
               ),
               InkWell(
                 onTap: () {
@@ -500,19 +508,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      radius: 10.0,
-                      child: selectedCategory == 'SUB_OWNER_SCHEDULE'
-                          ? Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 20.0,
+                      child: Icon(
+                        Icons.circle,
+                        color: Color(0xFFF90000),
                       )
-                          : null,
                     ),
                     SizedBox(width: 10),
                     Text('부 관리자'),
                   ],
                 ),
+              ),
+              Divider(
+                height: 1,
+                color: Colors.grey,
               ),
               InkWell(
                 onTap: () {
@@ -525,14 +533,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      radius: 10.0,
-                      child: selectedCategory == '공동'
-                          ? Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 20.0,
+                      child:
+                          Icon(
+                        Icons.circle,
+                        color: Color(0xFF9E00FF),
                       )
-                          : null,
                     ),
                     SizedBox(width: 10),
                     Text('공동'),
