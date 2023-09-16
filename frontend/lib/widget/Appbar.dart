@@ -185,18 +185,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
             },
           ),
         ],
-        title: Padding(
-          padding: const EdgeInsets.only(top: 0),
-          child: Text(
-            widget.title,  // widget을 사용하여 title에 접근
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset(
+              'assets/lovesollogo.png',
+              width: 180.0, // Adjust the width to your desired size
+              height: 100.0, // Adjust the height to your desired size
+              fit: BoxFit.contain, // Adjust the fit as needed
             ),
-          ),
+            SizedBox(width: 0), // Adjust the amount of space between the logo and other items
+          ],
         ),
-        centerTitle: true,
       ),
     );
   }
