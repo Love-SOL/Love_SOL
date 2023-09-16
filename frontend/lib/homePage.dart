@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              icon: Image.asset('assets/personicon.png'),
+              icon: Image.asset('assets/Filled.png'),
               onPressed: () {
                 _showOptionsDialog(context);
               },
@@ -560,7 +560,7 @@ class _HomePageState extends State<HomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          title: Text('My Page'),
+          title: Text('Options'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

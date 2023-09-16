@@ -90,7 +90,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          title: Text('My Page'),
+          title: Text('Options'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -138,7 +138,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
         actions: [
           IconButton(
-            icon: Image.asset('assets/personicon.png'),
+            icon: Image.asset('assets/Filled.png'),
             onPressed: () {
               _showOptionsDialog(context);
             },
