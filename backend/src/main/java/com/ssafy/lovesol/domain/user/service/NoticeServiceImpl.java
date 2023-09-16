@@ -34,6 +34,7 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public Page<NoticeResDto> getNoticeList(User receiver, int page) {
+        String[] kinds = {"기타","펫","데이트로그","일정","커뮤니티"};
         return noticeRepository.findNoticesByReceiverOrderByCreateAtDesc
                 (receiver, PageRequest.of(page,PAGE_NUM)).map(
                 Notices ->
@@ -42,7 +43,7 @@ public class NoticeServiceImpl implements NoticeService{
                                 .SenderName(Notices.getSender().getName())
                                 .title(Notices.getTitle())
                                 .createAt(Notices.getCreateAt())
-                                .kind(Notices.getKind())
+                                .kind(kinds[Notices.getKind()>4?0:Notices.getKind()])
                                 .build()
         );
     }
