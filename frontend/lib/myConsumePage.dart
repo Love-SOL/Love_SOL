@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import './widget/BottomNav.dart';
 
 class MyConsumePage extends StatefulWidget {
   final String accountNumber;
@@ -32,11 +33,11 @@ class _MyConsumePage extends State<MyConsumePage> {
   };
 
   Map<String, Color> categoryColors = {
-    '식당': Colors.blue,
-    '쇼핑': Colors.red,
-    '커피숍': Colors.green,
-    '온라인': Colors.yellow,
-    '기타': Colors.deepPurple
+    '식당': Color(0xFF0245AC),
+    '쇼핑': Color(0xFF336BFF),
+    '커피숍': Color(0xFF80A3FF),
+    '온라인': Color(0xFFCCDAFF),
+    '기타': Color(0xFFE6EDFF),
   };
 
   @override
@@ -328,7 +329,9 @@ class _MyConsumePage extends State<MyConsumePage> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 2),
     );
+
   }
 }
 

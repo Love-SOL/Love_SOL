@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import './widget/BottomNav.dart';
 
 class MyAccountPage extends StatefulWidget {
   final String accountNumber;
@@ -410,6 +411,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 0),
     );
   }
 }
