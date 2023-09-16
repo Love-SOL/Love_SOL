@@ -218,7 +218,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${accountData['accountType'] == 0 ? "주 계좌" : " 커플 통장" }", // Display account type here
+                                    "${accountData['type'] == 0 ? "주 계좌" : "커플 통장" }", // Display account type here
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -349,7 +349,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         ],
                                       ),
                                       Text(
-                                        '$transactionSign${transaction.transactionAmount}원',  // 거래액 앞에 +/- 기호 동적 추가
+                                        '$transactionSign${formatCurrency(transaction.transactionAmount.toString())}원',  // 거래액 앞에 +/- 기호 동적 추가
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.normal,
