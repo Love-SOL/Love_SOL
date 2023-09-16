@@ -35,7 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   List<PieChartSectionData> sectionList = [];
-
+  List<NoticeResDto> noticeList = [];
 
 
   String userId = "";
@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
     await fetchAccountData(); // 초기 데이터 로드를 기다립니다.
     await fetchTransactionCategoryData(accountData["accountNumber"]);
+    await fetchNoticeData();
   }
 
   Future<void> _loadUserData() async {
@@ -151,6 +152,26 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> fetchNoticeData() async {
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/notice/$userId"));
+
+    var decode = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> responseBody = json.decode(decode);
+    int statusCode = responseBody['statusCode'];
+
+    if (statusCode == 200) {
+      List<dynamic> data = responseBody['data'];
+      List<NoticeResDto> dataList = data.map((data) => NoticeResDto.fromJson(data as Map<String, dynamic>)).toList();
+
+      setState(() {
+        noticeList = dataList;
+      });
+
+    } else {
+      throw Exception('API 요청 실패');
+    }
+  }
+
   List<PieChartSectionData> createPieChartSections(List<GetTransactionByCategoryResponseDto> data) {
     return data.map((item) {
       print(item);
@@ -199,24 +220,19 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
                       height: 300,
-                      child: ListView(
-                        children: [
-                          ListTile(
-                            title: Text('알림 1'),
-                            subtitle: Text('알림 내용 1'),
-                          ),
-                          ListTile(
-                            title: Text('알림 2'),
-                            subtitle: Text('알림 내용 2'),
-                          ),
-                        ],
+                      child: ListView.builder(
+                        itemCount: noticeList.length,
+                        itemBuilder: (context, index) {
+                          final notice = noticeList[index];
+                          return ListTile(
+                            title: Text(notice.title),
+                            subtitle: Text(notice.body),
+                          );
+                        },
                       ),
                     ),
                     actions: [
@@ -832,6 +848,8 @@ class _CouplePageState extends State<CouplePage> {
   String petName = '';
   int petType = 0;
   String dday = '0';
+  String userId = '';
+  String coupleId = '';
   String schedule = '일정이 없어요';
   String scheduleDDay = '';
   Map<String, dynamic> petData = {};
@@ -843,27 +861,32 @@ class _CouplePageState extends State<CouplePage> {
   bool isPaid = false;
   void initState(){
     super.initState();
+    _loadUserData();
     _loadAnniversaryData();
     _loadScheduleData();
     _loadPetData();
   }
 
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+    coupleId = (prefs.getInt('coupleId') ?? '').toString();
+  }
+
   Future<void> _loadAnniversaryData() async {
     final prefs = await SharedPreferences.getInstance();
     final coupleId = prefs.getInt("coupleId");
-    print('커플 페이지');
-    print(coupleId);
     final response = await http.get(Uri.parse("http://10.0.2.2:8080/api/couple/anniversary/$coupleId"));
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
     int statusCode = responseBody['statusCode'];
-
     if (statusCode == 200) {
       // 성공
       setState(() {
         dday = responseBody['data'].toString();
       });
+
     } else {
       print(statusCode);
       // 실패
@@ -878,11 +901,15 @@ class _CouplePageState extends State<CouplePage> {
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
     int statusCode = responseBody['statusCode'];
+    print('스테이터스 코드');
+    print(statusCode);
 
     if (statusCode == 200) {
       setState(() {
         scheduleData = Map<String, dynamic>.from(responseBody['data']);
       });
+      print('몇일?');
+      print(scheduleData);
     } else {
       print(statusCode);
       // 실패
@@ -1270,7 +1297,7 @@ class NoticeResDto {
       title: json['title'],
       body: json['body'],
       createAt: DateTime.parse(json['createAt']),
-      senderName: json['SenderName'],
+      senderName: json['senderName'],
     );
   }
 }
