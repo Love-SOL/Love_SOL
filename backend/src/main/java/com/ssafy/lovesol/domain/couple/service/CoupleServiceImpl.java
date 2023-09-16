@@ -46,9 +46,9 @@ public class CoupleServiceImpl implements CoupleService{
         User user = userService.getUserByUserId(coupleDto.getId());
         log.info("후보1");
         if(user == null) return -1;
-        log.info("커플통장 생성 전 owner 객체 " + user.toString());
+//        log.info("커플통장 생성 전 owner 객체 " + user.toString());
         Couple couple = coupleDto.toEntity(user);
-        log.info(couple.toString());
+//        log.info(couple.toString());
         return coupleRepository.save(couple).getCoupleId();
 
     }
@@ -252,5 +252,10 @@ public class CoupleServiceImpl implements CoupleService{
         log.info("CoupleServiceImpl_getDDay | 커플의 커스텀 설정 D-DAY 조회");
         Couple couple = coupleRepository.findById(coupleId).get();
         return couple.toDDayResponseDto((int)ChronoUnit.DAYS.between(LocalDate.now(), couple.getDDay() == null ? LocalDate.now() : couple.getDDay()) , couple.getDDay());
+    }
+
+    @Override
+    public void saveCouple(Couple couple) {
+        coupleRepository.save(couple);
     }
 }

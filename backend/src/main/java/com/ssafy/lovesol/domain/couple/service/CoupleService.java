@@ -30,5 +30,7 @@ public interface CoupleService {
     DDayResponseDto registDDay(DDayRequestDto dDayRequestDto);
     DDayResponseDto getDDay(Long coupleId);
 
+    void saveCouple(Couple couple);
+
 }
 
