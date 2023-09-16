@@ -106,9 +106,6 @@ Future<void> initializeFirebase() async {
     final kind = message.data["kind"];
     if (kind == "0") {
       print(message.data);
-      // "kind"가 0이면 특정 페이지로 이동
-      // 이동 로직을 구현하면 됩니다.
-      // 예를 들어 Navigator를 사용하여 특정 페이지로 이동할 수 있습니다.
       _showConfirmationDialog(message.data["receiverId"], message.data["senderId"]);
     }
     // FCM 메시지를 푸시 알림으로 표시
@@ -123,6 +120,11 @@ Future<void> initializeFirebase() async {
     FlutterLocalNotification.showNotification(
         message.notification?.title ?? 'Notification Title',
         message.notification?.body ?? 'Notification Body');
+    final kind = message.data["kind"];
+    if (kind == "0") {
+      print(message.data);
+      _showConfirmationDialog(message.data["receiverId"], message.data["senderId"]);
+    }
   });
 
   print(fcmToken);
