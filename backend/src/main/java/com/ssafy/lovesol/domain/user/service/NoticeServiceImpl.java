@@ -34,13 +34,14 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public Page<NoticeResDto> getNoticeList(User receiver, int page) {
+        log.info("알림 조회중");
         String[] kinds = {"기타","펫","데이트로그","일정","커뮤니티"};
         return noticeRepository.findNoticesByReceiverOrderByCreateAtDesc
                 (receiver, PageRequest.of(page,PAGE_NUM)).map(
                 Notices ->
                         NoticeResDto.builder()
                                 .body(Notices.getBody())
-                                .SenderName(Notices.getSender().getName())
+                                .senderName(Notices.getSender().getName())
                                 .title(Notices.getTitle())
                                 .createAt(Notices.getCreateAt())
                                 .kind(kinds[Notices.getKind()>4?0:Notices.getKind()])

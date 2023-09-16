@@ -25,7 +25,9 @@ public class PetServiceImpl implements PetService{
         log.info("PetServiceImpl_getPet | 커플 펫 조회");
         Couple couple = coupleRepository.findById(coupleId).orElseThrow(NotExistCoupleException::new);
         Pet pet = couple.getPet();
-        System.out.println(pet);
+        if (pet == null)
+            return null;
+
         return pet.toResponsePetDto();
     }
 
