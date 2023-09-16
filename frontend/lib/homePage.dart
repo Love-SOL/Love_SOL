@@ -1324,7 +1324,7 @@ class _CouplePageState extends State<CouplePage> {
                         Image.asset(
                           'assets/lovebox.png',
                           width: 100,
-                          height: 100,
+                          height: 50,
                         ),
                         if (loveBoxData.isNotEmpty)
                           buildAccountCard(loveBoxData, context),
