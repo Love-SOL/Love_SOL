@@ -305,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(20.0),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey,
@@ -366,7 +366,7 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFA47DE5),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey,
@@ -496,7 +496,7 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -1109,7 +1109,7 @@ class _CouplePageState extends State<CouplePage> {
                         width: 5,
                         decoration: BoxDecoration(
                           color: Color(0xFFE6DFFF),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       SizedBox(width:5),
@@ -1157,7 +1157,7 @@ class _CouplePageState extends State<CouplePage> {
                         width: 5,
                         decoration: BoxDecoration(
                           color: Color(0xFFE6DFFF),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       Image.asset(
@@ -1235,7 +1235,13 @@ class _CouplePageState extends State<CouplePage> {
             borderRadius: BorderRadius.circular(20.0),
           ),
           content: TextField(
-            decoration: InputDecoration(hintText: '펫 이름을 입력하세요'),
+            decoration: InputDecoration(
+          hintText: '펫에게 이름을 지어주세요',
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors
+                .deepPurple),
+          ),
+            ),
             onChanged: (value) {
               setState(() {
                 petName = value; // 입력한 펫 이름을 저장
@@ -1250,7 +1256,11 @@ class _CouplePageState extends State<CouplePage> {
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFFDADADA),
               ),
-              child: Text('취소'),
+              child: Text('취소',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFA47DE5),
+                ),),
             ),
 
             TextButton(
@@ -1261,7 +1271,11 @@ class _CouplePageState extends State<CouplePage> {
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFFA47DE5),
               ),
-              child: Text('확인'),
+              child: Text('확인',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                ),),
             ),
           ],
         );
@@ -1386,7 +1400,7 @@ class _CouplePageState extends State<CouplePage> {
                           ),
                         );
                       },
-                      '펫 이름을 설정해주세요',
+                      '펫에게 이름을 지어주세요',
                           () {
                         _setPetName(context);
                       },

@@ -160,7 +160,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: Image.asset(
-                                  'assets/shinhanlogo.png',
+                                  'assets/pet5.gif',
                                   width: 50,
                                   height: 50,
                                 ),
@@ -182,7 +182,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                       '${accountData["accountNumber"] == null ? "0" : formatAccountNumber(accountData["accountNumber"])}',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -198,7 +198,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ]
@@ -210,18 +210,26 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFA47DE5),
+                                  primary: Color(0xFFFFFFFF),
                                 ),
-                                child: Text('이체'),
+                                child: Text('이체',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFA47DE5)
+                                  ),),
                               ),
                               SizedBox(width: 16), // Add spacing between buttons
                               ElevatedButton(
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFA47DE5),
+                                  primary: Color(0xFFFFFFFF),
                                 ),
-                                child: Text('결제'),
+                                child: Text('결제',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFA47DE5)
+                                  ),),
                               ),
                             ],
                           ),
