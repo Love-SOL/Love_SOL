@@ -246,7 +246,7 @@ public class CoupleController {
         return new SingleResponseResult<>(coupleService.getDDay(coupleId));
     }
     @Operation(summary="유저 결재내역 새로고침")
-    @PostMapping("/refresh/{couplId}")
+    @PostMapping("/refresh/{coupleId}")
     public ResponseResult refreshTransaction(@PathVariable(value = "coupleId") @Valid long couplId){
         Couple couple = coupleService.getCoupleInfoByCouplId(couplId);
         //여기서 결재 내역 조회한다.
@@ -261,7 +261,7 @@ public class CoupleController {
             log.info("계좌 내역 조회에 실패했습니다.");
             return ResponseResult.failResponse;
         }
-        LocalDateTime current = LocalDateTime.now().minusMinutes(10);
+        LocalDateTime current = LocalDate.now().atStartOfDay();
         Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
         List<Transaction> transactionList = transactionService.findTransactionsDetail(current,coupleAccount);
         LocalDate curDay = current.toLocalDate();
