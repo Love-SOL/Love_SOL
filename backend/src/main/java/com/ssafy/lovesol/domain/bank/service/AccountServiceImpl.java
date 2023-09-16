@@ -170,9 +170,9 @@ public class AccountServiceImpl implements AccountService{
         JSONObject result = new JSONObject(response.getBody());
         int successCode = result.getJSONObject("dataHeader").getInt("successCode");
 
-        if(successCode != 0 ){
+        if(successCode == 0 ){
             log.info("계좌 조회 성공");
-            accountRepository.findByAccountNumber(accountNumber).get().toGetUserAccountsResponseDto();
+            return accountRepository.findByAccountNumber(accountNumber).get().toGetUserAccountsResponseDto();
         }
 
         return null;
