@@ -8,6 +8,7 @@ import com.ssafy.lovesol.domain.couple.dto.request.*;
 import com.ssafy.lovesol.domain.couple.dto.response.ResponseAccountInfoDto;
 import com.ssafy.lovesol.domain.couple.entity.Couple;
 import com.ssafy.lovesol.domain.couple.service.CoupleService;
+import com.ssafy.lovesol.domain.user.dto.request.UpdateUserAccountInfoDto;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.service.NoticeService;
 import com.ssafy.lovesol.domain.user.service.UserService;
@@ -77,7 +78,7 @@ public class CoupleController {
     public ResponseResult createCoupleinfo(@RequestBody @Valid CoupleCreateRequestDto coupleCreateRequestDto)
     {
         log.info("CoupleController -> 커플 객체 초기 생성 ");
-        if(coupleService.createCouple(coupleCreateRequestDto) < 0) return ResponseResult.failResponse;
+        if(coupleService.createCouple(coupleCreateRequestDto) <= 0) return ResponseResult.failResponse;
 
         return ResponseResult.successResponse;
     }
@@ -89,14 +90,22 @@ public class CoupleController {
     @PostMapping("/connect")
     public ResponseResult sendconnection(@RequestBody @Valid ConnectNotificationReqDto connectNotificationReqDto)
     {
+
         //여기서 커플 객채를 만들어줘야한다.
         String titleInit= "커플 통장 초대장이 왔어요!";
         String bodyInit= connectNotificationReqDto.getSenderId()+"님이 커플 통장에 초대했어요";
         int kind = 0;
         log.info("CoupleController -> 커플 연결 신청 알람 전송");
-        User sender = userService.getUserById(connectNotificationReqDto.getSenderId());
-        User receiver = userService.getUserById(connectNotificationReqDto.getSenderId());
+        User sender = userService.getUserByUserId(connectNotificationReqDto.getSenderId());
+        User receiver = userService.getUserByUserId(connectNotificationReqDto.getSenderId());
+        sender.setAmount(connectNotificationReqDto.getAmount());
+        sender.setDepositAt(connectNotificationReqDto.getDay());
+
+        Couple couple = coupleService.getCoupleInfoByUserId(sender.getId());
+        couple.setAnniversary(connectNotificationReqDto.getAnniversary());
+
         noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
+
         Map<String, String> data = new HashMap<>();
         data.put("kind",Integer.toString(kind));
         data.put("senderId",Long.toString(sender.getUserId()));
@@ -107,13 +116,18 @@ public class CoupleController {
 //        fcmNotificationService.sendNotificationByToken()
     }
 
+    @Operation(summary = "Couple connection step x", description = "사용자가 커플 연결을 신청합니다." )
     @PostMapping("/share/{ownerId}")
     public ResponseResult connectCouple(@PathVariable long ownerId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto) throws NoSuchAlgorithmException {
         log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
         if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
         }
+        //TODO : 여기서는 이제 승인이 되었으닌깐  subOwner의 자동이체 날짜와 금액을 저장해야하한다.
+        User subOwner = userService.getUserByUserId(coupleRequestDto.getSubOnwerId());
+        User owner = userService.getUserByUserId(ownerId);
 
+        userService.UpdateDepositInfo(UpdateUserAccountInfoDto.builder().depositAt(owner.getDepositAt()).amount(owner.getAmount()).id(subOwner.getId()).build());
         return ResponseResult.successResponse;
     }
 
@@ -171,9 +185,32 @@ public class CoupleController {
 
     @PostMapping("/wire/{userId}")
     public ResponseResult sendAmount(@PathVariable long userId, @RequestBody @Valid SendCoupleAmountRequestDto requestDto){
+        LocalDateTime current = LocalDateTime.now();
         User user = userService.getUserByUserId(userId);
         Couple couple = coupleService.getCoupleInfoByCouplId(requestDto.getCouplId());
-        
+        transactionService.registTransactionInfo(Transaction.builder()
+                        .branchName("기타")
+                        .transactionAt(current)
+                        .depositAmount(0)
+                        .content("LoveSol")
+                        .withdrawalAmount(requestDto.getAmount())
+                        .account(accountService.findAccountByAccountNumber(user.getPersonalAccount()))
+                .build());
+
+        transactionService.registTransactionInfo(Transaction.builder()
+                .branchName("기타")
+                .transactionAt(current)
+                .depositAmount(requestDto.getAmount())
+                .content("LoveSol")
+                .withdrawalAmount(0)
+                .account(accountService.findAccountByAccountNumber(couple.getCommonAccount()))
+                .build());
+        Account personAccount = accountService.findAccountByAccountNumber(user.getPersonalAccount());
+        Account coupleAccount = accountService.findAccountByAccountNumber(couple.getCommonAccount());
+        personAccount.setBalance(personAccount.getBalance()- requestDto.getAmount());
+        coupleAccount.setBalance(coupleAccount.getBalance()+requestDto.getAmount());
+        accountService.accountSave(personAccount);
+        accountService.accountSave(coupleAccount);
 //        return Res
         return ResponseResult.successResponse;
     }

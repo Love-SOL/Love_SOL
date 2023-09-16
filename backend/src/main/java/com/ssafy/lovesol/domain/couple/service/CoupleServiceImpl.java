@@ -177,7 +177,6 @@ public class CoupleServiceImpl implements CoupleService{
     }
 
     @Override
-    @Transactional
     public boolean connectCouple(ConnectCoupleRequestDto coupleDto, long coupleId) throws NoSuchAlgorithmException {
         Optional<Couple> coupleOption = coupleRepository.findById(coupleId);
         if(coupleOption.isEmpty()) {
@@ -204,7 +203,6 @@ public class CoupleServiceImpl implements CoupleService{
             accountRepository.save(loveBox);
 
             couple.setSubOwner(subOwner);
-            couple.setAnniversary(coupleDto.getAnniversary());
             couple.setCommonAccount(loveBox.getAccountNumber());
             return true;
         }

@@ -23,9 +23,7 @@ public class ConnectCoupleRequestDto {
     private long subOnwerId;
 
 
-    @NotNull
-    @Schema(description = "기념일",example = "2020-02-02")
-    private LocalDate anniversary;
+
     @NotNull
     @Schema(description = "0,1 승인/거절", example = "예시")
     private int check; // 0: 승인 1: 거절
