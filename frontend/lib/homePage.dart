@@ -939,15 +939,11 @@ class _CouplePageState extends State<CouplePage> {
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
     int statusCode = responseBody['statusCode'];
-    print('스테이터스 코드');
-    print(statusCode);
 
     if (statusCode == 200) {
       setState(() {
         scheduleData = Map<String, dynamic>.from(responseBody['data']);
       });
-      print('몇일?');
-      print(scheduleData);
     } else {
       print(statusCode);
       // 실패
@@ -972,6 +968,7 @@ class _CouplePageState extends State<CouplePage> {
         isPaid = true;
         petType = result;
       });
+      print('isPaid');
       print(isPaid);
     }
   }
@@ -984,16 +981,21 @@ class _CouplePageState extends State<CouplePage> {
 
     var decode = utf8.decode(response.bodyBytes);
     Map<String, dynamic> responseBody = json.decode(decode);
-    int statusCode = responseBody['status'];
+    int statusCode = responseBody['statusCode'];
 
+    print('status code');
+    print(statusCode);
     if (statusCode == 200) {
-      setState(() {
-        petData = Map<String, dynamic>.from(responseBody['data']);
-      });
-      print(petData);
+      if(responseBody['data'] == null){
+        _isPaid();
+      }else{
+        setState(() {
+          petData = Map<String, dynamic>.from(responseBody['data']);
+        });
+      }
     } else {
       print('펫 요청 실패');
-      _isPaid();
+
     }
   }
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed, bool isSchedule , bool isPet) {
