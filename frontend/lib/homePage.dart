@@ -643,52 +643,21 @@ class _PersonalPageState extends State<PersonalPage> {
       appBar: CustomAppBar(
         title: "내 계좌",
       ),
-      body:Container(
+      body: Container(
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
             Expanded(
-              flex : 3,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFFE4ECFF),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'LOVE BOX',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      if(loveBoxData.isNotEmpty)
-                        buildAccountCard(loveBoxData, context),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height:15),
-            Expanded(
-              flex: 5,
+              flex: 3,
               child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MyAccountPage(accountNumber: loveBoxData['accountNumber']),
+                    ),
+                  );
+                },
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -704,30 +673,67 @@ class _PersonalPageState extends State<PersonalPage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child:
-                    Container(
-                      child: ListView.builder(
-                        itemCount: accountData.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            children: [
-                              buildAccountCard(accountData[index], context),
-                              SizedBox(height: 10.0),
-                            ],
-                          );
-                        },
-                      ),
+                    padding: const EdgeInsets.all(25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LOVE BOX',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        if (loveBoxData.isNotEmpty)
+                          buildAccountCard(loveBoxData, context),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height:15),
-
+            SizedBox(height: 15),
+            Expanded(
+              flex: 5,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFE4ECFF),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    child: ListView.builder(
+                      itemCount: accountData.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: [
+                            buildAccountCard(accountData[index], context),
+                            SizedBox(height: 10.0),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 15),
           ],
         ),
       ),
+
       bottomNavigationBar: buildBottomNavigationBar(context, 0),
     );
 
@@ -792,96 +798,105 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
         accountNumber.substring(6, 12);
   }
 
-  return Container(
-    width: double.infinity,
-    // height: 150.0,
-    margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
-    padding: EdgeInsets.all(16.0),
-    decoration: BoxDecoration(
-      color: Color(0xFFF7F7F7),
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
-              Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/shinhanlogo.png', // 이미지 파일 경로
-                  width: 30.0, // 이미지의 너비
-                  height: 30.0, // 이미지의 높이
+  return InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyAccountPage(accountNumber: accountInfo['accountNumber'])), // 'YourNewPage'는 이동하려는 페이지의 클래스명을 나타냅니다.
+      );
+    },
+    child: Container(
+      width: double.infinity,
+      // height: 150.0,
+      margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Color(0xFFF7F7F7),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/shinhanlogo.png', // 이미지 파일 경로
+                      width: 30.0, // 이미지의 너비
+                      height: 30.0, // 이미지의 높이
+                    ),
+                    SizedBox(width: 8.0), // 이미지와 텍스트 사이의 간격 조절
+                    Text(
+                      accountInfo["accountNumber"] == null ? "" : formatAccountNumber(accountInfo["accountNumber"]), // accountNumber를 표시
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 8.0), // 이미지와 텍스트 사이의 간격 조절
-                Text(
-                  accountInfo["accountNumber"] == null ? "" : formatAccountNumber(accountInfo["accountNumber"]), // accountNumber를 표시
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+              if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
+                IconButton(
+                  onPressed: () {
+                    _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
+                  },
+                  icon: Icon(
+                    Icons.list,
+                    color: Colors.black,
                   ),
                 ),
-              ],
-            ),
-            if (accountInfo["accountNumber"] != null && accountInfo["accountNumber"].length != 14)
-              IconButton(
-              onPressed: () {
-                _showConfirmationDialog(accountInfo); // 해당 데이터로 다이얼로그 표시
-              },
-              icon: Icon(
-                Icons.list,
-                color: Colors.black,
+            ],
+          ),
+          Center(
+            child: Text(
+              '${formatCurrency(removeSosu(accountInfo["balance"].toString()))}원', // balance를 표시
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
               ),
-            ),
-          ],
-        ),
-        Center(
-          child: Text(
-            '${formatCurrency(removeSosu(accountInfo["balance"].toString()))}원', // balance를 표시
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('이체'),
               ),
-              child: Text('이체'),
-            ),
-            SizedBox(width: 16), // Add spacing between buttons
-            ElevatedButton(
-              onPressed: () {
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0046FF),
+              SizedBox(width: 16), // Add spacing between buttons
+              ElevatedButton(
+                onPressed: () {
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0046FF),
+                ),
+                child: Text('결제'),
               ),
-              child: Text('결제'),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     ),
   );
+
 }
 
 String formatCurrency(String amountStr) {
@@ -1245,45 +1260,52 @@ class _CouplePageState extends State<CouplePage> {
         child: Column(
           children: [
             Expanded(
-              flex : 1,
-              child: Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(left:16, right:16, top: 16),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF7F7F7),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'LOVE BOX',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyAccountPage(accountNumber: loveBoxData['accountNumber'])), // 'YourNewPage'는 이동하려는 페이지의 클래스명입니다.
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF7F7F7),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
                       ),
-                      if(loveBoxData.isNotEmpty)
-                        buildAccountCard(loveBoxData, context),
                     ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LOVE BOX',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        if (loveBoxData.isNotEmpty)
+                          buildAccountCard(loveBoxData, context),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 3),
             Expanded(
               flex: 1,
               child: buildContainer(
