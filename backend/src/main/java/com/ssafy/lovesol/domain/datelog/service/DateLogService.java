@@ -26,4 +26,6 @@ public interface DateLogService {
     List<DateLogForCalenderResponseDto> getDateLogList(Long coupleId, int year,int month);
 
     List<ImageResponseDto> getAllImage(Long coupleId);
+
+    public Couple getDatelogCouple(Long dateLogId);
 }
