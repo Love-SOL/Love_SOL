@@ -142,7 +142,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
           ),
           Text(
             DateFormat('yyyy년 MM월').format(selectedDate), // 원하는 형식으로 날짜 포맷
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Lato'),
           ),
           IconButton(
             icon: Icon(Icons.arrow_forward),
@@ -182,6 +182,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Lato',
             ),
           );
         }).toList(),
@@ -263,6 +264,7 @@ class _DiaryWidgetState extends State<DiaryWidget> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Lato',
                         color: isDate ? Color(0xFFA47DE5) : Color(0xFF69695D),
                       ),
                   ),
