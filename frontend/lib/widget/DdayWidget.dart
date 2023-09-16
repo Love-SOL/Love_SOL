@@ -41,14 +41,16 @@ class _DDayPageState extends State<DDayPage> {
     print('registCustomDDay');
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8080/api/couple/dday'), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/couple/dday'),
+        // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
           'coupleId': coupleId,
           'title': title,
-          'targetDay': "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"
+          'targetDay': "${selectedDate.year}-${selectedDate.month.toString()
+              .padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"
         }),
       );
       var decode = utf8.decode(response.bodyBytes);
@@ -59,7 +61,7 @@ class _DDayPageState extends State<DDayPage> {
       if (statusCode == 200) {
         // 성공
         DDayResponseDto dday = DDayResponseDto.fromJson(responseBody['data']);
-        widget.onDDaySet(dday.remainingDay,dday.title,dday.date);
+        widget.onDDaySet(dday.remainingDay, dday.title, dday.date);
       } else {
         print(statusCode);
         // 실패
@@ -70,62 +72,75 @@ class _DDayPageState extends State<DDayPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              "디데이 날짜 설정",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0), // Adjust the radius as needed
+              topRight: Radius.circular(10.0), // Adjust the radius as needed
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                final pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2101),
-                );
+            color: Colors.white,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "디데이 날짜 설정",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () async {
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
 
-                if (pickedDate != null && pickedDate != selectedDate) {
-                  setState(() {
-                    selectedDate = pickedDate;
-                  });
-                }
-              },
-              child: Text(
-                "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일",
-                style: TextStyle(fontSize: 18),
+                  if (pickedDate != null && pickedDate != selectedDate) {
+                    setState(() {
+                      selectedDate = pickedDate;
+                    });
+                  }
+                },
+                child: Text(
+                  "${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate
+                      .day}일",
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: textController, // 텍스트 입력 필드에 컨트롤러 할당
-              decoration: InputDecoration(
-                labelText: '텍스트 입력', // 입력 필드 라벨
+              SizedBox(height: 20),
+              TextField(
+                controller: textController,
+                decoration: InputDecoration(
+                  labelText: '내용을 입력하세요',
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final text = textController.text; // 입력한 텍스트 가져오기
-                registCustomDDay(text);
-              },
-              child: Text("설정"),
-            ),
-          ],
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  final text = textController.text;
+                  registCustomDDay(text);
+                },
+                child: Text("설정"),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
 
 class DDayResponseDto {
   final int coupleId;

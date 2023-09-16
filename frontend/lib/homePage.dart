@@ -41,10 +41,10 @@ class _HomePageState extends State<HomePage> {
 
   Map<String, Color> categoryColors = {
     '식당': Color(0xFF0245AC),
-    '쇼핑': Colors.red,
-    '커피숍': Colors.green,
-    '온라인': Colors.yellow,
-    '기타': Colors.deepPurple
+    '쇼핑': Color(0xFF336BFF),
+    '커피숍': Color(0xFF80A3FF),
+    '온라인': Color(0xFFCCDAFF),
+    '기타': Color(0xFFE6EDFF),
   };
 
   void initState(){

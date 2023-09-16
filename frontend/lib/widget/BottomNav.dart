@@ -62,7 +62,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
         label: '챗봇',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.heart_broken_sharp),
+        icon: Icon(Icons.favorite),
         label: '커플',
       ),
     ],
