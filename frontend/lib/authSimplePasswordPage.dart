@@ -103,6 +103,7 @@ class _AuthSimplePasswordPageState extends State<AuthSimplePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0XFF0046FF),
         elevation: 0,
       ),
