@@ -112,7 +112,6 @@ class _DiaryWidgetState extends State<DiaryWidget> {
     return Column(
       children: <Widget>[
         _buildHeader(),
-
         _buildWeekDays(),
         SizedBox(height: 20),
         Expanded(
