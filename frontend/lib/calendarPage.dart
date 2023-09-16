@@ -289,9 +289,16 @@ class _CalendarPageState extends State<CalendarPage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), // 왼쪽 위 모서리 둥글게 설정
+              topRight: Radius.circular(20.0), // 오른쪽 위 모서리 둥글게 설정
+            ),
+            color: Colors.white, // 배경색 설정
+          ),
           padding: EdgeInsets.all(16),
           child: DDayPage(
-            onDDaySet: (date, text , target) {
+            onDDaySet: (date, text, target) {
               Navigator.pop(context);
               setState(() {
                 dDay = date;
@@ -302,6 +309,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         );
       },
+      backgroundColor: Colors.transparent, // 배경을 투명으로 설정
     );
   }
 }
