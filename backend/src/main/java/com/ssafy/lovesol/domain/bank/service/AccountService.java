@@ -32,4 +32,6 @@ public interface AccountService {
     GetUserAccountsResponseDto getUserMainAccount(Long userId) throws NoSuchAlgorithmException;
 
     GetUserAccountsResponseDto getAccountInfo(String accountNumber);
+
+    GetUserAccountsResponseDto getAccountByCoupleId(Long coupleId);
 }

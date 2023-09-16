@@ -73,7 +73,7 @@ public class AccountController {
     }
 
     @GetMapping("/couple/{userId}")
-    public ResponseResult getMyLoveBox(@Valid @PathVariable Long userId) throws NoSuchAlgorithmException {
+    public ResponseResult getMyLoveBox(@Valid @PathVariable(value = "userId") Long userId) throws NoSuchAlgorithmException {
         return new SingleResponseResult<>(accountService.getMyAccounts(userId,1));
     }
 
@@ -89,12 +89,20 @@ public class AccountController {
 
     @GetMapping("/transaction/{accountNumber}/{idx}")
         public ResponseResult getTransactionList(@PathVariable(name = "accountNumber") String accountNumber , @PathVariable(name = "idx") int idx) {
+        log.info("계좌 번호로 소비내역 조회");
         return new ListResponseResult<>(transactionService.getTransactionList(accountNumber,idx));
     }
 
     @GetMapping("/transaction/category/{accountNumber}")
     public ResponseResult getTransactionListByCategory(@PathVariable(name = "accountNumber") String accountNumber , @RequestParam(name = "year") int year , @RequestParam(name = "month") int month) {
+        log.info("계좌 번호로 카테고리별 소비내역 조회");
         return new ListResponseResult<>(transactionService.getTransactionListByCategory(accountNumber, year, month));
     }
+
+    // @GetMapping("/couple/{coupleId}")
+    // public ResponseResult getAccountByCoupleId(@PathVariable(name = "coupleId") Long coupleId) {
+    //     log.info("커플 계좌 조회");
+    //     return new SingleResponseResult<>(accountService.getAccountByCoupleId(coupleId));
+    // }
 
 }
