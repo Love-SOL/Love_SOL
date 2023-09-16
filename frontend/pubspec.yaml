@@ -99,6 +99,7 @@ flutter:
     - assets/center.png
     - assets/logoblue.png
     - assets/ottbar.png
+    - assets/lovesollogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

@@ -168,6 +168,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
 
       appBar: AppBar(
+        automaticallyImplyLeading : false,
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
         iconTheme: IconThemeData(
@@ -216,13 +217,9 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        title: Text(
-          "홈",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: Image.asset('assets/lovesollogo.png'),
         ),
         centerTitle: true,
       ),
@@ -962,14 +959,14 @@ class _CouplePageState extends State<CouplePage> {
   Widget buildContainer(String title, Color color, Function()? onPressed, String? centerText, Function()? onCenterTextPressed, bool isSchedule , bool isPet) {
     return GestureDetector(
       onTap: onPressed, // 위젯을 클릭했을 때 onPressed 함수 실행
-      child: Container(
+      child:
+      Container(
         width: double.infinity,
-        height: 150,
-        margin: EdgeInsets.all(16),
+        margin: EdgeInsets.only(left:16, right:16, top: 16),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
