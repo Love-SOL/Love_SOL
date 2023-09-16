@@ -16,7 +16,6 @@ import java.util.Optional;
 public interface CoupleService {
 
     long createCouple(CoupleCreateRequestDto coupleDto);
-//    void updateCouple(CoupleUpdateRequestDto coupleDto);
     String getCoupleInfo(long userId);
 
     boolean cutCouple(long coupleId);

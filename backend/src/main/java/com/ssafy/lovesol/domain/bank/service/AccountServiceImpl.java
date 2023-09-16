@@ -132,26 +132,6 @@ public class AccountServiceImpl implements AccountService{
         return sb.toString();
     }
 
-
-    @Override
-    public List<Transaction> findTransactionByAccount(String accountNumber){
-        Optional<Account> result = accountRepository.findByAccountNumber(accountNumber);
-        if(result.isEmpty()){
-            log.info("not found Account");
-            return null;
-        }
-        Map<String, String> data = new HashMap<>();
-        data.put("계좌번호",result.get().getAccountNumber());
-        ResponseEntity<String> response = commonHttpSend.shinhanAPI(data, "/search/transaction");
-        return result.get().getTransactionList();
-    }
-
-    @Override
-    public List<Transaction> findTransactionByAccountToday(String accountNumber, LocalDateTime Now) {
-        return null;
-        //쿼리 생성이 후에 구성해야함 너무 어려움 따흑
-    }
-
     @Override
     public Account findAccountByAccountNumber(String accountNumber) {
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
@@ -191,13 +171,4 @@ public class AccountServiceImpl implements AccountService{
 
         return null;
     }
-
-    @Override
-    public GetUserAccountsResponseDto getAccountByCoupleId(Long coupleId) {
-        log.info("AccountServiceImpl_getAccountByCoupleId | 커플 계좌 조회");
-        return accountRepository.findByAccountNumber(coupleRepository.findById(coupleId).get().getCommonAccount())
-            .orElseThrow(NotExistAccountException::new)
-            .toGetUserAccountsResponseDto();
-    }
-
 }

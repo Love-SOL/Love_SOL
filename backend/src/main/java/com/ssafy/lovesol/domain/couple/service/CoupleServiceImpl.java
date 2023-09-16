@@ -46,9 +46,7 @@ public class CoupleServiceImpl implements CoupleService{
         User user = userService.getUserByUserId(coupleDto.getId());
         log.info("후보1");
         if(user == null) return -1;
-//        log.info("커플통장 생성 전 owner 객체 " + user.toString());
         Couple couple = coupleDto.toEntity(user);
-//        log.info(couple.toString());
         return coupleRepository.save(couple).getCoupleId();
 
     }
@@ -74,7 +72,7 @@ public class CoupleServiceImpl implements CoupleService{
     public boolean cutCouple(long coupleId) {
         Couple couple = coupleRepository.findById(coupleId).get();
         Account commonAccount = accountRepository.findByAccountNumber(couple.getCommonAccount()).get();
-        //여기서부터는 이제 공통 계좌와 돈 나눠주는거임
+        // 해지 시 정산
         User owner = couple.getOwner();
         User subOwner = couple.getSubOwner();
         double total =  couple.getSubOwnerTotal() + couple.getSubOwnerTotal();
@@ -101,7 +99,6 @@ public class CoupleServiceImpl implements CoupleService{
 //        log.info(Integer.toString(successCode));
 //        if(successCode != 0 ){
 //            log.info("입금을 실패 했습니다.");
-//            //여기서 notice를 추가해주자.
 //            return false;
 //        }
         log.info(Double.toString(ownerAccount.getBalance()+ownerGet));
@@ -181,7 +178,6 @@ public class CoupleServiceImpl implements CoupleService{
         Optional<Couple> coupleOption = coupleRepository.findByOwner(userService.getUserByUserId(ownerId));
         if(coupleOption.isEmpty()) {
             return false;
-            //일단 커플이 없었기때문에 버그가 발생한 부분인데 에러처리는 나중에 해줘야한다.
         }
         Couple couple = coupleOption.get();
         if(coupleDto.getCheck()>0){
@@ -216,7 +212,7 @@ public class CoupleServiceImpl implements CoupleService{
         Optional<Couple> op_couple = coupleRepository.findById(coupleId);
         if(op_couple.isEmpty()) return null;
         Couple couple = op_couple.get();
-//          "지불가능잔액":"331551"
+
         Map<String, String> data = new HashMap<>();
         data.put("출금계좌번호",couple.getCommonAccount());
         ResponseEntity<String> response =  commonHttpSend.shinhanAPI( data,"/account/balance/detail");

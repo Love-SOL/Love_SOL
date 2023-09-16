@@ -39,7 +39,7 @@ public class UserScheduler {
     /*
      * 1. 금일로 설정된 인원들에 한정하여 입금을 시켜줘야한다.
      * */
-//    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 13 * * *")
     public void deposit() {
         int day = LocalDateTime.now().getDayOfMonth();
         List<User> userList = userService.getAllUserByDepositAt(day);
@@ -67,7 +67,6 @@ public class UserScheduler {
             int successCode = result.getJSONObject("dataHeader").getInt("successCode");
             if(successCode != 0 ){
                 log.info("입금을 실패 했습니다.");
-                //여기서 notice를 추가해주자.
                 continue;
             }
             LocalDateTime now = LocalDateTime.now();
@@ -98,14 +97,9 @@ public class UserScheduler {
             couple.setBalance(couple.getBalance()+user.getAmount());
 
             accountService.accountSave(couple);
-
-
-//            ResponseEntity<String> response =  CommonHttpSend.CommonHttpSend();
-
         }
 
         log.info(day + "일 Scheduler success");
     }
-
 
 }

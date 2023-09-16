@@ -76,8 +76,7 @@ public class CoupleController {
             @ApiResponse(responseCode = "200", description = "커플 통장 생성 성공")
     })
     @PostMapping("")
-    public ResponseResult createCoupleinfo(@RequestBody @Valid CoupleCreateRequestDto coupleCreateRequestDto)
-    {
+    public ResponseResult createCoupleinfo(@RequestBody @Valid CoupleCreateRequestDto coupleCreateRequestDto) {
         log.info("CoupleController -> 커플 객체 초기 생성 ");
         if(coupleService.createCouple(coupleCreateRequestDto) <= 0) return ResponseResult.failResponse;
 
@@ -94,20 +93,21 @@ public class CoupleController {
 
         //여기서 커플 객채를 만들어줘야한다.
         String titleInit= "커플 통장 초대장이 왔어요!";
-        String bodyInit= connectNotificationReqDto.getSenderId()+"님이 커플 통장에 초대했어요";
         int kind = 0;
         log.info("CoupleController -> 커플 연결 신청 알람 전송");
         User sender = userService.getUserByUserId(connectNotificationReqDto.getSenderId());
         User receiver = userService.getUserById(connectNotificationReqDto.getReceiverId());
+
+        String bodyInit= sender.getName()+"님이 커플 통장에 초대했어요";
         sender.setAmount(connectNotificationReqDto.getAmount());
         sender.setDepositAt(connectNotificationReqDto.getDay());
 
         Couple couple = coupleService.getCoupleInfoByUserId(sender.getId());
 
         if(couple.getSubOwner() ==null){
-        couple.setAnniversary(connectNotificationReqDto.getAnniversary());
-        noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
-        coupleService.saveCouple(couple);
+            couple.setAnniversary(connectNotificationReqDto.getAnniversary());
+            noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
+            coupleService.saveCouple(couple);
         }
         Map<String, String> data = new HashMap<>();
         data.put("kind",Integer.toString(kind));
@@ -116,33 +116,27 @@ public class CoupleController {
         data.put("coupleId", Long.toString(couple.getCoupleId()));
         if(!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(sender.getUserId()).title(titleInit).body(bodyInit).build(),data)) return ResponseResult.failResponse;
         return ResponseResult.successResponse;
-        //여기선 먼저
-        //여기서는 알림만 보내주면된다..!
-//        fcmNotificationService.sendNotificationByToken()
     }
 
     @Operation(summary = "Couple connection step x", description = "사용자가 커플 연결을 신청합니다." )
     @PostMapping("/share/{ownerId}")
-
     public ResponseResult connectCouple(@PathVariable(value = "ownerId") long ownerId,@RequestBody @Valid ConnectCoupleRequestDto coupleRequestDto) throws NoSuchAlgorithmException {
-
         log.info("CoupleController -> 커플 통장 연결 유무 처리 ");
         if(!coupleService.connectCouple(coupleRequestDto,ownerId)){
             return ResponseResult.failResponse;
         }
+
         User subOwner = userService.getUserById(coupleRequestDto.getSubOnwerId());
         User owner = userService.getUserByUserId(ownerId);
 
         userService.UpdateDepositInfo(UpdateUserAccountInfoDto.builder().depositAt(owner.getDepositAt()).amount(owner.getAmount()).id(subOwner.getId()).build());
-
 
         return ResponseResult.successResponse;
     }
 
 
     @PostMapping("/farewall/{coupleId}")
-    public ResponseResult farewallCouple(@PathVariable long coupleId)
-    {
+    public ResponseResult farewallCouple(@PathVariable long coupleId) {
         log.info("CoupleController -> 커플 통장 정산하기");
         if(!coupleService.cutCouple(coupleId)){
             return ResponseResult.failResponse;
@@ -150,36 +144,22 @@ public class CoupleController {
         return ResponseResult.successResponse;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        log.info("CoupleController -> 환율 조회 ");
-        Map<String, String> data = new HashMap<>();
-        data.put("조회일자","20230901");
-       return commonHttpSend.shinhanAPI(data, "/search/fxrate/number");
-
-    }
-
     @GetMapping("/{coupleId}/balance")
     public SingleResponseResult<ResponseAccountInfoDto> accountTotalInfo(@PathVariable long coupleId){
         ResponseAccountInfoDto dto = coupleService.getAccountTotal(coupleId);
         return new SingleResponseResult<ResponseAccountInfoDto>(dto);
     }
-    //
+
     @GetMapping("/{coupleId}/detail/{date}")
     public ListResponseResult<Transaction> accountDetail(@PathVariable long coupleId , @PathVariable LocalDate date){
         Couple couple = coupleService.getCoupleInfoByCouplId(coupleId);
         Account account = accountService.findAccountByAccountNumber(couple.getCommonAccount());
         LocalDateTime infoAt = date.atStartOfDay();
         List<Transaction> transactionList = transactionService.findTransactionsDetailOrderBy(infoAt,account);
-        //여기서는 couple아이디를 기반으로 커플이 원하는 날짜에 있는 date날짜에 맞는 transaction 리스트를 뽑아와야한다.
-        //
-//        List<Transaction> transactionList = transactionService.findTransactionsDetail(date, accountService.findAccountByAccountNumber(couple.getCommonAccount()));
-        //여기서는 커플id값을 기반으로
         return new ListResponseResult<Transaction>(transactionList);
 
 
     }
-//    @PostMapping("")
 
     @Operation(summary = "커플 D-DAY 조회", description = "사용자의 커플 D-DAY 조회합니다.")
     @ApiResponses(value = {
@@ -219,7 +199,6 @@ public class CoupleController {
         coupleAccount.setBalance(coupleAccount.getBalance()+requestDto.getAmount());
         accountService.accountSave(personAccount);
         accountService.accountSave(coupleAccount);
-//        return Res
         return ResponseResult.successResponse;
     }
 

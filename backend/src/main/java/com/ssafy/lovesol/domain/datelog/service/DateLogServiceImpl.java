@@ -100,7 +100,6 @@ public class DateLogServiceImpl implements DateLogService{
         dateLog.getImageList().add(image);
         // 데이트 일기에마일리지(exp)를 적립한다.
         dateLog.accumulateMileage(10);
-        // TODO: 펫에게 마일리지를 적립한다.
     }
 
     @Override
@@ -123,9 +122,6 @@ public class DateLogServiceImpl implements DateLogService{
         for (DateLog dateLog : dateLogRepository.findAllByCoupleIdAndYearAndMonth(coupleId, year, month)) {
             LocalDateTime dateAt = dateLog.getDateAt().atStartOfDay();
             LocalDateTime endAt = dateLog.getDateAt().atTime(LocalTime.MAX);
-
-            System.out.println("dateAt = " + dateAt);
-            System.out.println("endAt = " + endAt);
 
             List<Transaction> transactionList = transactionRepository.findByAccountAccountNumberAndTransactionAtBetweenAndTransactionType(commonAccount, dateAt, endAt , 0);
             int totalAmount = 0;

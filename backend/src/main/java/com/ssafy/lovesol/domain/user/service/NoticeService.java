@@ -10,5 +10,4 @@ public interface NoticeService {
     void registNotice(User senderId, User receiver, String title, String body, int kind );
 
     Page<NoticeResDto> getNoticeList(User receiver, int page);
-    //PageRequest.of(page,FOLLOWLIST_PAGE_NUM)
 }
