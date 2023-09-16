@@ -134,8 +134,7 @@ class _HomePageState extends State<HomePage> {
         // 성공
         List<dynamic> data = responseBody['data'];
         List<GetTransactionByCategoryResponseDto> dataList = data.map((data) => GetTransactionByCategoryResponseDto.fromJson(data as Map<String, dynamic>)).toList();
-        print('실행');
-        print(dataList);
+
         setState(() {
           sectionList = createPieChartSections(dataList);
         });
@@ -714,6 +713,16 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
     );
   }
 
+  String formatAccountNumber(String accountNumber) {
+    if (accountNumber.length != 12) {
+      return "Invalid account number";
+    }
+
+    return accountNumber.substring(0, 3) + '-' +
+        accountNumber.substring(3, 6) + '-' +
+        accountNumber.substring(6, 12);
+  }
+
   return Container(
     width: double.infinity,
     // height: 150.0,
@@ -749,7 +758,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
                 ),
                 SizedBox(width: 8.0), // 이미지와 텍스트 사이의 간격 조절
                 Text(
-                  accountInfo['accountNumber'], // accountNumber를 표시
+                  accountInfo["accountNumber"] == null ? "" : formatAccountNumber(accountInfo["accountNumber"]), // accountNumber를 표시
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -1235,6 +1244,33 @@ class GetTransactionByCategoryResponseDto {
       category: json['category'],
       amount: json['amount'],
       rate: json['rate'].toDouble(),
+    );
+  }
+}
+
+class NoticeResDto {
+  final String kind;
+  final String title;
+  final String body;
+  final DateTime createAt;
+  final String senderName;
+
+  NoticeResDto({
+    required this.kind,
+    required this.title,
+    required this.body,
+    required this.createAt,
+    required this.senderName,
+  });
+
+  // JSON에서 NoticeResDto로 변환하는 팩토리 생성자
+  factory NoticeResDto.fromJson(Map<String, dynamic> json) {
+    return NoticeResDto(
+      kind: json['kind'],
+      title: json['title'],
+      body: json['body'],
+      createAt: DateTime.parse(json['createAt']),
+      senderName: json['SenderName'],
     );
   }
 }

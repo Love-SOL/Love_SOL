@@ -79,7 +79,7 @@ public class InitDb {
                 .accountNumber("110556128939")
                 .balance(100000)
                 .name("박신한")
-                .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
+                .userId("c1aa4bf6a27dfe51995d6044e9363e5b07b2c218e662362fbfaee6b271c117dd")
                 .bankCode(88)
                 .type(0)
                 .build();
@@ -88,7 +88,7 @@ public class InitDb {
                 .accountNumber("110556128939-1")
                 .balance(100000)
                 .name("박신한")
-                .userId("fc901fb0f111ae796285fb603380152500d1c1eb73107abcafb92409b49cea14")
+                .userId("c1aa4bf6a27dfe51995d6044e9363e5b07b2c218e662362fbfaee6b271c117dd")
                 .bankCode(88)
                 .type(1)
                 .build();

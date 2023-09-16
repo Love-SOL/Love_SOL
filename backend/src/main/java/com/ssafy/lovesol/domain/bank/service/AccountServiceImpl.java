@@ -10,8 +10,10 @@ import com.ssafy.lovesol.domain.bank.entity.Account;
 import com.ssafy.lovesol.domain.bank.entity.Transaction;
 import com.ssafy.lovesol.domain.bank.repository.AccountRepository;
 import com.ssafy.lovesol.domain.bank.repository.TransactionRepository;
+import com.ssafy.lovesol.domain.couple.repository.CoupleRepository;
 import com.ssafy.lovesol.domain.user.entity.User;
 import com.ssafy.lovesol.domain.user.repository.UserRepository;
+import com.ssafy.lovesol.global.exception.NotExistAccountException;
 import com.ssafy.lovesol.global.exception.NotExistUserException;
 import com.ssafy.lovesol.global.util.CommonHttpSend;
 import com.ssafy.lovesol.global.util.SmsService;
@@ -38,7 +40,7 @@ public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-
+    private final CoupleRepository coupleRepository;
     private final UserRepository userRepository;
     private final CommonHttpSend commonHttpSend;
     private final SmsService smsService;
@@ -174,6 +176,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public GetUserAccountsResponseDto getAccountInfo(String accountNumber) {
+        log.info("AccountServiceImpl_getAccountInfo | 계좌번호 정보 조회");
         HashMap<String,String> data = new HashMap<>();
         data.put("계좌번호","230307000000");
 
@@ -187,6 +190,14 @@ public class AccountServiceImpl implements AccountService{
         }
 
         return null;
+    }
+
+    @Override
+    public GetUserAccountsResponseDto getAccountByCoupleId(Long coupleId) {
+        log.info("AccountServiceImpl_getAccountByCoupleId | 커플 계좌 조회");
+        return accountRepository.findByAccountNumber(coupleRepository.findById(coupleId).get().getCommonAccount())
+            .orElseThrow(NotExistAccountException::new)
+            .toGetUserAccountsResponseDto();
     }
 
 }
