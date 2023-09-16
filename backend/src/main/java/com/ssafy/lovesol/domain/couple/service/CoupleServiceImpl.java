@@ -177,8 +177,8 @@ public class CoupleServiceImpl implements CoupleService{
     }
 
     @Override
-    public boolean connectCouple(ConnectCoupleRequestDto coupleDto, long coupleId) throws NoSuchAlgorithmException {
-        Optional<Couple> coupleOption = coupleRepository.findById(coupleId);
+    public boolean connectCouple(ConnectCoupleRequestDto coupleDto, long ownerId) throws NoSuchAlgorithmException {
+        Optional<Couple> coupleOption = coupleRepository.findByOwner(userService.getUserByUserId(ownerId));
         if(coupleOption.isEmpty()) {
             return false;
             //일단 커플이 없었기때문에 버그가 발생한 부분인데 에러처리는 나중에 해줘야한다.

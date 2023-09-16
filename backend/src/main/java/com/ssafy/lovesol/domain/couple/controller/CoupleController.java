@@ -97,7 +97,7 @@ public class CoupleController {
         int kind = 0;
         log.info("CoupleController -> 커플 연결 신청 알람 전송");
         User sender = userService.getUserByUserId(connectNotificationReqDto.getSenderId());
-        User receiver = userService.getUserByUserId(connectNotificationReqDto.getSenderId());
+        User receiver = userService.getUserById(connectNotificationReqDto.getReceiverId());
         sender.setAmount(connectNotificationReqDto.getAmount());
         sender.setDepositAt(connectNotificationReqDto.getDay());
 
