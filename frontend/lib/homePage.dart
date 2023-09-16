@@ -1063,6 +1063,7 @@ class _CouplePageState extends State<CouplePage> {
       onTap: onPressed, // 위젯을 클릭했을 때 onPressed 함수 실행
       child:
       Container(
+        height: 190,
         width: double.infinity,
         margin: EdgeInsets.only(left:16, right:16, top: 16),
         padding: EdgeInsets.all(16),
@@ -1153,14 +1154,14 @@ class _CouplePageState extends State<CouplePage> {
                   ),
                 ],
               ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             if (isPet)
               Column(
                 children: [
                   Row(
                     children: [
                       Container(
-                        height: 100,
+                        height: 200,
                         width: 5,
                         decoration: BoxDecoration(
                           color: Color(0xFFE6DFFF),
