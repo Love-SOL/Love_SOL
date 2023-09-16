@@ -199,6 +199,9 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                     title: Text('알림'),
                     content: Container(
                       width: double.maxFinite,
@@ -527,14 +530,6 @@ class _HomePage2State extends State<HomePage2> {
                         ],
                       ),
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('닫기'),
-                      ),
-                    ],
                   );
                 },
               );
