@@ -1161,12 +1161,14 @@ class _CouplePageState extends State<CouplePage> {
                   Row(
                     children: [
                       Container(
+                        height: 100,
                         width: 5,
                         decoration: BoxDecoration(
                           color: Color(0xFFE6DFFF),
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
+                      SizedBox(width:5),
                       Image.asset(
                         "assets/pet${petData["kind"]}.gif",
                         width: 80,
