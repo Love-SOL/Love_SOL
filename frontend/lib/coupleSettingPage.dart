@@ -85,6 +85,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
       appBar: AppBar(
         backgroundColor: Color(0XFFF7F7F7),
         elevation: 0,
+        iconTheme: IconThemeData(color: Color(0XFF0046FF)),
       ),
       body: Container(
         color: Color(0xFFF7F7F7),
@@ -103,7 +104,7 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
                   aniversary = value;
                 }),
                 SizedBox(height: 10),
-                buildInputBox('자동이체 날짜', '날짜를 선택해주세요', onChanged: (value) {
+                buildInputBox('자동이체 날짜', '(예 : 25)', onChanged: (value) {
                   day = value;
                 }),
                 SizedBox(height: 20),
