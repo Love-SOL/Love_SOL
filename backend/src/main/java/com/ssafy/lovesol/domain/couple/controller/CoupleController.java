@@ -103,6 +103,7 @@ public class CoupleController {
         sender.setDepositAt(connectNotificationReqDto.getDay());
 
         Couple couple = coupleService.getCoupleInfoByUserId(sender.getId());
+
         if(couple.getSubOwner() ==null){
         couple.setAnniversary(connectNotificationReqDto.getAnniversary());
         noticeService.registNotice(sender,receiver,titleInit,bodyInit,kind);
@@ -112,6 +113,7 @@ public class CoupleController {
         data.put("kind",Integer.toString(kind));
         data.put("senderId",Long.toString(sender.getUserId()));
         data.put("receiverId", connectNotificationReqDto.getReceiverId());
+        data.put("coupleId", Long.toString(couple.getCoupleId()));
         if(!fcmNotificationService.sendNotificationByToken(FcmRequestDto.builder().targetId(sender.getUserId()).title(titleInit).body(bodyInit).build(),data)) return ResponseResult.failResponse;
         return ResponseResult.successResponse;
         //여기선 먼저
