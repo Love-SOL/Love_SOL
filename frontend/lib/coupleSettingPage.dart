@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'homePage.dart';
+import 'package:http/http.dart' as http;
 
 class Couplesettingpage extends StatefulWidget {
   @override
@@ -9,6 +13,41 @@ class Couplesettingpage extends StatefulWidget {
 
 class _CouplesettingpageState extends State<Couplesettingpage> {
   bool isAutoTransferEnabled = false;
+  String userId = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 페이지 초기화 시 createLoveBox 함수 호출
+    createLoveBox();
+  }
+
+  Future<void> loadData() async {
+    await _loadUserData();
+    await createLoveBox();
+  }
+
+  Future<void> createLoveBox() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/couple'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'id': userId,
+        }),
+      );
+    } catch (e) {
+      return;
+    }
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = (prefs.getInt('userId') ?? '').toString();
+  }
 
   @override
   Widget build(BuildContext context) {
