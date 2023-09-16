@@ -192,6 +192,10 @@ class _HomePageState extends State<HomePage> {
         // amount를 double로 변환
         title: item.category,
         radius: 50,
+        titleStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )
       );
     }).toList();
   }
@@ -1100,6 +1104,15 @@ class _CouplePageState extends State<CouplePage> {
                 children: [
                   Row(
                     children: [
+                      Container(
+                        height: 100,
+                        width: 5,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFE6DFFF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      SizedBox(width:5),
                       Stack(
                         alignment: Alignment.center,
                         children: [
@@ -1139,6 +1152,14 @@ class _CouplePageState extends State<CouplePage> {
                 children: [
                   Row(
                     children: [
+                      Container(
+                        height: 100,
+                        width: 5,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFE6DFFF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       Image.asset(
                         "assets/pet${petData["kind"]}.gif",
                         width: 80,
