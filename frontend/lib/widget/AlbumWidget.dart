@@ -250,26 +250,24 @@ class _AlbumWidgetState extends State<AlbumWidget> {
           padding: const EdgeInsets.all(16),
           child: TextField(
             onChanged: (value) {
-              // 사용자가 입력한 값을 content 변수에 저장
               content = value;
             },
-            decoration: InputDecoration(labelText: '내용 입력'),
+            decoration: InputDecoration(labelText: '댓글을 입력해주세요'),
           ),
         ),
-        Align( // 작성하기 버튼을 우측 정렬하고 우측에 약간의 간격을 띄웁니다.
+        Align(
           alignment: Alignment.centerRight,
-          child: ElevatedButton(
+          child: IconButton(
+            icon: Icon(Icons.send),
             onPressed: () async {
-              // 작성하기 버튼을 누를 때의 동작 추가
               await uploadImage(dateLogId, image0!, content);
-              // 이미지 업로드 후 화면 갱신
               await fetchAlbumData(dateLogId);
               setState(() {
                 isExpanded = false;
               });
-              // 다른 작업을 수행할 필요가 있을 경우 여기에 추가하세요.
             },
-            child: Text('작성하기'),
+            style: IconButton.styleFrom(
+            ),
           ),
         ),
       ],
