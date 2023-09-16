@@ -1175,6 +1175,9 @@ class _CouplePageState extends State<CouplePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('펫 이름 설정'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           content: TextField(
             decoration: InputDecoration(hintText: '펫 이름을 입력하세요'),
             onChanged: (value) {
@@ -1188,13 +1191,20 @@ class _CouplePageState extends State<CouplePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFDADADA),
+              ),
               child: Text('취소'),
             ),
+
             TextButton(
               onPressed: () {
                 _registPet();
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+              ),
               child: Text('확인'),
             ),
           ],
