@@ -192,6 +192,10 @@ class _HomePageState extends State<HomePage> {
         // amount를 double로 변환
         title: item.category,
         radius: 50,
+        titleStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )
       );
     }).toList();
   }
