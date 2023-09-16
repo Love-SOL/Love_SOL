@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const apiKey = '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';
+const apiKey = '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';
 const endpoint = 'https://api.openai.com/v1/chat/completions';
 
 
@@ -50,9 +50,7 @@ class _ChatBotAppState extends State<ChatBotApp> {
   final List<ChatMessage> _messages = [];
 
 
-
   void _handleMessageSubmit(String message) async {
-
     setState(() {
       _messages.add(ChatMessage(
         text: message,
@@ -89,7 +87,6 @@ class _ChatBotAppState extends State<ChatBotApp> {
           isUserMessage: false,
         ));
       });
-
     }
   }
 
@@ -141,18 +138,14 @@ class _ChatBotAppState extends State<ChatBotApp> {
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: InputDecoration(hintText: '메시지 입력'),
+              onSubmitted: (message) {
+                if (message.isNotEmpty) {
+                  _handleMessageSubmit(message);
+                  _controller.clear();
+                }
+              },
+              decoration: InputDecoration(hintText: '궁금한 점을 입력하세요'),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () {
-              final message = _controller.text;
-              if (message.isNotEmpty) {
-                _handleMessageSubmit(message);
-                _controller.clear();
-              }
-            },
           ),
         ],
       ),
@@ -179,9 +172,9 @@ class ChatBubble extends StatelessWidget {
       alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: isUserMessage ? Colors.blue : Colors.green,
+          color: isUserMessage ? Colors.grey : Color(0xFF0466FF),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Text(

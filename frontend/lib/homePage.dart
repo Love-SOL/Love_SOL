@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'myConsumePage.dart';
 import 'myAccountPage.dart';
 import 'package:intl/intl.dart';
+import './widget/BottomNav.dart';
 
 
 void main() {
@@ -34,11 +35,13 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> accountData = {};
   List<PieChartSectionData> sectionList = [];
 
+
+
   String userId = "";
   String coupleId = "";
 
   Map<String, Color> categoryColors = {
-    '식당': Colors.blue,
+    '식당': Color(0xFF0245AC),
     '쇼핑': Colors.red,
     '커피숍': Colors.green,
     '온라인': Colors.yellow,
@@ -166,6 +169,7 @@ class _HomePageState extends State<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
@@ -228,7 +232,8 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: Color(0xFFF7F7F7),
         padding: EdgeInsets.all(15),
-        child: Column(
+        child:
+        Column(
           children: [
             Expanded(
               flex: 1,
@@ -329,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
                                 children: [
                                   Text(
-                                    "주 계좌", // Display account type here
+                                    "주 계좌",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -337,11 +342,11 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Opacity(
-                                    opacity: 0.7, // Adjust the opacity as needed
+                                    opacity: 0.4,
                                     child: Text(
-                                      '${accountData["accountNumber"]}', // Your smaller text here
+                                      '${accountData["accountNumber"]}',
                                       style: TextStyle(
-                                        fontSize: 16, // Adjust the font size as needed
+                                        fontSize: 16,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -354,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '잔액: ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
+                                  '${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -458,6 +463,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 2)
     );
   }
 }
@@ -594,51 +600,10 @@ class _HomePage2State extends State<HomePage2> {
           Expanded(
             child: _selectedPageIndex == 0 ? PersonalPage() : CouplePage(),
           ),
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            showSelectedLabels: false, // 선택된 아이템의 라벨 숨김
-            showUnselectedLabels: false,
-            selectedLabelStyle: TextStyle(color: Colors.white),
-            unselectedLabelStyle: TextStyle(color: Colors.white),
-            selectedItemColor: Color(0xFF1151C7), // 선택된 아이템의 색상
-            unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.wallet),
-                label: '홈',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_note),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.sms),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_2),
-                label: '',
-              ),
-            ],
-            onTap: (int index) {
-              if (index == 0) {
-              } else if (index == 1) {
-              }
-              else if (index == 2) {
-              }
-              else if (index == 3) {
-              }
-              else if (index == 4) {
-              }
-            },
-          ),
+
         ],
       ),
+        bottomNavigationBar: buildBottomNavigationBar(context, 0)
     );
   }
 }
@@ -802,7 +767,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0471E8),
+                primary: Color(0xFF0046FF),
               ),
               child: Text('이체'),
             ),
@@ -811,7 +776,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
               onPressed: () {
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF1151C7),
+                primary: Color(0xFF0046FF),
               ),
               child: Text('결제'),
             ),
@@ -1132,8 +1097,7 @@ class _CouplePageState extends State<CouplePage> {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => CalendarPage()),
     );
-
-    // CalendarPage에서 돌아온 후 실행되는 코드
+    
     if (result == 'update') {
       _loadScheduleData();
     }
@@ -1141,7 +1105,68 @@ class _CouplePageState extends State<CouplePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFF7F7F7),
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
+        ),
+        actions: [
+          IconButton(
+            icon: Image.asset('assets/personicon.png'),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Image.asset('assets/bellicon.png'),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림'),
+                    content: Container(
+                      width: double.maxFinite,
+                      height: 300,
+                      child: ListView(
+                        children: [
+                          ListTile(
+                            title: Text('알림 1'),
+                            subtitle: Text('알림 내용 1'),
+                          ),
+                          ListTile(
+                            title: Text('알림 2'),
+                            subtitle: Text('알림 내용 2'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('닫기'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body:
+      Align(
         alignment: Alignment.topLeft,
         child: Column(
           children: [
@@ -1227,6 +1252,8 @@ class _CouplePageState extends State<CouplePage> {
             ),
           ],
         )
+      ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 4),
     );
   }
 }

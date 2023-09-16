@@ -17,6 +17,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String accountNumber = '';
   List<GetTransactionResponseDto> transactions = [];
 
+
+
   @override
   void initState() {
     super.initState();
@@ -161,7 +163,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0046FF),
+                    color: Color(0xFFE4ECFF),
                     borderRadius: BorderRadius.circular(0),
                     boxShadow: [
                       BoxShadow(
@@ -184,31 +186,31 @@ class _MyAccountPageState extends State<MyAccountPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(0),
                                 child: Image.asset(
-                                  'assets/purple2.png',
-                                  width: 30,
-                                  height: 30,
+                                  'assets/shinhanlogo.png',
+                                  width: 50,
+                                  height: 50,
                                 ),
                               ),
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "${accountData['accountType'] == 0 ? "주 계좌" : " 커플 통장" }", // Display account type here
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                   ),
                                   Opacity(
-                                    opacity: 0.7, // Adjust the opacity as needed
+                                    opacity: 0.4,
                                     child: Text(
                                       '${accountData["accountNumber"]}',
                                       style: TextStyle(
-                                        fontSize: 12, // Adjust the font size as needed
-                                        color: Colors.white,
+                                        fontSize: 16,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -220,10 +222,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '잔액: ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
+                                  ' ${accountData["balance"].toString().substring(0, accountData["balance"].toString().length-2)} 원',
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ]
@@ -235,7 +238,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('이체'),
                               ),
@@ -244,7 +247,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 onPressed: () {
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFFE4ECFF),
+                                  primary: Color(0xFF0046FF),
                                 ),
                                 child: Text('결제'),
                               ),

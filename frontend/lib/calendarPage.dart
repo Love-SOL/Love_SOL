@@ -10,6 +10,7 @@ import './widget/AlbumWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'widget/BottomNav.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -260,6 +261,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ElevatedButton(
                       onPressed: _showCalendar,
                       style: ElevatedButton.styleFrom(
+
                         primary: showCalendar ? Color(0xFF0046FF) : Color(0xFFDADADA),
                       ),
                       child: Text("일정"),
@@ -314,6 +316,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
         ),
+          bottomNavigationBar: buildBottomNavigationBar(context, 1)
       ),
     );
   }

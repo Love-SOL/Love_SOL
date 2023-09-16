@@ -27,15 +27,23 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   Future<void> _loadUserDataAndFetchData() async {
     await _loadUserData(); // 사용자 데이터 로드를 기다립니다.
-    await fetchScheduleData(DateTime.now().year.toString(), DateTime.now().month.toString());
+    await fetchScheduleData(DateTime
+        .now()
+        .year
+        .toString(), DateTime
+        .now()
+        .month
+        .toString());
   }
 
-  Future<void> fetchScheduleData(String year , String month) async{
+  Future<void> fetchScheduleData(String year, String month) async {
     Color eventColor = Colors.blue;
 
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/schedule/' + coupleId + '?year=' + year + '&&month=' + month), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse(
+            'http://10.0.2.2:8080/api/schedule/' + coupleId + '?year=' + year +
+                '&&month=' + month), // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -51,16 +59,18 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       if (statusCode == 200) {
         // 성공
         List<dynamic> data = responseBody['data'];
-        List<ScheduleResponseDto> scheduleList =  data.map((data) => ScheduleResponseDto.fromJson(data as Map<String, dynamic>)).toList();
+        List<ScheduleResponseDto> scheduleList = data.map((data) =>
+            ScheduleResponseDto.fromJson(data as Map<String, dynamic>))
+            .toList();
 
         for (var schedule in scheduleList) {
-          print(schedule.content);  // 예: 일정 내용만 출력
+          print(schedule.content); // 예: 일정 내용만 출력
 
-          if (schedule.scheduleType == 'MAIN_OWNER_SCHEDULE'){
+          if (schedule.scheduleType == 'MAIN_OWNER_SCHEDULE') {
             eventColor = Color(0xFF0046FF);
-          }else if(schedule.scheduleType =='SUB_OWNER_SCHEDULE'){
+          } else if (schedule.scheduleType == 'SUB_OWNER_SCHEDULE') {
             eventColor = Color(0xFFF90000);
-          }else{
+          } else {
             eventColor = Color(0xFF9E00FF);
           }
           DateTime dateTime = DateTime.parse(schedule.startAt);
@@ -80,7 +90,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               events[dateTime] = [event];
             }
           });
-
         }
       } else {
         print(statusCode);
@@ -99,17 +108,18 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   Future<bool> createSchedule(CalendarEvent event) async {
     int scheduleType = 0;
-    if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
+    if (selectedCategory == 'MAIN_OWNER_SCHEDULE') {
       scheduleType = 1;
-    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
+    } else if (selectedCategory == 'SUB_OWNER_SCHEDULE') {
       scheduleType = 2;
-    }else{
+    } else {
       scheduleType = 0;
     }
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8080/api/schedule/'+coupleId), // 스키마를 추가하세요 (http 또는 https)
+        Uri.parse('http://10.0.2.2:8080/api/schedule/' + coupleId),
+        // 스키마를 추가하세요 (http 또는 https)
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -117,8 +127,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           'coupleId': 1,
           'content': event.title,
           'scheduleType': scheduleType,
-          'startAt' : DateFormat('yyyy-MM-dd').format(event.startDate),
-          'endAt' : DateFormat('yyyy-MM-dd').format(event.startDate),
+          'startAt': DateFormat('yyyy-MM-dd').format(event.startDate),
+          'endAt': DateFormat('yyyy-MM-dd').format(event.startDate),
         }),
       );
       // 응답 데이터(JSON 문자열)를 Dart 맵으로 파싱
@@ -148,7 +158,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     return Column(
       children: <Widget>[
         _buildHeader(),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         _buildWeekDays(),
         SizedBox(height: 20),
         Expanded(
@@ -174,7 +184,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   selectedDate.day,
                 );
                 events = {};
-                fetchScheduleData(selectedDate.year.toString(), selectedDate.month.toString());
+                fetchScheduleData(selectedDate.year.toString(),
+                    selectedDate.month.toString());
               });
             },
           ),
@@ -192,7 +203,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   selectedDate.day,
                 );
                 events = {};
-                fetchScheduleData(selectedDate.year.toString(), selectedDate.month.toString());
+                fetchScheduleData(selectedDate.year.toString(),
+                    selectedDate.month.toString());
               });
             },
           ),
@@ -272,7 +284,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isToday ? Colors.red : Colors.transparent,
+                color: Colors.transparent,
               ),
               child: Column(
                 children: [
@@ -281,7 +293,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isToday ? Colors.white : Color(0xFF69695D),
+                      color: isToday ? Colors.black : Color(0xFF69695D),
                     ),
                   ),
                   if (eventsForDate != null) // 해당 날짜에 이벤트가 있는 경우
@@ -310,44 +322,59 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
           title: Text(
             DateFormat('yyyy년 MM월 dd일').format(eventDate),
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (events.containsKey(eventDate) &&
-                  events[eventDate]!.isNotEmpty)
-                ...events[eventDate]!.map((event) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),  // 여기서 수직 간격 조절 가능
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 8,
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: event.color,
+          content: Container(
+            width: double.maxFinite,
+            height: 250,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (events.containsKey(eventDate) &&
+                    events[eventDate]!.isNotEmpty)
+                  ...events[eventDate]!.map((event) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 12,
+                            height: 8,
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: event.color,
+                            ),
                           ),
-                        ),
-                        Expanded(child: Text(event.title)),
-                      ],
-                    ),
-                  );
-                }).toList()
-              else
-                Text('일정이 없습니다.'),
-              ElevatedButton(
-                onPressed: () {
-                  _showAddEventDialog(eventDate);
-                },
-                child: Text('일정 추가'),
-              ),
-            ],
+                          Expanded(child: Text(event.title)),
+                        ],
+                      ),
+                    );
+                  }).toList()
+                else
+                  Text('일정이 없습니다.'),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                _showCategoryDialog(eventDate);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0046FF),
+                minimumSize: Size(double.infinity, 40),
+              ),
+              child: Text('+ 일정을 추가하세요'),
+            ),
+            SizedBox(height: 10),
+          ],
         );
       },
     );
@@ -371,23 +398,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   controller: titleController,
                   decoration: InputDecoration(labelText: '일정 제목'),
                 ),
-                // 카테고리 선택 버튼
-                ElevatedButton(
-                  onPressed: () {
-                    _showCategoryDialog(); // 카테고리 선택 다이얼로그 표시
-                  },
-                  child: Text('카테고리 선택'),
-                ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (selectedCategory == 'MAIN_OWNER_SCHEDULE'){
+                    if (selectedCategory == 'MAIN_OWNER_SCHEDULE') {
                       eventColor = Color(0xFF0046FF);
-                    }else if(selectedCategory =='SUB_OWNER_SCHEDULE'){
+                    } else if (selectedCategory == 'SUB_OWNER_SCHEDULE') {
                       eventColor = Color(0xFFF90000);
-                    }else{
+                    } else {
                       eventColor = Color(0xFF9E00FF);
                     }
-
                     final event = CalendarEvent(
                       title: titleController.text,
                       color: eventColor,
@@ -395,7 +414,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       category: selectedCategory, // 선택한 카테고리 저장
                     );
 
-                    if(await createSchedule(event)){
+                    if (await createSchedule(event)) {
                       setState(() {
                         if (events.containsKey(eventDate)) {
                           events[eventDate]!.add(event);
@@ -427,56 +446,99 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 
-  // 카테고리를 선택하는 다이얼로그를 표시하는 메소드
-  void _showCategoryDialog() {
-    showDialog(
+  void _showCategoryDialog(DateTime eventDate) {
+    showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("카테고리 선택"),
-          content: Column(
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // MAIN_OWNER_SCHEDULE 버튼
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = 'MAIN_OWNER_SCHEDULE';
                   });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                  _showAddEventDialog(eventDate);
                 },
-                child: Text('주 관리자'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == 'MAIN_OWNER_SCHEDULE'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('주 관리자'),
+                  ],
+                ),
               ),
-              // SUB_OWNER_SCHEDULE 버튼
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = 'SUB_OWNER_SCHEDULE';
                   });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                  _showAddEventDialog(
+                      eventDate);
                 },
-                child: Text('부 관리자'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == 'SUB_OWNER_SCHEDULE'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('부 관리자'),
+                  ],
+                ),
               ),
-              // 공동 카테고리 버튼
-              ElevatedButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   setState(() {
                     selectedCategory = '공동';
                   });
-                  Navigator.of(context).pop(); // 모달 다이얼로그 닫기
+                  _showAddEventDialog(eventDate); // 모달 bottom sheet 닫기
                 },
-                child: Text('공동'),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: selectedCategory == '공동'
+                          ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.0,
+                      )
+                          : null,
+                    ),
+                    SizedBox(width: 10),
+                    Text('공동'),
+                  ],
+                ),
               ),
             ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("취소"),
-              onPressed: () {
-                Navigator.of(context).pop(); // 모달 다이얼로그 닫기
-              },
-            ),
-          ],
         );
       },
     );

@@ -31,32 +31,9 @@ class _CouplesettingpageState extends State<Couplesettingpage> {
                 SizedBox(height: 10),
                 buildInputBox('기념일', '기념일을 입력해주세요'),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '자동입금 여부',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Switch(
-                      value: isAutoTransferEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isAutoTransferEnabled = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                if (isAutoTransferEnabled) ...[
-                  SizedBox(height: 20),
-                  buildInputBox('자동이체 날짜', '날짜를 선택해주세요'),
-                  SizedBox(height: 20),
-                  buildInputBox('자동이체 금액', '금액을 선택해주세요'),
-                ],
+                buildInputBox('자동이체 날짜', '날짜를 선택해주세요'),
+                SizedBox(height: 20),
+                buildInputBox('자동이체 금액', '금액을 선택해주세요'),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
