@@ -154,7 +154,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Love SOL',
       theme: ThemeData(
-        fontFamily: "Shinhan",
+        fontFamily: "Yanol",
       ),
       navigatorKey: navigatorKey,
       home: LoginPage(), // 처음 실행되는 페이지 설정 (예: 로그인 페이지)
