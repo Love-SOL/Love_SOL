@@ -19,7 +19,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context, int currentIn
       if (index == 0) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage2()),
+          MaterialPageRoute(builder: (context) => PersonalPage()),
         );
       } else if (index == 1) {
         Navigator.push(

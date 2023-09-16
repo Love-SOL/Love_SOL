@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => HomePage2(),
+                              builder: (context) => PersonalPage(),
                             ));
                           },
                           child: Text(
@@ -567,7 +567,6 @@ class _HomePage2State extends State<HomePage2> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16), // 버튼 사이 간격 조절
                 Container(
                   width: 100,
                   child: ElevatedButton(
@@ -649,13 +648,83 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body:
-      ListView.builder(
-        itemCount: accountData.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildAccountCard(accountData[index], context);
-        },
+      appBar: AppBar(
+        backgroundColor: Color(0xFFF7F7F7),
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Color(0XFF0046FF),
+        ),
+        actions: [
+          IconButton(
+            icon: Image.asset('assets/personicon.png'),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Image.asset('assets/bellicon.png'),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림'),
+                    content: Container(
+                      width: double.maxFinite,
+                      height: 300,
+                      child: ListView(
+                        children: [
+                          ListTile(
+                            title: Text('알림 1'),
+                            subtitle: Text('알림 내용 1'),
+                          ),
+                          ListTile(
+                            title: Text('알림 2'),
+                            subtitle: Text('알림 내용 2'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('닫기'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+        title: Text(
+          "홈",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child:
+        Container(
+          child: ListView.builder(
+            itemCount: accountData.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                children: [
+                  buildAccountCard(accountData[index], context),
+                  SizedBox(height: 10.0),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 0),
     );
   }
 }
@@ -693,7 +762,7 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
   return Container(
     width: double.infinity,
     // height: 150.0,
-    margin: EdgeInsets.all(10),
+    margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
     padding: EdgeInsets.all(16.0),
     decoration: BoxDecoration(
       color: Color(0xFFF7F7F7),
