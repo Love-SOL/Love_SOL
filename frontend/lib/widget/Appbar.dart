@@ -95,7 +95,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFA47DE5),
                 ),
-                child: Text('정산하기'),
+                child: Text('해지하기'),
               ),
             ],
           ),

@@ -573,7 +573,7 @@ class _HomePageState extends State<HomePage> {
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFA47DE5),
                 ),
-                child: Text('정산하기'),
+                child: Text('해지하기'),
               ),
             ],
           ),
@@ -672,16 +672,7 @@ class _PersonalPageState extends State<PersonalPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFA47DE5), // 시작 색상
-                        Color(0xFFEEE1FF), // 종료 색상
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp,
-                    ),
+                    color: Color(0xFFA47DE5),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -831,18 +822,6 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
       // height: 150.0,
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
       padding: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Color(0xFFF7F7F7),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -886,30 +865,42 @@ Widget buildAccountCard(Map<String, dynamic> accountInfo, BuildContext context) 
             child: Text(
               '${formatCurrency(removeSosu(accountInfo["balance"].toString()))}원', // balance를 표시
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ),
+          SizedBox(height:5),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFA47DE5),
+                  primary: Color(0xFFFFFFFF),
                 ),
-                child: Text('입금'),
+                child: Text('입금',
+                  style:
+                  TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFA47DE5)
+                  ),
+                ),
               ),
               SizedBox(width: 16), // Add spacing between buttons
               ElevatedButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFA47DE5),
+                  primary: Color(0xFFFFFFFF),
                 ),
-                child: Text('결제'),
+                child: Text('결제',
+                  style:
+                  TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFA47DE5)
+                  ),
+                ),
               ),
             ],
           ),
@@ -946,7 +937,7 @@ class _CouplePageState extends State<CouplePage> {
   Map<String, dynamic> petData = {};
   Map<String, dynamic> loveBoxData = {};
   Map<String, dynamic> scheduleData = {
-    'content': '일정 없음',  // String 값
+    'content': '약속 없음',  // String 값
     'remainingDay': 0,              // int 값
     'date': DateTime.now()           // DateTime 객체
   };
@@ -1095,7 +1086,7 @@ class _CouplePageState extends State<CouplePage> {
                   ),
                 ),
               ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             if(isSchedule)
               Column(
                 children: [
@@ -1104,7 +1095,7 @@ class _CouplePageState extends State<CouplePage> {
                       Stack(
                         alignment: Alignment.center,
                         children: [
-                          Icon(Icons.favorite, color: Colors.red, size: 100.0),
+                          Icon(Icons.favorite, color: Color(0xFFFF0000), size: 100.0),
                           Text("+" + dday, style: TextStyle(color: Colors.white , fontSize: 18)),
                         ],
                       ),
@@ -1125,7 +1116,7 @@ class _CouplePageState extends State<CouplePage> {
                             '다음 약속까지 ${scheduleData["remainingDay"]}일 남았어요', // Exp 텍스트 추가
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.black,
+                              color: Color(0xFFA47DE5),
                             ),
                           ),
                         ],
@@ -1305,17 +1296,8 @@ class _CouplePageState extends State<CouplePage> {
                   margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                   padding: EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFA47DE5), // 시작 색상
-                      Color(0xFFEEE1FF), // 종료 색상
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp,
-                  ),
-                    borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFA47DE5),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -1326,17 +1308,17 @@ class _CouplePageState extends State<CouplePage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(0),
+                    padding: const EdgeInsets.only(top:18, bottom: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'LOVE BOX',
+                          '러브박스',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                         if (loveBoxData.isNotEmpty)
